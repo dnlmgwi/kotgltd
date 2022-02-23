@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -8,7 +7,6 @@ import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
-import 'package:flutter/material.dart';
 // import 'package:external_app_launcher/external_app_launcher.dart';
 
 class EventsPage extends ConsumerWidget {

@@ -1,12 +1,10 @@
-import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
 import 'package:kotgltd/features/auth/model/login_response.dart';
-import 'package:kotgltd/features/auth/model/profile.dart';
+// import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/features/auth/model/register_response.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/auth/model/user.dart';
 import 'package:kotgltd/features/auth/services/auth_repository.dart';
 import 'package:kotgltd/features/auth/services/jwt_checker.dart';
-import 'package:kotgltd/features/profile/services/profile_repository.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 
@@ -127,16 +125,9 @@ class AuthStateNotifier extends ChangeNotifier {
         tokens.put(0, token);
         user.put(0, response.register.user);
 
-        // //Does User Have Profile
-        // await _profileRepo.getProfile();
-
+        isAuth();
         return response;
       }
-      isAuth();
-      // } on NoProfileException {
-      //   //Change State To No Profile
-      //   noProfile();
-      // }
     } catch (e) {
       print(e);
       isNotAuth();

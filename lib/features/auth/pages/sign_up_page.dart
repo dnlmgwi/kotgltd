@@ -300,19 +300,26 @@ class SignUpPage extends ConsumerWidget {
                                   return null;
                                 },
                               ),
+                              SizedBox(
+                                height: 15.sp,
+                              ),
                               CheckboxListTile(
                                   activeColor: kotgBlack,
                                   checkColor: kotgGreen,
                                   selected: false,
-                                  title:
-                                      Text('I Accept the terms and conditions'),
+                                  title: Text(
+                                    'I Accept the terms and conditions',
+                                    style: GoogleFonts.oxygen(
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
                                   tileColor: kotgBlack,
                                   value: _tc,
                                   onChanged: (value) {
                                     updateTermsAndConditions(context, value!);
                                   }),
                               SizedBox(
-                                height: 35.sp,
+                                height: 15.sp,
                               ),
                               ElevatedButton(
                                 style: OutlinedButton.styleFrom(
@@ -337,6 +344,7 @@ class SignUpPage extends ConsumerWidget {
                                       // phoneNumber: _phoneNumber,
                                     )
                                         .whenComplete(() {
+                                      Get.back();
                                       Get.snackbar(
                                         "Successful",
                                         'Time to Sign in!',
@@ -386,12 +394,12 @@ class SignUpPage extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 35.sp,
+                    height: 15.sp,
                   ),
                   Divider(),
 
                   SizedBox(
-                    height: 35.sp,
+                    height: 15.sp,
                   ),
 
                   TextButton(

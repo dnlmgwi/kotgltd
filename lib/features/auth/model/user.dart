@@ -1,4 +1,3 @@
-import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 part 'user.g.dart';
 
@@ -18,7 +17,6 @@ class User extends HiveObject {
     required this.id,
     required this.email,
     required this.username,
-    // this.profile,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

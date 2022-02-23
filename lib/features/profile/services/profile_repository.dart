@@ -2,7 +2,7 @@
 import 'package:graphql/client.dart';
 import 'package:kotgltd/data/enviroment_creds.dart';
 import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
-import 'package:kotgltd/features/auth/model/profile.dart';
+// import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/profile/graphql/profile_queries.dart';
 import 'package:kotgltd/packages/core.dart';
@@ -19,7 +19,7 @@ class ProfileRepository {
   );
 
   final tokens = Hive.box<Token>('token');
-  final profile = Hive.box<Profile>('profile');
+  // final profile = Hive.box<Profile>('profile');
   // Pick an image
   final GraphQLClient client = GraphQLClient(
     cache: GraphQLCache(partialDataPolicy: PartialDataCachePolicy.accept),
@@ -74,7 +74,7 @@ class ProfileRepository {
 
       var response = result.data!['createProfile'];
 
-      profile.put(0, Profile.fromJson(response['profile']));
+      // profile.put(0, Profile.fromJson(response['profile']));
 
       print(response);
       return response;
@@ -105,7 +105,7 @@ class ProfileRepository {
 
       var response = result.data!['updateProfile'];
 
-      profile.put(0, Profile.fromJson(response['profile']));
+      // profile.put(0, Profile.fromJson(response['profile']));
 
       print(response);
       return response;

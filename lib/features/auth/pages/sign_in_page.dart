@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
+import 'package:kotgltd/features/auth/pages/sign_up_page.dart';
 import 'package:kotgltd/features/auth/pages/widgets/forgot_password_widget.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/auth/providers/email_password_providers.dart';
@@ -123,7 +124,7 @@ class SignInPage extends ConsumerWidget {
                                             bottom: 10.sp,
                                             left: 10.sp,
                                             right: 10.sp),
-                                        labelText: 'Username',
+                                        labelText: 'Email',
                                         labelStyle: GoogleFonts.oxygen(
                                             color: kotgGreen,
                                             fontSize: 10.sp,
@@ -247,35 +248,29 @@ class SignInPage extends ConsumerWidget {
                       }
                     },
                   ),
-                  SizedBox(
-                    height: 35.sp,
+                  TextButton(
+                    style: ButtonStyle(
+                        enableFeedback: true,
+                        splashFactory: NoSplash.splashFactory),
+                    onPressed: () => Get.to(SignUpPage()),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Sign Up',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
                   ),
-                  // TextButton(
-                  //   style: ButtonStyle(
-                  //       enableFeedback: true,
-                  //       splashFactory: NoSplash.splashFactory),
-                  //   onPressed: () => Get.toNamed('/signup'),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Text(
-                  //         "Don't have an account?",
-                  //         style: TextStyle(color: Colors.grey),
-                  //       ),
-                  //       SizedBox(
-                  //         width: 5,
-                  //       ),
-                  //       Text(
-                  //         'Sign Up',
-                  //         style: TextStyle(color: Colors.white),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
                   Divider(),
-                  // SizedBox(
-                  //   height: 35.sp,
-                  // ),
                   TextButton(
                     style: ButtonStyle(
                         enableFeedback: true,
