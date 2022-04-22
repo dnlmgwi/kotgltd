@@ -55,7 +55,6 @@ class MyApp extends ConsumerWidget {
         themeMode: ThemeMode.dark,
         home: Consumer(builder: (context, ref, child) {
           var network = ref.watch(networkStateProvider);
-
           return network.map(
               data: (data) {
                 if (data.value == NetworkStatus.isOn) {

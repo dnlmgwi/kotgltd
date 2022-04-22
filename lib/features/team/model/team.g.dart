@@ -17,9 +17,11 @@ class TeamAdapter extends TypeAdapter<Team> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Team(
-      id: fields[0] as String,
+      id: fields[0] as int,
+      deleted: fields[5] as bool,
+      deletedAt: fields[6] as DateTime?,
       teamMembers: (fields[4] as List?)?.cast<dynamic>(),
-      createdAt: fields[2] as String,
+      createdAt: fields[2] as DateTime,
       inviteCode: fields[3] as String,
       teamName: fields[1] as String,
     );
@@ -28,7 +30,7 @@ class TeamAdapter extends TypeAdapter<Team> {
   @override
   void write(BinaryWriter writer, Team obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +40,11 @@ class TeamAdapter extends TypeAdapter<Team> {
       ..writeByte(3)
       ..write(obj.inviteCode)
       ..writeByte(4)
-      ..write(obj.teamMembers);
+      ..write(obj.teamMembers)
+      ..writeByte(5)
+      ..write(obj.deleted)
+      ..writeByte(6)
+      ..write(obj.deletedAt);
   }
 
   @override
@@ -57,9 +63,13 @@ class TeamAdapter extends TypeAdapter<Team> {
 // **************************************************************************
 
 Team _$TeamFromJson(Map<String, dynamic> json) => Team(
-      id: json['id'] as String,
+      id: json['id'] as int,
+      deleted: json['deleted'] as bool,
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
       teamMembers: json['team_members'] as List<dynamic>?,
-      createdAt: json['created_at'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
       inviteCode: json['invite_code'] as String,
       teamName: json['team_name'] as String,
     );
@@ -67,7 +77,9 @@ Team _$TeamFromJson(Map<String, dynamic> json) => Team(
 Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
       'id': instance.id,
       'team_name': instance.teamName,
-      'created_at': instance.createdAt,
+      'createdAt': instance.createdAt.toIso8601String(),
       'invite_code': instance.inviteCode,
       'team_members': instance.teamMembers,
+      'deleted': instance.deleted,
+      'deleted_at': instance.deletedAt?.toIso8601String(),
     };

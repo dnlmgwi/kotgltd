@@ -249,7 +249,6 @@ class CreatedTeamDetailsPage extends ConsumerWidget {
               builder: (context, snapshot) {
                 // Check for errors
                 if (snapshot.hasError) {
-                  //TODO Show Create or Join
                   return Center(
                     child: Icon(
                       Ionicons.pulse_outline,
@@ -259,9 +258,217 @@ class CreatedTeamDetailsPage extends ConsumerWidget {
                 }
                 // Once complete, show your application
                 if (snapshot.connectionState == ConnectionState.done) {
-                  var team = snapshot.data as Team;
+                  var team = snapshot.data;
 
-                  }
+                  print(team);
+
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 35, top: 30, bottom: 25),
+                            child: ListTile(
+                              title: Text(
+                                'team![' ']',
+                                style: TextStyle(fontSize: 25.sp),
+                              ),
+                              trailing: IconButton(
+                                  onPressed: () {
+                                    _showOptionsBottomSheet(teamId: 0);
+                                  },
+                                  icon: Icon(
+                                    Ionicons.ellipsis_vertical_outline,
+                                  )),
+
+                              // Get.toNamed('/joinRequests',
+                              //     arguments: {
+                              //       'inviteCode': team[0]['invite_code'],
+                              //       'teamId': team[0]['id']
+                              //     })
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(Ionicons.share_outline),
+                              title: Text('Send Invite Code'),
+                              onTap: () => Share.share("team.inviteCode"),
+                            ),
+                            ListTile(
+                              leading: Icon(Ionicons.person_add_outline),
+                              title: Text('Join Requests'),
+                              trailing: FutureBuilder(
+                                  future: _userRepo.getInviteCount(
+                                      inviteCode: ""),
+                                  builder: (context, snapshot) {
+                                    // Check for errors
+                                    if (snapshot.hasError) {
+                                      return Center(
+                                        child: Icon(
+                                          Ionicons.pulse_outline,
+                                          color: Colors.white,
+                                        ), //TODO Error Icon
+                                      );
+                                    }
+                                    // Once complete, show your application
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      var count = snapshot.data as num;
+
+                                      if (count == 0) {
+                                        return Text('');
+                                      }
+
+                                      return Badge(
+                                        position: BadgePosition.topEnd(
+                                            top: 0, end: 3),
+                                        animationDuration:
+                                            Duration(milliseconds: 300),
+                                        animationType: BadgeAnimationType.slide,
+                                        badgeContent: Text(
+                                          count.toString(),
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      );
+                                    }
+                                    // Otherwise, show something whilst waiting for initialization to complete
+                                    return Badge(
+                                      position:
+                                          BadgePosition.topEnd(top: 0, end: 3),
+                                      animationDuration:
+                                          Duration(milliseconds: 300),
+                                      animationType: BadgeAnimationType.slide,
+                                      badgeContent: Text(
+                                        '',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    );
+                                  }),
+                              onTap: () => _showManageTeamBottomSheet(
+                                inviteCode: "team.inviteCode",
+                                teamId: 0,
+                              ),
+                            ),
+                            // ListTile(
+                            //   leading: Icon(Ionicons.notifications_outline),
+                            //   trailing: Text('Coming Soon'),
+                            //   enabled: false,
+                            //   title: Text('Notifications'),
+                            //   // trailing: Badge(
+                            //   //   position: BadgePosition.topEnd(top: 0, end: 3),
+                            //   //   animationDuration: Duration(milliseconds: 300),
+                            //   //   animationType: BadgeAnimationType.slide,
+                            //   //   badgeContent: Text(
+                            //   //     '2',
+                            //   //     style: TextStyle(color: Colors.white),
+                            //   //   ),
+                            //   // ),
+                            //   onTap: () {},
+                            // ),
+                            ListTile(
+                              leading: Icon(Ionicons.stats_chart_outline),
+                              title: Text('Team Stats'),
+                              trailing: Text('Coming Soon'),
+                              enabled: false,
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, top: 18, bottom: 15),
+                          child: Text(
+                            'Team Members',
+                            style: GoogleFonts.sarala(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: [0, 1].isEmpty
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15, top: 18, bottom: 15),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Looking abit too empty here...player?',
+                                          style: GoogleFonts.sarala(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 10.sp,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 35,
+                                        ),
+                                        Container(
+                                          width: 50.w,
+                                          child: ElevatedButton.icon(
+                                            style: OutlinedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                              ),
+                                              enableFeedback: true,
+                                              primary: kotgBlack,
+                                              backgroundColor: kotgGreen,
+                                            ),
+                                            icon: Icon(Ionicons.share_outline),
+                                            label: Text(
+                                              'Send Invite Code',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Share.share("");
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                              : ListView.builder(
+                                  itemCount: ["", ""].length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return ListTile(
+                                      leading: ClipOval(
+                                        child: Container(),
+                                        // child: Image.network(
+                                        //   team["",""][index]['member']
+                                        //           ['profile']['avatar']['image']
+                                        //       ['url'],
+                                        //   width: 40,
+                                        //   height: 40,
+                                        //   fit: BoxFit.cover,
+                                        // ),
+                                      ),
+                                      title: Text(
+                                        // team.teamMembers![index]['member']
+                                        //     ['username'],
+                                        "",
+                                        style: GoogleFonts.sarala(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20.sp,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                        )
+                      ]);
+                }
                 // Otherwise, show something whilst waiting for initialization to complete
                 return ListView.builder(
                     itemCount: 2,

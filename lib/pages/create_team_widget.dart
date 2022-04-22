@@ -19,7 +19,6 @@ class CreateTeamWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _userRepo = ref.watch(teamRepoProvider);
-    final _inviteCodeProvider = ref.watch(inviteCodeProvider);
     final _teamName = ref.watch(teamNameProvider.state);
 
     return LoaderOverlay(
@@ -119,10 +118,9 @@ class CreateTeamWidget extends ConsumerWidget {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                context.loaderOverlay.show();
                                 _userRepo
                                     .createTeam(
-                                      inviteCode:
-                                          _inviteCodeProvider.value!.trim(),
                                       teamName: teamNameController.text,
                                     )
                                     .catchError((error, stackTrace) {

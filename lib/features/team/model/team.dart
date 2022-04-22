@@ -8,15 +8,14 @@ part 'team.g.dart';
 @HiveType(typeId: 6)
 class Team extends HiveObject {
   @HiveField(0)
-  String id;
+  int id;
 
   @HiveField(1)
   @JsonKey(name: 'team_name')
   String teamName;
 
   @HiveField(2)
-  @JsonKey(name: 'created_at')
-  String createdAt;
+  DateTime createdAt;
 
   @HiveField(3)
   @JsonKey(name: 'invite_code')
@@ -26,9 +25,18 @@ class Team extends HiveObject {
   @JsonKey(name: 'team_members')
   List? teamMembers;
 
+  @HiveField(5)
+  bool deleted;
+
+  @HiveField(6)
+  @JsonKey(name: 'deleted_at')
+  DateTime? deletedAt;
+
   Team({
     required this.id,
-    required this.teamMembers,
+    required this.deleted,
+    required this.deletedAt,
+    this.teamMembers,
     required this.createdAt,
     required this.inviteCode,
     required this.teamName,

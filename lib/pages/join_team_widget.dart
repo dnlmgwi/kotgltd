@@ -15,6 +15,7 @@ class JoinTeamWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _userRepo = ref.watch(teamRepoProvider);
+    final _inviteRepo = ref.watch(inviteRepoProvider);
 
     return LoaderOverlay(
       overlayOpacity: 0.8,
@@ -111,19 +112,22 @@ class JoinTeamWidget extends ConsumerWidget {
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            _userRepo
-                                .createJoinRequest(
-                                  inviteCode: inviteCodeController.text,
-                                )
+                            _inviteRepo
+                                .sendInvite(
+                              inviteCode: inviteCodeController.text,
+                            )
                                 .catchError((error, stackTrace) {
-                                  context.loaderOverlay.hide();
-                                  Get.snackbar(
-                                      "Connection Error", error!.toString(),
-                                      backgroundColor: Colors.red,
-                                      snackPosition: SnackPosition.BOTTOM);
-                                })
-                                .then((value) => ref.refresh(teamRepoProvider))
-                                .whenComplete(() => Get.back());
+                              // context.loaderOverlay.hide();
+
+                              Get.snackbar(
+                                  "Connection Error", error!.toString(),
+                                  backgroundColor: Colors.red,
+                                  snackPosition: SnackPosition.TOP);
+                            }).then((value) {
+                              Get.snackbar("Invite Sent", "Please Wait",
+                                  snackPosition: SnackPosition.TOP);
+                              ref.refresh(teamRepoProvider);
+                            }).whenComplete(() => Get.back());
                           }
                         },
                       ),

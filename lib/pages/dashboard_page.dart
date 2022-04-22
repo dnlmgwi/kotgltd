@@ -7,7 +7,7 @@ import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/features/events/pages/events_page.dart';
 import 'package:kotgltd/features/home/pages/home_page.dart';
 import 'package:kotgltd/pages/settings_page.dart';
-// import 'package:kotgltd/pages/team_page.dart';
+import 'package:kotgltd/pages/team_page.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class DashboardPage extends ConsumerWidget {
@@ -18,7 +18,7 @@ class DashboardPage extends ConsumerWidget {
     EventsPage(),
     // VirtualCardPage(),
     // WalletPage(),
-    // TeamsPage(),
+    TeamsPage(),
     SettingsPage()
   ];
 
@@ -136,10 +136,10 @@ class DashboardPage extends ConsumerWidget {
               label: 'Events',
               icon: Icon(Ionicons.ticket_outline),
             ),
-            // BottomNavigationBarItem(
-            //   label: 'Teams',
-            //   icon: Icon(Ionicons.people_outline),
-            // ),
+            BottomNavigationBarItem(
+              label: 'Teams',
+              icon: Icon(Ionicons.people_outline),
+            ),
             BottomNavigationBarItem(
               label: 'Settings',
               icon: Icon(

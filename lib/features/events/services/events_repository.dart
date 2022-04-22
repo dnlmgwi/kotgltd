@@ -56,6 +56,8 @@ class EventsRepository {
 
       var response = result.data!['events']['data'] as List;
 
+      print(response);
+
       return response;
     } on TimeoutException {
       ///30 Seconds Timeout

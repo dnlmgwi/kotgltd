@@ -1,29 +1,17 @@
+import 'package:kotgltd/features/team/model/team.dart';
+
 abstract class ITeamRepository {
-  Future<String> createTeam({
+  Future createTeam({
     required String teamName,
-    required String inviteCode,
   });
 
-  Future<List?> getMyCreatedTeamMembers();
+  Future leaveTeam();
 
-  Future<List?> getJoinedTeam();
-
-  Future<List?> getMyCreatedTeam();
+  Future<Team> getTeam();
 
   Future<List?> getJoinRequests({required String inviteCode});
 
-  Future<num> getJoinRequestsCount({required String inviteCode});
+  Future<num> getInviteCount({required String inviteCode});
 
-  Future<List?> deleteTeamJoinRequests({required String id});
-
-  Future<void> deleteTeam({required String teamId});
-
-  Future<void> createJoinRequest({
-    required String inviteCode,
-  });
-
-  Future<void> claimJoinRequest({
-    required String id,
-    required String teamId,
-  });
+  Future<void> deleteTeam({required int teamId});
 }
