@@ -246,26 +246,30 @@ class TeamsPage extends ConsumerWidget {
                         subtitle: Text('knowledge is power'),
                         onTap: () {},
                       ),
-                      //   ListTile(
-                      //     leading: Icon(
-                      //       Ionicons.exit_outline,
-                      //       color: Colors.red,
-                      //     ),
-                      //     title: Text(
-                      //       'Delete Team',
-                      //       style: TextStyle(
-                      //         color: Colors.red,
-                      //       ),
-                      //     ),
-                      //     subtitle: Text(
-                      //         'You will no longer be able to manage this team'),
-                      //     onTap: () {
-                      //       _userRepo.deleteTeam(teamId: teamId).then((value) {
-                      //         ref.refresh(teamRepoProvider);
-                      //         Get.back();
-                      //       });
-                      //     },
-                      //   ),
+                      ListTile(
+                        leading: Icon(
+                          Ionicons.exit_outline,
+                          color: Colors.red,
+                        ),
+                        title: Text(
+                          'Delete Team',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                        subtitle: Text(
+                            'You will no longer be able to manage this team'),
+                        onTap: () {
+                          _userRepo.deleteTeam().then((value) {
+                            ref.refresh(teamRepoProvider);
+                            Get.back();
+                          }).catchError((error, stackTrace) {
+                            Get.snackbar("Connection Error", error!.toString(),
+                                backgroundColor: Colors.red,
+                                snackPosition: SnackPosition.TOP);
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ));

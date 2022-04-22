@@ -103,7 +103,7 @@ class JoinTeamWidget extends ConsumerWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              "Join ",
+                              "Join",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -112,22 +112,23 @@ class JoinTeamWidget extends ConsumerWidget {
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
+                            context.loaderOverlay.show();
                             _inviteRepo
                                 .sendInvite(
                               inviteCode: inviteCodeController.text,
                             )
-                                .catchError((error, stackTrace) {
-                              // context.loaderOverlay.hide();
-
-                              Get.snackbar(
-                                  "Connection Error", error!.toString(),
-                                  backgroundColor: Colors.red,
-                                  snackPosition: SnackPosition.TOP);
-                            }).then((value) {
-                              Get.snackbar("Invite Sent", "Please Wait",
+                                .then((value) {
+                              context.loaderOverlay.hide();
+                              Get.snackbar("Success", value.toString(),
                                   snackPosition: SnackPosition.TOP);
                               ref.refresh(teamRepoProvider);
-                            }).whenComplete(() => Get.back());
+                            }).catchError((error, stackTrace) {
+                              context.loaderOverlay.hide();
+                              Get.snackbar("Error", error!.toString(),
+                                  backgroundColor: Colors.red,
+                                  snackPosition: SnackPosition.TOP);
+                            });
+                            Get.back();
                           }
                         },
                       ),

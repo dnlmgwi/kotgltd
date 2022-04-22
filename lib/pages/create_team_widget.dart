@@ -121,18 +121,21 @@ class CreateTeamWidget extends ConsumerWidget {
                                 context.loaderOverlay.show();
                                 _userRepo
                                     .createTeam(
-                                      teamName: teamNameController.text,
-                                    )
-                                    .catchError((error, stackTrace) {
-                                      context.loaderOverlay.hide();
-                                      Get.snackbar(
-                                          "Connection Error", error!.toString(),
-                                          backgroundColor: Colors.red,
-                                          snackPosition: SnackPosition.BOTTOM);
-                                    })
-                                    .then((value) =>
-                                        ref.refresh(teamRepoProvider))
-                                    .whenComplete(() => Get.back());
+                                  teamName: teamNameController.text,
+                                )
+                                    .then((value) {
+                                  Get.snackbar("Success", value,
+                                      snackPosition: SnackPosition.TOP);
+                                  context.loaderOverlay.hide();
+                                  ref.refresh(teamRepoProvider);
+                                }).catchError((error, stackTrace) {
+                                  context.loaderOverlay.hide();
+
+                                  Get.snackbar("Error", error!.toString(),
+                                      backgroundColor: Colors.red,
+                                      snackPosition: SnackPosition.TOP);
+                                });
+                                Get.back();
                               }
                             },
                           ),

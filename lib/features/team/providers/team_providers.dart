@@ -12,8 +12,13 @@ enum TeamState { member, captain, none }
 final teamStateProvider = StateProvider.autoDispose((ref) => TeamState.none);
 
 final teamStateFutureProvider = FutureProvider.autoDispose((ref) async {
-  var teamStateType = ref.watch(teamStateProvider);
-  final team = await ref.watch(teamRepoProvider).getTeam();
+  // var teamStateType = ref.watch(teamStateProvider);
+  final team;
+  try {
+    team = await ref.watch(teamRepoProvider).getTeam();
+  } catch (e) {
+    rethrow;
+  }
   return team;
 });
 

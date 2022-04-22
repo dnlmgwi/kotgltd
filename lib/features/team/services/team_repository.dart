@@ -146,6 +146,42 @@ class TeamRepository extends ITeamRepository {
         throw Exception(response.body);
       }
 
+      return jsonResponse['data']['message'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future deleteTeam() async {
+    try {
+      final response = await http.delete(
+        Uri.parse('${Env.baseUrl}/api/team/delete'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+          'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+        },
+      );
+
+      final jsonResponse = json.decode(response.body);
+
+      if (response.statusCode == 404) {
+        throw Exception('Not Found');
+      }
+
+      if (response.statusCode == 400) {
+        throw Exception(jsonResponse['error']['message']);
+      }
+
+      if (response.statusCode == 401) {
+        throw Exception('Token Expired');
+      }
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw Exception(response.body);
+      }
+
       return jsonResponse['data'];
     } catch (e) {
       rethrow;
@@ -221,27 +257,27 @@ class TeamRepository extends ITeamRepository {
     }
   }
 
-  @override
-  Future<void> deleteTeam({required int teamId}) async {
-    try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.deleteTeam()),
-          variables: {"team_id": teamId}); //TODO Variable
+  // @override
+  // Future<void> deleteTeam({required int teamId}) async {
+  //   try {
+  //     final QueryOptions options = QueryOptions(
+  //         document: gql(TeamQueries.deleteTeam()),
+  //         variables: {"team_id": teamId}); //TODO Variable
 
-      final QueryResult? result = await graphQLClient().query(options);
+  //     final QueryResult? result = await graphQLClient().query(options);
 
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
-      }
+  //     if (result!.hasException) {
+  //       print(result.exception.toString());
+  //       throw Exception(result.exception!.graphqlErrors.first.message);
+  //     }
 
-      var response = result.data!['invites'];
+  //     var response = result.data!['invites'];
 
-      print(response);
-    } catch (e) {
-      rethrow;
-    }
-  }
+  //     print(response);
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   // @override
   // Future<String> createTeam({

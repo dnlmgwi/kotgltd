@@ -227,7 +227,7 @@ class CreatedTeamDetailsPage extends ConsumerWidget {
               ),
               subtitle: Text('You will no longer be able to manage this team'),
               onTap: () {
-                _userRepo.deleteTeam(teamId: teamId).then((value) {
+                _userRepo.deleteTeam().then((value) {
                   ref.refresh(teamRepoProvider);
                   Get.back();
                 });

@@ -227,7 +227,7 @@ class CreatedTeamDetailsPage extends ConsumerWidget {
               ),
               subtitle: Text('You will no longer be able to manage this team'),
               onTap: () {
-                _userRepo.deleteTeam(teamId: teamId).then((value) {
+                _userRepo.deleteTeam().then((value) {
                   ref.refresh(teamRepoProvider);
                   Get.back();
                 });
@@ -301,8 +301,8 @@ class CreatedTeamDetailsPage extends ConsumerWidget {
                               leading: Icon(Ionicons.person_add_outline),
                               title: Text('Join Requests'),
                               trailing: FutureBuilder(
-                                  future: _userRepo.getInviteCount(
-                                      inviteCode: ""),
+                                  future:
+                                      _userRepo.getInviteCount(inviteCode: ""),
                                   builder: (context, snapshot) {
                                     // Check for errors
                                     if (snapshot.hasError) {

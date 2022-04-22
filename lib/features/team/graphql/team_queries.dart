@@ -3,23 +3,23 @@ class TeamQueries {
   ///"team_name": "gs23cyd",
   ///"captain": "1"
   ///}
-  static String createTeam() {
-    return r'''mutation($team_name: String!, $captain: ID!) {
-      createTeam(
-          data: {
-            team_name: $team_name,
-            captain: $captain,
-            }
-      ){
-    data{
-      id
-      attributes{
-        team_name
-      }
-    }
-  }
-        }''';
-  }
+  // static String createTeam() {
+  //   return r'''mutation($team_name: String!, $captain: ID!) {
+  //     createTeam(
+  //         data: {
+  //           team_name: $team_name,
+  //           captain: $captain,
+  //           }
+  //     ){
+  //   data{
+  //     id
+  //     attributes{
+  //       team_name
+  //     }
+  //   }
+  // }
+  //       }''';
+  // }
 
   ///Team Have Joined
   static String getJoinedTeam() {
@@ -51,23 +51,23 @@ class TeamQueries {
   }''';
   }
 
-  static String deleteTeam() {
-    return r'''mutation($team_id: ID!,) {
-      updateTeam (
-        input: {
-          where: {
-            id: $team_id,
-            },
-            data: {
-              deleted: true
-            }
-          }){
-            team {
-              team_name
-            }
-          }
-        }''';
-  }
+  // static String deleteTeam() {
+  //   return r'''mutation($team_id: ID!,) {
+  //     updateTeam (
+  //       input: {
+  //         where: {
+  //           id: $team_id,
+  //           },
+  //           data: {
+  //             deleted: true
+  //           }
+  //         }){
+  //           team {
+  //             team_name
+  //           }
+  //         }
+  //       }''';
+  // }
 
   /// Limit is 5 Gamers only
   /// Fetched in Ascending order of Request Date/Time
@@ -122,17 +122,17 @@ class TeamQueries {
 }''';
   }
 
-  static String deleteTeamJoinRequests() {
-    return r'''mutation($request_id: ID!){
-      deleteTeamJoinRequest(input: {
-        where: {
-          id: $request_id
-          }
-        }){
-          teamJoinRequest {
-            created_at
-          }
-        }
-      }''';
-  }
+  // static String deleteTeamJoinRequests() {
+  //   return r'''mutation($request_id: ID!){
+  //     deleteTeamJoinRequest(input: {
+  //       where: {
+  //         id: $request_id
+  //         }
+  //       }){
+  //         teamJoinRequest {
+  //           created_at
+  //         }
+  //       }
+  //     }''';
+  // }
 }

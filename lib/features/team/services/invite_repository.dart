@@ -121,7 +121,7 @@ class InviteRepository {
         throw Exception('Network Error');
       }
 
-      return jsonResponse['data'];
+      return jsonResponse['data']['message'];
     } catch (e) {
       rethrow;
     }
