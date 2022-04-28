@@ -140,8 +140,8 @@ class TeamsPage extends ConsumerWidget {
                                           motion: const ScrollMotion(),
 
                                           // A pane can dismiss the Slidable.
-                                          dismissible: DismissiblePane(
-                                              onDismissed: () {}),
+                                          // dismissible: DismissiblePane(
+                                          //     onDismissed: () {}),
 
                                           // All actions are defined in the children parameter.
                                           children: [
@@ -173,18 +173,16 @@ class TeamsPage extends ConsumerWidget {
                                         ),
 
                                         child: ListTile(
-                                          leading: ClipOval(
-                                            child: TextAvatar(
-                                              shape: Shape.Circular,
-                                              size: 50,
-                                              textColor: Colors.white,
-                                              fontSize: 35,
-                                              upperCase: true,
-                                              numberLetters: 2,
-                                              text: invite[index]['attributes']
-                                                      ['user']['data']
-                                                  ['attributes']['email'],
-                                            ),
+                                          leading: TextAvatar(
+                                            shape: Shape.Circular,
+                                            size: 50,
+                                            textColor: Colors.white,
+                                            fontSize: 35,
+                                            upperCase: true,
+                                            numberLetters: 2,
+                                            text: invite[index]['attributes']
+                                                    ['user']['data']
+                                                ['attributes']['email'],
                                           ),
                                           title: Text(invite[index]
                                                   ['attributes']['user']['data']
@@ -472,6 +470,16 @@ class TeamsPage extends ConsumerWidget {
                                     //   //   fit: BoxFit.cover,
                                     //   // ),
                                     // ),
+                                    leading: TextAvatar(
+                                      shape: Shape.Circular,
+                                      size: 50,
+                                      textColor: Colors.white,
+                                      fontSize: 35,
+                                      upperCase: true,
+                                      numberLetters: 2,
+                                      text: data.value.teamMembers![index]
+                                          ['user']['username'],
+                                    ),
                                     title: Text(
                                       data.value.teamMembers![index]['user']
                                           ['username'],
