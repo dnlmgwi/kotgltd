@@ -68,7 +68,7 @@ class ForgotPasswordWidget extends ConsumerWidget {
                                   borderSide:
                                       BorderSide(color: kotgGreen, width: 2)),
                               filled: true,
-                              contentPadding: EdgeInsets.all(13),
+                              contentPadding: EdgeInsets.all(13.sp),
                               labelText: 'Email Address'.toUpperCase(),
                               labelStyle: GoogleFonts.oxygen(
                                   color: kotgGreen,

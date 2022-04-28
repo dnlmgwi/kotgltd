@@ -82,17 +82,7 @@ class TeamQueries {
             attributes {
               
               email
-              
-              avatar {
-                
-                data {
-                  
-                  attributes {
-                    
-                    url
-                  }
-                }
-              }
+              username
             }
           }
         }

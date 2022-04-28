@@ -6,6 +6,7 @@ import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:quick_notify/quick_notify.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 // import 'package:external_app_launcher/external_app_launcher.dart';
 
@@ -128,7 +129,6 @@ class EventsPage extends ConsumerWidget {
                   ),
                   Consumer(builder: (context, ref, _) {
                     final _tc = ref.watch(tcEventsProvider.state).state;
-                    final eventRef = ref.watch(eventReferenceProvider(eventId));
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -166,6 +166,12 @@ class EventsPage extends ConsumerWidget {
                                           'We Are Ready For You!',
                                           snackPosition: SnackPosition.TOP);
                                       context.loaderOverlay.hide();
+                                      Gaimon.success();
+                                      ref.refresh(deRegisterEventsProvider(
+                                        int.parse(
+                                          eventId,
+                                        ),
+                                      ));
                                     }).catchError(
                                       (error) {
                                         Get.snackbar("Reservation Error",
@@ -173,10 +179,12 @@ class EventsPage extends ConsumerWidget {
                                             backgroundColor: Colors.red,
                                             snackPosition: SnackPosition.TOP);
                                         context.loaderOverlay.hide();
+                                        Gaimon.error();
                                       },
                                     );
                                   } else {
                                     context.loaderOverlay.hide();
+                                    Gaimon.error();
                                     Get.snackbar(
                                         "Please Accept Terms And Conditions",
                                         "You need to agree to our terms to proceed",
@@ -228,7 +236,7 @@ class EventsPage extends ConsumerWidget {
                   // print(_events);
                   return _events.map(
                       data: (events) {
-                        if (events.value.isEmpty) {
+                        if (events.value.kotgEvents.eventData.isEmpty) {
                           //print('project snapshot data is: ${projectSnap.data}');
                           return Center(
                             child: Text("We couldn't find any events"),
@@ -236,7 +244,7 @@ class EventsPage extends ConsumerWidget {
                         }
 
                         return ListView.builder(
-                            itemCount: events.value.length,
+                            itemCount: events.value.kotgEvents.eventData.length,
                             controller: scrollController,
                             physics: BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics(),
@@ -247,14 +255,27 @@ class EventsPage extends ConsumerWidget {
                                 child: GestureDetector(
                                   onTap: () {
                                     _showEventDestailsBottomSheet(
-                                      eventId: events.value[index]['id'],
-                                      desciption: events.value[index]
-                                          ['attributes']['description'],
-                                      eventName: events.value[index]
-                                          ['attributes']['name'],
-                                      imageUrl: events.value[index]
-                                              ['attributes']['image']['data']
-                                          ['attributes']['url'],
+                                      eventId: events.value.kotgEvents.eventData
+                                          .elementAt(index)
+                                          .id,
+                                      desciption: events
+                                          .value.kotgEvents.eventData
+                                          .elementAt(index)
+                                          .eventAttributes
+                                          .description,
+                                      eventName: events
+                                          .value.kotgEvents.eventData
+                                          .elementAt(index)
+                                          .eventAttributes
+                                          .name,
+                                      imageUrl: events
+                                          .value.kotgEvents.eventData
+                                          .elementAt(index)
+                                          .eventAttributes
+                                          .kotgEventImage
+                                          .eventImageData
+                                          .kotgEventImageAttributes
+                                          .url,
                                     );
                                   },
                                   child: Padding(
@@ -322,12 +343,16 @@ class EventsPage extends ConsumerWidget {
                                               color: Colors.black87,
                                               child: ListTile(
                                                   trailing: Container(child:
-                                                      Consumer(builder: (context, ref, _) {
+                                                      Consumer(builder:
+                                                          (context, ref, _) {
                                                     final _regRepo = ref.watch(
                                                       registeredEventsProvider(
-                                                        int.parse(
-                                                            events.value[index]
-                                                                ['id']),
+                                                        int.parse(events
+                                                            .value
+                                                            .kotgEvents
+                                                            .eventData
+                                                            .elementAt(index)
+                                                            .id),
                                                       ),
                                                     );
 
@@ -344,13 +369,27 @@ class EventsPage extends ConsumerWidget {
                                                                           kotgPurple),
                                                                   onPressed: () =>
                                                                       _showEventRegBottomSheet(
-                                                                        eventId:
-                                                                            events.value[index]['id'],
+                                                                        eventId: events
+                                                                            .value
+                                                                            .kotgEvents
+                                                                            .eventData
+                                                                            .elementAt(index)
+                                                                            .id,
                                                                         eventPrice: events
-                                                                            .value[index]['attributes']['price']
+                                                                            .value
+                                                                            .kotgEvents
+                                                                            .eventData
+                                                                            .elementAt(index)
+                                                                            .eventAttributes
+                                                                            .price
                                                                             .toString(),
-                                                                        eventName:
-                                                                            events.value[index]['attributes']['name'],
+                                                                        eventName: events
+                                                                            .value
+                                                                            .kotgEvents
+                                                                            .eventData
+                                                                            .elementAt(index)
+                                                                            .eventAttributes
+                                                                            .name,
                                                                       ),
                                                                   child: Text(
                                                                       'Join',
@@ -366,9 +405,13 @@ class EventsPage extends ConsumerWidget {
                                                                         .loaderOverlay
                                                                         .show();
                                                                     ref
-                                                                        .watch(deRegisterEventsProvider(int.parse(events.value[index]
-                                                                            [
-                                                                            'id'])))
+                                                                        .watch(
+                                                                          deRegisterEventsProvider(
+                                                                            int.parse(
+                                                                              events.value.kotgEvents.eventData.elementAt(index).id,
+                                                                            ),
+                                                                          ),
+                                                                        )
                                                                         .catchError((error) =>
                                                                             Get
                                                                                 .snackbar(
@@ -385,18 +428,24 @@ class EventsPage extends ConsumerWidget {
                                                                         snackPosition:
                                                                             SnackPosition.TOP,
                                                                       );
-                                                                      ref.refresh(registeredEventsProvider(int.parse(
-                                                                          events.value[index]
-                                                                              [
-                                                                              'id'])));
+                                                                      ref.refresh(
+                                                                        registeredEventsProvider(
+                                                                          int.parse(events
+                                                                              .value
+                                                                              .kotgEvents
+                                                                              .eventData
+                                                                              .elementAt(index)
+                                                                              .id),
+                                                                        ),
+                                                                      );
                                                                     }).whenComplete(
                                                                             () {
                                                                       context
                                                                           .loaderOverlay
                                                                           .hide();
 
-                                                                      ref.refresh(
-                                                                          eventsProvider);
+                                                                      // ref.refresh(
+                                                                      //     eventsProvider);
                                                                     });
                                                                   },
                                                                   child: Text(
@@ -425,9 +474,13 @@ class EventsPage extends ConsumerWidget {
                                                             Text('Error'));
                                                   })),
                                                   subtitle: Text(
-                                                      Jiffy(events.value[index]
-                                                                  ['attributes']
-                                                              ['event_date'])
+                                                      Jiffy(events
+                                                              .value
+                                                              .kotgEvents
+                                                              .eventData
+                                                              .elementAt(index)
+                                                              .eventAttributes
+                                                              .eventDate)
                                                           .format(
                                                               'dd MMM yyyy'),
                                                       style:
@@ -437,8 +490,11 @@ class EventsPage extends ConsumerWidget {
                                                             FontWeight.bold,
                                                       )),
                                                   title: Text(
-                                                      events.value[index]
-                                                          ['attributes']['name'],
+                                                      events.value.kotgEvents
+                                                          .eventData
+                                                          .elementAt(index)
+                                                          .eventAttributes
+                                                          .name,
                                                       style: GoogleFonts.poppins(
                                                         fontSize: 12.sp,
                                                         fontWeight:
@@ -453,10 +509,15 @@ class EventsPage extends ConsumerWidget {
                                               Radius.circular(15)),
                                           image: DecorationImage(
                                               image: NetworkImage(
-                                                  events.value[index]
-                                                              ['attributes']
-                                                          ['image']['data']
-                                                      ['attributes']['url']),
+                                                events
+                                                    .value.kotgEvents.eventData
+                                                    .elementAt(index)
+                                                    .eventAttributes
+                                                    .kotgEventImage
+                                                    .eventImageData
+                                                    .kotgEventImageAttributes
+                                                    .url,
+                                              ),
                                               fit: BoxFit.cover)),
                                     ),
                                   ),

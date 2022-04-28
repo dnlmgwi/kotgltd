@@ -98,8 +98,7 @@ class SignUpPage extends ConsumerWidget {
                                         width: 2,
                                       )),
                                   filled: true,
-                                  contentPadding: EdgeInsets.only(
-                                      bottom: 10.sp, left: 10.sp, right: 10.sp),
+                                  contentPadding: EdgeInsets.all(13.sp),
                                   labelText: 'Username',
                                   labelStyle: GoogleFonts.oxygen(
                                       color: kotgGreen,
@@ -136,10 +135,7 @@ class SignUpPage extends ConsumerWidget {
                                   ],
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.only(
-                                        bottom: 10.sp,
-                                        left: 10.sp,
-                                        right: 10.sp),
+                                    contentPadding: EdgeInsets.all(13.sp),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(5.0)),
@@ -178,7 +174,7 @@ class SignUpPage extends ConsumerWidget {
                               //         borderSide:
                               //             BorderSide(color: kotgGreen, width: 2)),
                               //     filled: true,
-                              //     contentPadding: EdgeInsets.all(13),
+                              //     contentPadding: EdgeInsets.all(13.sp),
                               //     labelText: 'Phone',
                               //     labelStyle: GoogleFonts.oxygen(
                               //         color: kotgGreen,
@@ -208,6 +204,7 @@ class SignUpPage extends ConsumerWidget {
                                 autofillHints: [AutofillHints.password],
                                 obscureText: passwordVisibility,
                                 decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(13.sp),
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(5.0)),
@@ -216,8 +213,6 @@ class SignUpPage extends ConsumerWidget {
                                         width: 2,
                                       )),
                                   filled: true,
-                                  contentPadding: EdgeInsets.only(
-                                      bottom: 10.sp, left: 10.sp, right: 10.sp),
                                   labelText: 'Password',
                                   labelStyle: GoogleFonts.oxygen(
                                       color: kotgGreen,
@@ -252,6 +247,7 @@ class SignUpPage extends ConsumerWidget {
                                 autofillHints: [AutofillHints.password],
                                 obscureText: passwordVisibility,
                                 decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(13.sp),
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(5.0)),
@@ -275,8 +271,6 @@ class SignUpPage extends ConsumerWidget {
                                           .state = !passwordVisibility;
                                     },
                                   ),
-                                  contentPadding: EdgeInsets.only(
-                                      bottom: 10.sp, left: 10.sp, right: 10.sp),
                                   labelText: 'Confirm Password',
                                   labelStyle: GoogleFonts.oxygen(
                                       color: kotgGreen,

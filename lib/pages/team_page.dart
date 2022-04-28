@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -172,16 +173,19 @@ class TeamsPage extends ConsumerWidget {
                                         ),
 
                                         child: ListTile(
-                                          // leading: ClipOval(
-                                          //   // child: Image.network(
-                                          //   //   joinRequest[index]['attributes']
-                                          //   //       ['user']['avatar']['data'],
-                                          //   //   width: 40,
-                                          //   //   height: 40,
-                                          //   //   fit: BoxFit.cover,
-                                          //   // ),
-                                          //   child: Container(),
-                                          // ),
+                                          leading: ClipOval(
+                                            child: TextAvatar(
+                                              shape: Shape.Circular,
+                                              size: 50,
+                                              textColor: Colors.white,
+                                              fontSize: 35,
+                                              upperCase: true,
+                                              numberLetters: 2,
+                                              text: invite[index]['attributes']
+                                                      ['user']['data']
+                                                  ['attributes']['email'],
+                                            ),
+                                          ),
                                           title: Text(invite[index]
                                                   ['attributes']['user']['data']
                                               ['attributes']['email']),

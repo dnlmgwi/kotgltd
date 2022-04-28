@@ -72,7 +72,7 @@ class CreateTeamWidget extends ConsumerWidget {
                                   borderSide:
                                       BorderSide(color: kotgPurple, width: 2)),
                               filled: true,
-                              contentPadding: EdgeInsets.all(10.sp),
+                              contentPadding: EdgeInsets.all(13.sp),
                               labelText: 'Enter Your Team Name'.toUpperCase(),
                               labelStyle: GoogleFonts.oxygen(
                                   color: kotgPurple,
@@ -123,19 +123,18 @@ class CreateTeamWidget extends ConsumerWidget {
                                     .createTeam(
                                   teamName: teamNameController.text,
                                 )
-                                    .then((value) {
+                                    .onError((error, stackTrace) {
+                                  context.loaderOverlay.hide();
+                                  Get.snackbar("Error", error!.toString(),
+                                      backgroundColor: Colors.red,
+                                      snackPosition: SnackPosition.TOP);
+                                }).then((value) {
                                   Get.snackbar("Success", value,
                                       snackPosition: SnackPosition.TOP);
                                   context.loaderOverlay.hide();
                                   ref.refresh(teamRepoProvider);
-                                }).catchError((error, stackTrace) {
-                                  context.loaderOverlay.hide();
-
-                                  Get.snackbar("Error", error!.toString(),
-                                      backgroundColor: Colors.red,
-                                      snackPosition: SnackPosition.TOP);
+                                  Get.back();
                                 });
-                                Get.back();
                               }
                             },
                           ),

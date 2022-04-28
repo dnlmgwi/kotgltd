@@ -9,6 +9,7 @@
 //   EditProfileWidget({Key? key}) : super(key: key);
 
 //   final _formKey = GlobalKey<FormState>();
+
 //   @override
 //   Widget build(BuildContext context, ref) {
 //     var _avatarId = ref.watch(avatarProvider);
@@ -32,93 +33,93 @@
 //                 return Column(
 //                   crossAxisAlignment: CrossAxisAlignment.center,
 //                   children: [
-//                     Form(
-//                       key: _formKey,
-//                       child: Column(
-//                         children: <Widget>[
-//                           FormField<String>(
-//                             onSaved: (value) {
-//                               _avatarId = value!;
-//                             },
-//                             builder: (FormFieldState<String> state) {
-//                               return Container(
-//                                 height: 100,
-//                                 child: Consumer(
-//                                   builder: (context, watch, child) {
-//                                     final _avatarProvider =
-//                                         ref.watch(avatarsProvider);
+//                     // Form(
+//                     //   key: _formKey,
+//                     //   child: Column(
+//                     //     children: <Widget>[
+//                     //       FormField<String>(
+//                     //         onSaved: (value) {
+//                     //           _avatarId = value!;
+//                     //         },
+//                     //         builder: (FormFieldState<String> state) {
+//                     //           return Container(
+//                     //             height: 100,
+//                     //             child: Consumer(
+//                     //               builder: (context, watch, child) {
+//                     //                 final _avatarProvider =
+//                     //                     ref.watch(avatarsProvider);
 
-//                                     return _avatarProvider.map(
-//                                       data: (avatarResponse) {
-//                                         ///Set Default Avatar on Load
-//                                         // _avatarId.state = avatarResponse.value[0]['id'];
-//                                         return ScrollSnapList(
-//                                           onItemFocus: (int index) {
-//                                             _avatarId = avatarResponse
-//                                                 .value[index]['id'];
-//                                             updateValue(
-//                                                 state,
-//                                                 avatarResponse.value[index]
-//                                                     ['id']);
-//                                           },
-//                                           itemSize: 50,
-//                                           itemBuilder: (BuildContext contex,
-//                                                   int index) =>
-//                                               ClipOval(
-//                                             child: Image.network(
-//                                               avatarResponse.value[index]
-//                                                   ['image']['url'],
-//                                               width: 100,
-//                                               height: 100,
-//                                               fit: BoxFit.cover,
-//                                             ),
-//                                           ),
-//                                           selectedItemAnchor:
-//                                               SelectedItemAnchor.MIDDLE,
-//                                           itemCount:
-//                                               avatarResponse.value.length,
-//                                           dynamicItemOpacity: 0.2,
-//                                           focusOnItemTap: true,
-//                                           shrinkWrap: true,
-//                                           dynamicItemSize: true,
-//                                           margin: EdgeInsets.all(2.5),
-//                                           updateOnScroll: true,
-//                                           initialIndex: 1,
-//                                         );
-//                                       },
-//                                       loading: (_) => Center(
-//                                           child: CircularProgressIndicator()),
-//                                       error: (message) => Center(
-//                                         child: Icon(
-//                                           Ionicons.pulse_outline,
-//                                           color:
-//                                               Colors.white, //TODO Retry Button
-//                                         ), //TODO Error Icon
-//                                       ),
-//                                     );
-//                                   },
-//                                 ),
-//                               ); // Any field widget like DropDownButton,
-//                               // Radio, Checkbox, or Slider.
-//                             },
-//                             validator: (value) {
-//                               if (value == null) {
-//                                 Get.snackbar(
-//                                   "Please Select an Avatar",
-//                                   'Scroll or Touch to Select',
-//                                   snackPosition: SnackPosition.TOP,
-//                                 );
-//                                 return 'Please Select and Avatar';
-//                               }
-//                               return null;
-//                             },
-//                           ),
-//                           SizedBox(
-//                             height: 35,
-//                           ),
-//                         ],
-//                       ),
-//                     ),
+//                     //                 return _avatarProvider.map(
+//                     //                   data: (avatarResponse) {
+//                     //                     ///Set Default Avatar on Load
+//                     //                     // _avatarId.state = avatarResponse.value[0]['id'];
+//                     //                     return ScrollSnapList(
+//                     //                       onItemFocus: (int index) {
+//                     //                         _avatarId = avatarResponse
+//                     //                             .value[index]['id'];
+//                     //                         updateValue(
+//                     //                             state,
+//                     //                             avatarResponse.value[index]
+//                     //                                 ['id']);
+//                     //                       },
+//                     //                       itemSize: 50,
+//                     //                       itemBuilder: (BuildContext contex,
+//                     //                               int index) =>
+//                     //                           ClipOval(
+//                     //                         child: Image.network(
+//                     //                           avatarResponse.value[index]
+//                     //                               ['image']['url'],
+//                     //                           width: 100,
+//                     //                           height: 100,
+//                     //                           fit: BoxFit.cover,
+//                     //                         ),
+//                     //                       ),
+//                     //                       selectedItemAnchor:
+//                     //                           SelectedItemAnchor.MIDDLE,
+//                     //                       itemCount:
+//                     //                           avatarResponse.value.length,
+//                     //                       dynamicItemOpacity: 0.2,
+//                     //                       focusOnItemTap: true,
+//                     //                       shrinkWrap: true,
+//                     //                       dynamicItemSize: true,
+//                     //                       margin: EdgeInsets.all(2.5),
+//                     //                       updateOnScroll: true,
+//                     //                       initialIndex: 1,
+//                     //                     );
+//                     //                   },
+//                     //                   loading: (_) => Center(
+//                     //                       child: CircularProgressIndicator()),
+//                     //                   error: (message) => Center(
+//                     //                     child: Icon(
+//                     //                       Ionicons.pulse_outline,
+//                     //                       color:
+//                     //                           Colors.white, //TODO Retry Button
+//                     //                     ), //TODO Error Icon
+//                     //                   ),
+//                     //                 );
+//                     //               },
+//                     //             ),
+//                     //           ); // Any field widget like DropDownButton,
+//                     //           // Radio, Checkbox, or Slider.
+//                     //         },
+//                     //         validator: (value) {
+//                     //           if (value == null) {
+//                     //             Get.snackbar(
+//                     //               "Please Select an Avatar",
+//                     //               'Scroll or Touch to Select',
+//                     //               snackPosition: SnackPosition.TOP,
+//                     //             );
+//                     //             return 'Please Select and Avatar';
+//                     //           }
+//                     //           return null;
+//                     //         },
+//                     //       ),
+//                     //       SizedBox(
+//                     //         height: 35,
+//                     //       ),
+//                     //     ],
+//                     //   ),
+//                     // ),
 //                     SizedBox(
 //                       height: 15,
 //                     ),

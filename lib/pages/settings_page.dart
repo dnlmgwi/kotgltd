@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/profile/widgets/edit_profile_widget.dart';
+import 'package:kotgltd/features/profile/widgets/update_profile_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icon.dart';
 
@@ -142,13 +143,11 @@ class SettingsPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    // ListTile(
-                    //   leading: LineIcon.user(),
-                    //   title: Text('Profile'),
-                    //   onTap: () {
-                    //     Get.to(EditProfileWidget());
-                    //   },
-                    // ),
+                    ListTile(
+                      leading: LineIcon.user(),
+                      title: Text('Profile'),
+                      onTap: () => Get.to(UpdateProfileWidget()),
+                    ),
                     Divider(),
                     Padding(
                       padding:

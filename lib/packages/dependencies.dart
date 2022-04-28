@@ -13,3 +13,4 @@ export 'package:jiffy/jiffy.dart';
 export 'package:email_validator/email_validator.dart';
 export 'package:flutter_markdown/flutter_markdown.dart';
 export 'package:dart_strapi/dart_strapi.dart';
+export 'package:gaimon/gaimon.dart';

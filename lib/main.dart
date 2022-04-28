@@ -12,6 +12,7 @@ import 'package:kotgltd/pages/pages.dart';
 import 'package:kotgltd/services/connection_state/connection_service.dart';
 import 'package:kotgltd/services/connection_state/connection_state_providers.dart';
 import 'package:lottie/lottie.dart';
+import 'package:quick_notify/quick_notify.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,11 @@ void main() async {
   await Hive.openBox<Team>('team');
   // await Hive.openBox<Profile>('profile');
   await Hive.openBox<Token>('token');
+  var hasPermission = await QuickNotify.hasPermission();
+
+  if (hasPermission) {
+    await QuickNotify.requestPermission();
+  }
 
   runApp(
     ProviderScope(

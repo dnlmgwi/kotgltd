@@ -4,6 +4,8 @@ import 'package:kotgltd/data/enviroment_creds.dart';
 import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/events/graphql/events_queries.dart';
+import 'package:kotgltd/features/events/model/kotgEvent.dart';
+import 'package:kotgltd/features/events/model/kotgEvents.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
@@ -37,7 +39,7 @@ class EventsRepository {
     return client;
   }
 
-  Future<List> fetchEvents() async {
+  Future<KOTGEvent> fetchEvents() async {
     try {
       final QueryOptions options = QueryOptions(
         document: gql(EventsQueries.getAllEvents()),
@@ -54,11 +56,11 @@ class EventsRepository {
         }
       }
 
-      var response = result.data!['events']['data'] as List;
+      var response = result.data!;
 
       print(response);
 
-      return response;
+      return KOTGEvent.fromJson(response);
     } on TimeoutException {
       ///30 Seconds Timeout
       throw NoConnectionException();
