@@ -4,9 +4,9 @@ import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:quick_notify/quick_notify.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 // import 'package:external_app_launcher/external_app_launcher.dart';
 
@@ -31,7 +31,13 @@ class EventsPage extends ConsumerWidget {
         {required String eventId,
         required String eventName,
         required String desciption,
-        required String imageUrl}) async {
+        required String imageUrl,
+        required String maxParticipants,
+        required String price,
+        required String dateTime,
+        String link = 'http://www.google.com',
+        required String prize,
+        required String eventDate}) async {
       await Get.bottomSheet(Container(
         color: kotgBlack,
         child: SingleChildScrollView(
@@ -56,7 +62,10 @@ class EventsPage extends ConsumerWidget {
                     ),
                     Spacer(),
                     IconButton(
-                        onPressed: () => Get.back(), icon: Icon(Ionicons.close))
+                        onPressed: () => Get.back(),
+                        icon: Icon(
+                          Ionicons.close,
+                        ))
                   ],
                 ),
               ),
@@ -69,7 +78,93 @@ class EventsPage extends ConsumerWidget {
                         image: NetworkImage(imageUrl), fit: BoxFit.cover)),
               ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(20.0),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        right: 5,
+                      ),
+                      child: Icon(
+                        LineIcons.calendarAlt,
+                      ),
+                    ),
+                    Text(Jiffy(eventDate).format('dd MMM yyyy'),
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5, left: 20),
+                      child: Icon(
+                        LineIcons.clockAlt,
+                      ),
+                    ),
+                    Text(Jiffy(dateTime).format('h:mm a'),
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5, left: 20),
+                      child: Icon(
+                        Ionicons.people,
+                      ),
+                    ),
+                    Text(maxParticipants,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5, left: 20),
+                      child: Icon(
+                        Ionicons.ticket_outline,
+                      ),
+                    ),
+                    Text('MWK ${price}',
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        right: 5,
+                      ),
+                      child: Icon(
+                        LineIcons.trophy,
+                      ),
+                    ),
+                    Text('MWK ${prize}',
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5, left: 20),
+                      child: Icon(
+                        LineIcons.link,
+                      ),
+                    ),
+                    Text(link,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: MarkdownBody(
                   shrinkWrap: true,
                   data: desciption,
@@ -79,9 +174,6 @@ class EventsPage extends ConsumerWidget {
           ),
         ),
       ));
-
-      // The code below will run after the bottom sheet goes away
-      print('The Bottom Sheet has gone away!');
     }
 
     void _showEventRegBottomSheet({
@@ -167,7 +259,7 @@ class EventsPage extends ConsumerWidget {
                                           snackPosition: SnackPosition.TOP);
                                       context.loaderOverlay.hide();
                                       Gaimon.success();
-                                      ref.refresh(deRegisterEventsProvider(
+                                      ref.refresh(registeredEventsProvider(
                                         int.parse(
                                           eventId,
                                         ),
@@ -255,6 +347,29 @@ class EventsPage extends ConsumerWidget {
                                 child: GestureDetector(
                                   onTap: () {
                                     _showEventDestailsBottomSheet(
+                                      price: events.value.kotgEvents.eventData
+                                          .elementAt(index)
+                                          .eventAttributes
+                                          .price
+                                          .toString(),
+                                      prize: events.value.kotgEvents.eventData
+                                          .elementAt(index)
+                                          .eventAttributes
+                                          .prize
+                                          .toString(),
+                                      maxParticipants: events
+                                          .value.kotgEvents.eventData
+                                          .elementAt(index)
+                                          .eventAttributes
+                                          .maxParticipants
+                                          .toString(),
+                                      dateTime:
+                                          '${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventDate} ${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventTime}',
+                                      eventDate: events
+                                          .value.kotgEvents.eventData
+                                          .elementAt(index)
+                                          .eventAttributes
+                                          .eventDate,
                                       eventId: events.value.kotgEvents.eventData
                                           .elementAt(index)
                                           .id,
@@ -288,50 +403,6 @@ class EventsPage extends ConsumerWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
-                                          // Row(
-                                          //   children: [
-                                          //     Expanded(
-                                          //       flex: 2,
-                                          //       child: Container(
-                                          //         height: 40,
-                                          //         child: Card(
-                                          //           shape:
-                                          //               RoundedRectangleBorder(
-                                          //             borderRadius:
-                                          //                 BorderRadius.circular(
-                                          //                     15.0),
-                                          //           ),
-                                          //           color: Colors.black87,
-                                          //           child: Row(
-                                          //             children: [
-                                          //               Icon(
-                                          //                 Ionicons
-                                          //                     .trophy_outline,
-                                          //                 size: 25,
-                                          //                 color: kotgGold,
-                                          //               ),
-                                          //               Expanded(
-                                          //                 flex: 2,
-                                          //                 child: Text('MWK' +
-                                          //                     events
-                                          //                         .value[index][
-                                          //                             'attributes']
-                                          //                             ['prize']
-                                          //                         .toString()),
-                                          //               )
-                                          //             ],
-                                          //           ),
-                                          //         ),
-                                          //       ),
-                                          //     ),
-                                          //     Expanded(
-                                          //       flex: 3,
-                                          //       child: Container(
-                                          //         height: 40,
-                                          //       ),
-                                          //     ),
-                                          //   ],
-                                          // ),
                                           Spacer(),
                                           Container(
                                             height: 70,
@@ -470,33 +541,96 @@ class EventsPage extends ConsumerWidget {
                                                               pathBackgroundColor:
                                                                   Colors.black,
                                                             ),
-                                                        error: (error) =>
-                                                            Text('Error'));
+                                                        error: (error) => Text(
+                                                            'Error')); //TODO Add Refresh
                                                   })),
-                                                  subtitle: Text(
-                                                      Jiffy(events
+                                                  subtitle: Wrap(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                          right: 5,
+                                                        ),
+                                                        child: Icon(
+                                                          LineIcons.calendarAlt,
+                                                          size: 15,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                          Jiffy(events
+                                                                  .value
+                                                                  .kotgEvents
+                                                                  .eventData
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .eventAttributes
+                                                                  .eventDate)
+                                                              .format(
+                                                                  'dd MMM yyyy'),
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                right: 5,
+                                                                left: 20),
+                                                        child: Icon(
+                                                          LineIcons.clockAlt,
+                                                          size: 15,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                          Jiffy('${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventDate} ${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventTime}')
+                                                              .format('h:mm a'),
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                right: 5,
+                                                                left: 20),
+                                                        child: Icon(
+                                                          Ionicons.people,
+                                                          size: 15,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                          events
                                                               .value
                                                               .kotgEvents
                                                               .eventData
                                                               .elementAt(index)
                                                               .eventAttributes
-                                                              .eventDate)
-                                                          .format(
-                                                              'dd MMM yyyy'),
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      )),
+                                                              .maxParticipants
+                                                              .toString(),
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                    ],
+                                                  ),
                                                   title: Text(
                                                       events.value.kotgEvents
                                                           .eventData
                                                           .elementAt(index)
                                                           .eventAttributes
                                                           .name,
-                                                      style: GoogleFonts.poppins(
-                                                        fontSize: 12.sp,
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontSize: 13.sp,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ))),
@@ -526,9 +660,9 @@ class EventsPage extends ConsumerWidget {
                             });
                       },
                       error: (error) {
-                        // Get.snackbar("Connection Error", error.toString(),
-                        //     backgroundColor: Colors.red,
-                        //     snackPosition: SnackPosition.BOTTOM);
+                        Get.snackbar("Connection Error", error.toString(),
+                            backgroundColor: Colors.red,
+                            snackPosition: SnackPosition.TOP);
 
                         return ListView.builder(
                             itemCount: 5,

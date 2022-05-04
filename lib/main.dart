@@ -29,11 +29,6 @@ void main() async {
   await Hive.openBox<Team>('team');
   // await Hive.openBox<Profile>('profile');
   await Hive.openBox<Token>('token');
-  var hasPermission = await QuickNotify.hasPermission();
-
-  if (hasPermission) {
-    await QuickNotify.requestPermission();
-  }
 
   runApp(
     ProviderScope(

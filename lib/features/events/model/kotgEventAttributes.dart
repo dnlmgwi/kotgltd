@@ -17,6 +17,9 @@ class KOTGEventAttributes {
 
   String description;
 
+  @JsonKey(name: 'max_participants')
+  int maxParticipants;
+
   int price;
 
   int prize;
@@ -28,6 +31,7 @@ class KOTGEventAttributes {
     required this.name,
     required this.price,
     required this.prize,
+    required this.maxParticipants,
     required this.kotgEventImage,
   });
 

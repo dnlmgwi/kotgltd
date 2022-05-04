@@ -480,7 +480,7 @@ class HomePage extends ConsumerWidget {
                         }
                         // Otherwise, show something whilst waiting for initialization to complete
                         return Container(
-                          height: 150.sp,
+                          // height: 150.sp,
                           child: Swiper(
                             itemBuilder: (BuildContext context, int index) {
                               return Container(

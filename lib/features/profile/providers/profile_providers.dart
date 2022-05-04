@@ -16,9 +16,9 @@ var profileRepoProvider = Provider(
 
 var avatarProvider = StateProvider<String>((ref) => '');
 
-var firstNameProvider = StateProvider<String>((ref) => '');
+var firstNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
-var lastNameProvider = StateProvider<String>((ref) => '');
+var lastNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
 var phoneNumberProvider = StateProvider<PhoneNumber>((ref) => PhoneNumber(
       isoCode: IsoCode.MW,
@@ -27,7 +27,8 @@ var phoneNumberProvider = StateProvider<PhoneNumber>((ref) => PhoneNumber(
 
 var otpProvider = StateProvider<String>((ref) => '');
 
-var dateOfBirthProvider = StateProvider<DateTime>((ref) => DateTime.now());
+var dateOfBirthProvider =
+    StateProvider.autoDispose<DateTime>((ref) => DateTime.now());
 
 var dateOfBirthFinalProvider =
     StateProvider.family<String, DateTime?>((ref, date) {

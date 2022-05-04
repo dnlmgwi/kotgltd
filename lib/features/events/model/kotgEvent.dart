@@ -1,5 +1,4 @@
 import 'package:kotgltd/features/events/model/kotgEvents.dart';
-import 'package:kotgltd/features/profile/model/profileAttributes.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 part 'kotgEvent.g.dart';
 

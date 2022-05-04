@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kotgltd/features/events/model/kotgEvent.dart';
-import 'package:kotgltd/features/events/model/kotgEvents.dart';
 import 'package:kotgltd/features/events/services/events_repository.dart';
 import 'package:kotgltd/features/events/services/reference_generator.dart';
 import 'package:kotgltd/packages/dependencies.dart';
@@ -12,21 +11,6 @@ final eventsRepoProvider = Provider(
 final eventsProvider = FutureProvider<KOTGEvent>((ref) async {
   final eventsClient = ref.watch(eventsRepoProvider);
   return eventsClient.fetchEvents();
-});
-
-final referenceGenerator = Provider((ref) => ReferenceGenerator());
-
-final eventReferenceProvider =
-    FutureProvider.family<String, String>((ref, eventName) async {
-  String reference = await ref
-      .watch(
-        referenceGenerator,
-      )
-      .createReference(
-        eventName,
-      );
-
-  return reference;
 });
 
 final registeredEventsProvider =

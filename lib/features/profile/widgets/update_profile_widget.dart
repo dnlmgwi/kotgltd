@@ -228,7 +228,7 @@ class UpdateProfileWidget extends ConsumerWidget {
                                     initialValue:
                                         data.value.profileAttributes.firstName,
                                     enabled: data.value.profileAttributes
-                                            .firstName!.isEmpty
+                                            .firstName.isEmpty
                                         ? true
                                         : false,
                                     decoration: InputDecoration(
@@ -265,7 +265,7 @@ class UpdateProfileWidget extends ConsumerWidget {
                                     initialValue:
                                         data.value.profileAttributes.lastName,
                                     enabled: data.value.profileAttributes
-                                            .lastName!.isEmpty
+                                            .lastName.isEmpty
                                         ? true
                                         : false,
                                     keyboardType: TextInputType.emailAddress,
@@ -383,6 +383,7 @@ class UpdateProfileWidget extends ConsumerWidget {
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
                                         context.loaderOverlay.show();
+
                                         _repo
                                             .updateProfile(
                                           firstName: _firstName.state,

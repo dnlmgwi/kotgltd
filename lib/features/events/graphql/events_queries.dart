@@ -2,7 +2,7 @@ class EventsQueries {
   static String getAllEvents() {
     return r'''query {
   events(
-    sort: "event_date:asc", publicationState:LIVE,
+    sort: "event_date:desc", publicationState:LIVE,
   ){
     data {
       id
@@ -17,6 +17,7 @@ class EventsQueries {
           }
         }
         }
+        max_participants
         description
         price
         prize

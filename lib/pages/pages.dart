@@ -1,7 +1,6 @@
 import 'package:kotgltd/features/auth/pages/sign_in_page.dart';
 import 'package:kotgltd/features/auth/pages/sign_up_page.dart';
 import 'package:kotgltd/features/events/pages/event_details_page.dart';
-import 'package:kotgltd/features/profile/widgets/edit_profile_widget.dart';
 import 'package:kotgltd/features/profile/widgets/update_profile_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/pages/create_team_widget.dart';

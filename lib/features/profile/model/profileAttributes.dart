@@ -3,15 +3,14 @@ part 'profileAttributes.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ProfileAttributes {
-
   @JsonKey(name: 'first_name')
-  String? firstName;
+  late String firstName;
 
   @JsonKey(name: 'last_name')
-  String? lastName;
+  late String lastName;
 
   @JsonKey(name: 'date_of_birth')
-  String? dateOfBirth;
+  late String dateOfBirth;
 
   @JsonKey(name: 'iso_code')
   String? isoCode;
@@ -29,10 +28,10 @@ class ProfileAttributes {
     required this.createdAt,
     required this.email,
     required this.username,
-    this.dateOfBirth,
-    this.firstName,
+    this.dateOfBirth ="",
+    this.firstName ="",
     this.isoCode,
-    this.lastName,
+    this.lastName ="",
     this.phoneNumber,
   });
 
