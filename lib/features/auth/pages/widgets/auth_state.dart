@@ -27,24 +27,29 @@ class AuthStateWidget extends ConsumerWidget {
         // else if (authState.value == AuthState.noProfile) {
         //   return noProfileBuilder(context);
         // }
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Your are offline'),
-              const Text('Can\'t load data right now.'),
-            ],
+        return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Your are offline'),
+                const Text('Can\'t load data right now.'),
+              ],
+            ),
           ),
         );
       },
-      loading: (loading) => Center(child: CircularProgressIndicator()),
-      error: (error) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Something went wrong'),
-            const Text('Can\'t load data right now.'),
-          ],
+      loading: (loading) =>
+          Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error) => Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Something went wrong'),
+              const Text('Can\'t load data right now.'),
+            ],
+          ),
         ),
       ),
     );
