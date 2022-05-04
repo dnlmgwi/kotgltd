@@ -118,6 +118,11 @@ class SettingsPage extends ConsumerWidget {
             //     ),
             //   ),
             // ),
+            ListTile(
+              leading: LineIcon.user(),
+              title: Text('Profile'),
+              onTap: () => Get.to(UpdateProfileWidget()),
+            ),
             Divider(),
             ListTile(
               leading: LineIcon.doorOpen(),
@@ -142,11 +147,7 @@ class SettingsPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    ListTile(
-                      leading: LineIcon.user(),
-                      title: Text('Profile'),
-                      onTap: () => Get.to(UpdateProfileWidget()),
-                    ),
+
                     Divider(),
                     Padding(
                       padding:
