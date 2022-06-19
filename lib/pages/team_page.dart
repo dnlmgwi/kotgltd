@@ -509,11 +509,7 @@ class TeamsPage extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Opacity(
-                        opacity: 1.0,
-                        child: Lottie.asset('assets/images/joystick.json',
-                            fit: BoxFit.cover, height: 80),
-                      ),
+                      CircularProgressIndicator(),
                       Text(
                         'Please wait...',
                         style: GoogleFonts.sarala(

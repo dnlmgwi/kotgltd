@@ -19,7 +19,7 @@ class UpdateProfileWidget extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final _firstName = ref.watch(firstNameProvider.state);
     final _lastName = ref.watch(lastNameProvider.state);
-    final _avatarId = ref.watch(avatarProvider.state);
+    // final _avatarId = ref.watch(avatarProvider.state);
     var _phoneNumber = ref.watch(phoneNumberProvider.state);
     final _dateofBirth = ref.watch(dateOfBirthProvider.state);
 
@@ -36,10 +36,6 @@ class UpdateProfileWidget extends ConsumerWidget {
       ref.read(firstNameProvider.state).state = firstName.trim();
     }
 
-    void updateAvatar(BuildContext context, String avatar) {
-      ref.read(avatarProvider.state).state = avatar;
-    }
-
     void updateLastName(BuildContext context, String lastName) {
       ref.read(lastNameProvider.state).state = lastName.trim();
     }
@@ -50,6 +46,11 @@ class UpdateProfileWidget extends ConsumerWidget {
 
     void updateValue(state, String id) {
       state.setValue(id);
+    }
+
+    void updateDetails(String firstName, String lastName) {
+      updateFirstName(context, firstName);
+      updateLastName(context, lastName);
     }
 
     final _profile = ref.watch(profileProvider);
@@ -93,13 +94,7 @@ class UpdateProfileWidget extends ConsumerWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Opacity(
-                                      opacity: 1.0,
-                                      child: Lottie.asset(
-                                          'assets/images/joystick.json',
-                                          fit: BoxFit.cover,
-                                          height: 80),
-                                    ),
+                                    CircularProgressIndicator(),
                                     Text(
                                       'Please wait...',
                                       style: GoogleFonts.sarala(
@@ -298,7 +293,7 @@ class UpdateProfileWidget extends ConsumerWidget {
                                     },
                                   ),
                                   SizedBox(
-                                    height: 15,
+                                    height: 35,
                                   ),
                                   // PhoneFormField(
                                   //   autovalidateMode:
@@ -331,45 +326,45 @@ class UpdateProfileWidget extends ConsumerWidget {
                                   //   countrySelectorNavigator:
                                   //       CountrySelectorNavigator.bottomSheet(),
                                   // ),
-                                  DateTimePicker(
-                                    initialValue: data
-                                        .value.profileAttributes.dateOfBirth,
-                                    enabled: data.value.profileAttributes
-                                            .dateOfBirth.isBlank!
-                                        ? true
-                                        : false,
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime(2100),
-                                    dateLabelText: 'Date of Birth',
-                                    onChanged: (val) => print(val),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(13.sp),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5.0)),
-                                          borderSide: BorderSide(
-                                              color: kotgGreen, width: 2)),
-                                      filled: true,
-                                      labelText: 'Date Of Birth',
-                                      labelStyle: GoogleFonts.oxygen(
-                                          color: kotgGreen,
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    type: DateTimePickerType.date,
-                                    initialDate: DateTime.now(),
-                                    calendarTitle: 'Date of Birth',
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter valid Date Of Birth';
-                                      }
-                                      return null;
-                                    },
-                                    onSaved: (val) => print(val),
-                                  ),
-                                  SizedBox(
-                                    height: 35,
-                                  ),
+                                  // DateTimePicker(
+                                  //   initialValue: data
+                                  //       .value.profileAttributes.dateOfBirth,
+                                  //   enabled: data.value.profileAttributes
+                                  //           .dateOfBirth.isEmpty
+                                  //       ? true
+                                  //       : false,
+                                  //   firstDate: DateTime(1900),
+                                  //   lastDate: DateTime(2100),
+                                  //   dateLabelText: 'Date of Birth',
+                                  //   onChanged: (val) => print(val),
+                                  //   decoration: InputDecoration(
+                                  //     contentPadding: EdgeInsets.all(13.sp),
+                                  //     focusedBorder: OutlineInputBorder(
+                                  //         borderRadius: BorderRadius.all(
+                                  //             Radius.circular(5.0)),
+                                  //         borderSide: BorderSide(
+                                  //             color: kotgGreen, width: 2)),
+                                  //     filled: true,
+                                  //     labelText: 'Date Of Birth',
+                                  //     labelStyle: GoogleFonts.oxygen(
+                                  //         color: kotgGreen,
+                                  //         fontSize: 15.sp,
+                                  //         fontWeight: FontWeight.bold),
+                                  //   ),
+                                  //   type: DateTimePickerType.date,
+                                  //   initialDate: DateTime.now(),
+                                  //   calendarTitle: 'Date of Birth',
+                                  //   validator: (value) {
+                                  //     if (value!.isEmpty) {
+                                  //       return 'Please enter valid Date Of Birth';
+                                  //     }
+                                  //     return null;
+                                  //   },
+                                  //   onSaved: (val) => print(val),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 35,
+                                  // ),
                                   ElevatedButton(
                                     style: OutlinedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -384,25 +379,37 @@ class UpdateProfileWidget extends ConsumerWidget {
                                       if (_formKey.currentState!.validate()) {
                                         context.loaderOverlay.show();
 
-                                        _repo
-                                            .updateProfile(
-                                          firstName: _firstName.state,
-                                          lastName: _lastName.state,
-                                          dateOfBirth: _dateofBirthFinal.state,
-                                          phoneNumber: _phoneNumber.state,
-                                        )
-                                            .then((value) {
-                                          context.loaderOverlay.hide();
-                                        }).onError((error, stackTrace) {
+                                        if (_firstName.state != "" ||
+                                            _lastName.state != "") {
+                                          _repo
+                                              .updateProfile(
+                                            firstName: _firstName.state,
+                                            lastName: _lastName.state,
+                                            dateOfBirth:
+                                                _dateofBirthFinal.state,
+                                            phoneNumber: _phoneNumber.state,
+                                          )
+                                              .then((value) {
+                                            context.loaderOverlay.hide();
+                                            ref.refresh(profileProvider);
+                                          }).onError((error, stackTrace) {
+                                            Get.snackbar(
+                                              "Update Error",
+                                              error!.toString(),
+                                              backgroundColor: Colors.red,
+                                              snackPosition: SnackPosition.TOP,
+                                            );
+                                            context.loaderOverlay.hide();
+                                          }); //TODO Show Error
+                                        } else {
                                           Get.snackbar(
                                             "Update Error",
-                                            error!.toString(),
+                                            r'''You Can't Make This Change''',
                                             backgroundColor: Colors.red,
                                             snackPosition: SnackPosition.TOP,
                                           );
                                           context.loaderOverlay.hide();
-                                        }); //TODO Show Error
-
+                                        }
                                       }
                                     },
                                     child: Center(

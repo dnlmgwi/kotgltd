@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/profile/widgets/update_profile_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -16,6 +16,75 @@ class SettingsPage extends ConsumerWidget {
     final _auth = ref.read(authProvider);
 
     // final _system = ref.watch(systemStatusProvider);
+    final Uri _urlGef = Uri.parse('https://www.globalesports.org/');
+    final Uri _urlFeedback = Uri.parse('https://forms.gle/R7ctyVzPgN6KupTj7');
+    final Uri _urlWA =
+        Uri.parse(r'''https://wa.me/265997176756?text=KOTG%20Feedback''');
+
+    void _launchGEFURL() async {
+      if (!await launch(_urlGef.toString())) throw 'Could not launch $_urlGef';
+    }
+
+    void _launchFeedbackURL() async {
+      if (!await launch(_urlFeedback.toString()))
+        throw 'Could not launch $_urlFeedback';
+    }
+
+    void _launchWAURL() async {
+      if (!await launch(_urlWA.toString())) throw 'Could not launch $_urlWA';
+    }
+
+    void _showEventDestailsBottomSheet() async {
+      await Get.bottomSheet(Container(
+        color: kotgBlack,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 15,
+                  top: 18,
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 35, bottom: 25),
+                      child: Text(
+                        'Partners',
+                        style: GoogleFonts.sarala(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 26.sp,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 35, bottom: 25),
+                      child: IconButton(
+                          onPressed: () => Get.back(),
+                          icon: Icon(
+                            Ionicons.close,
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 35, left: 35, bottom: 25),
+                child: Center(
+                  child: Container(
+                    child: Text('Coming Soon!'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ));
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -124,13 +193,6 @@ class SettingsPage extends ConsumerWidget {
               onTap: () => Get.to(UpdateProfileWidget()),
             ),
             Divider(),
-            ListTile(
-              leading: LineIcon.doorOpen(),
-              title: Text('Logout'),
-              enableFeedback: true,
-              onTap: () => _auth.logout(),
-            ),
-            Divider(),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -147,7 +209,12 @@ class SettingsPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-
+                    ListTile(
+                      leading: LineIcon.doorOpen(),
+                      title: Text('Logout'),
+                      enableFeedback: true,
+                      onTap: () => _auth.logout(),
+                    ),
                     Divider(),
                     Padding(
                       padding:
@@ -166,45 +233,62 @@ class SettingsPage extends ConsumerWidget {
                     //     'Donate',
                     //   ),
                     // ),
+                    // ListTile(
+                    //   leading: LineIcon.link(),
+                    //   title: Text('iMind Mental Health'),
+                    //   subtitle: Text('in partnership with iMind Malawi'),
+                    //   enabled: false,
+                    // ),
                     ListTile(
                       leading: LineIcon.link(),
-                      title: Text('iMind Mental Health'),
-                      subtitle: Text('in partnership with iMind Malawi'),
-                      enabled: false,
+                      title: Text('Global Esports Federation'),
+                      subtitle: Text('A Proud Affiliate'),
+                      enabled: true,
+                      enableFeedback: true,
+                      onTap: () async {
+                        _launchGEFURL();
+                      },
                     ),
+                    // ListTile(
+                    //   leading: LineIcon.award(),
+                    //   title: Text('Benefits'),
+                    //   enabled: false,
+                    // ),
                     ListTile(
-                      leading: LineIcon.award(),
-                      title: Text('Benefits'),
-                      enabled: false,
-                    ),
-                    ListTile(
-                      leading: LineIcon.whatSApp(),
+                      leading: LineIcon.file(),
                       title: Text('Feedback'),
-                      enabled: false,
+                      enabled: true,
+                      enableFeedback: true,
+                      onTap: () async {
+                        _launchFeedbackURL();
+                      },
                     ),
-
                     ListTile(
                       leading: LineIcon.peopleCarry(),
                       title: Text('Partners'),
                       enableFeedback: true,
-                      enabled: false,
-                      onTap: () {},
+                      enabled: true,
+                      onTap: () {
+                        _showEventDestailsBottomSheet();
+                      },
                     ),
                     ListTile(
                       leading: LineIcon.phone(),
                       title: Text('Contact Us'),
                       enableFeedback: true,
-                      enabled: false,
-                      onTap: () {},
+                      enabled: true,
+                      onTap: () async {
+                        _launchWAURL();
+                      },
                     ),
-                    ListTile(
-                      leading: LineIcon.questionCircleAlt(),
-                      title: Text('FAQs'),
-                      enableFeedback: true,
-                      enabled: false,
-                      onTap: () {},
-                    ),
-                    Divider(),
+                    // ListTile(
+                    //   leading: LineIcon.questionCircleAlt(),
+                    //   title: Text('FAQs'),
+                    //   enableFeedback: true,
+                    //   enabled: false,
+                    //   onTap: () {},
+                    // ),
+                    // Divider(),
                     Padding(
                       padding:
                           const EdgeInsets.only(left: 15, top: 18, bottom: 15),
