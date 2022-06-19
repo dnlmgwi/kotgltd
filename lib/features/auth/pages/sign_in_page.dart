@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -116,14 +115,11 @@ class SignInPage extends ConsumerWidget {
                                       autofillHints: [AutofillHints.username],
                                       keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(13.sp),
                                         focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: kotgGreen, width: 2)),
                                         filled: true,
-                                        contentPadding: EdgeInsets.only(
-                                            bottom: 10.sp,
-                                            left: 10.sp,
-                                            right: 10.sp),
                                         labelText: 'Email',
                                         labelStyle: GoogleFonts.oxygen(
                                             color: kotgGreen,
@@ -132,6 +128,7 @@ class SignInPage extends ConsumerWidget {
                                       ),
                                       // autofocus: true,
                                       maxLines: 1,
+
                                       onChanged: (String username) =>
                                           updateUsername(context, username),
                                       showCursor: true,
@@ -175,10 +172,7 @@ class SignInPage extends ConsumerWidget {
                                                 .state = !passwordVisibility;
                                           },
                                         ),
-                                        contentPadding: EdgeInsets.only(
-                                            bottom: 10.sp,
-                                            left: 10.sp,
-                                            right: 10.sp),
+                                        contentPadding: EdgeInsets.all(13.sp),
                                         labelText: 'Password',
                                         labelStyle: GoogleFonts.oxygen(
                                             color: kotgGreen,
@@ -239,7 +233,7 @@ class SignInPage extends ConsumerWidget {
                             .catchError((error) {
                           context.loaderOverlay.hide();
                           Get.snackbar(
-                            "Connection Error",
+                            "Error",
                             error!.toString(),
                             backgroundColor: Colors.red,
                             snackPosition: SnackPosition.BOTTOM,

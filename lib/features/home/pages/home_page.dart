@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,11 +9,14 @@ import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
+import 'package:kotgltd/features/profile/widgets/update_profile_widget.dart';
 // import 'package:kotgltd/features/reminder/providers/reminder_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
+import 'package:ticket_material/ticket_material.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({Key? key}) : super(key: key);
@@ -35,20 +39,57 @@ class HomePage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 15.sp, top: 18.sp, bottom: 25.sp),
+            padding: EdgeInsets.only(
+                left: 15.sp, top: 18.sp, bottom: 25.sp, right: 15.sp),
             child: Consumer(builder: (context, ref, _) {
               return FadeIn(
                 delay: Duration(milliseconds: 500),
                 child: _user.map(
                   loading: (loading) => CircularProgressIndicator(),
-                  data: (data) => Text(
-                    'Welcome, ${data.value!.username}',
-                    style: GoogleFonts.sarala(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                      color: Colors.white,
-                    ),
-                  ),
+                  data: (data) =>
+                      // Row(
+                      //   children: [
+
+                      //     ),
+                      //     Spacer(),
+                      //     TextAvatar(
+                      //       shape: Shape.Circular,
+                      //       size: 50,
+                      //       textColor: Colors.white,
+                      //       fontSize: 35,
+                      //       upperCase: true,
+                      //       numberLetters: 2,
+                      //       text: data.value!.username,
+                      //     ),
+                      //   ],
+                      // ),
+                      ListTile(
+                          leading: TextAvatar(
+                            shape: Shape.Circular,
+                            size: 50,
+                            textColor: Colors.white,
+                            fontSize: 35,
+                            upperCase: true,
+                            numberLetters: 2,
+                            text: data.value!.username,
+                          ),
+                          subtitle: Text(
+                            data.value!.email,
+                            style: GoogleFonts.sarala(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          trailing: Icon(LineIcons.editAlt),
+                          onTap: () => Get.to(UpdateProfileWidget()),
+                          title: Text(
+                            'Welcome, ${data.value!.username}',
+                            style: GoogleFonts.sarala(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                            ),
+                          )),
                   error: (error) => Container(
                     height: 130.sp,
                     child: Center(
@@ -315,183 +356,115 @@ class HomePage extends ConsumerWidget {
                               padding: const EdgeInsets.all(15.0),
                               child: Swiper(
                                 itemBuilder: (BuildContext context, int index) {
+                                  Widget _buildLeft() {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                Jiffy('${events[index]['event']['event_date']} ${events[index]['event']['event_time']}')
+                                                    .format(
+                                                        'MMM do yyyy, h:mm a'),
+                                                style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+
+                                              // Text(
+                                              //   events[index]['user']
+                                              //       ['username'],
+                                              //   style: TextStyle(
+                                              //       fontSize: 18.sp,
+                                              //       color: Colors.black,
+                                              //       fontWeight:
+                                              //           FontWeight.bold),
+                                              // ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 12.sp),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                events[index]['user']
+                                                    ['username'],
+                                                style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    color: Colors.grey),
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  events[index]['status'] ==
+                                                          "approved"
+                                                      ? Text(
+                                                          '${events[index]['status']}',
+                                                          style: TextStyle(
+                                                              fontSize: 12.sp,
+                                                              color: kotgGreen),
+                                                        )
+                                                      : Text(
+                                                          events[index]
+                                                              ['status'],
+                                                          style: TextStyle(
+                                                              fontSize: 12.sp,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+
+                                  Widget _buildRight() {
+                                    return Container(
+                                      child: Center(
+                                        child: GestureDetector(
+                                            child: QrImage(
+                                              data: events[index]['reference'],
+                                              version: QrVersions.auto,
+                                              size: 90.sp,
+                                            ),
+                                            onTap: () {
+                                              Clipboard.setData(ClipboardData(
+                                                text: events[index]
+                                                    ['reference'],
+                                              ));
+
+                                              Fluttertoast.showToast(
+                                                  msg: 'Copied to Clipboard',
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.TOP,
+                                                  timeInSecForIosWeb: 1,
+                                                  fontSize: 16.0.sp);
+                                            }),
+                                      ),
+                                    );
+                                  }
+
                                   return Column(
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.all(16),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20),
-                                                topRight: Radius.circular(20))),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                GestureDetector(
-                                                    child: QrImage(
-                                                      data: events[index]
-                                                          ['reference'],
-                                                      version: QrVersions.auto,
-                                                      size: 80.sp,
-                                                    ),
-                                                    onTap: () {
-                                                      Clipboard.setData(
-                                                          ClipboardData(
-                                                        text: events[index]
-                                                            ['reference'],
-                                                      ));
-
-                                                      Fluttertoast.showToast(
-                                                          msg:
-                                                              'Copied to Clipboard',
-                                                          toastLength: Toast
-                                                              .LENGTH_SHORT,
-                                                          gravity:
-                                                              ToastGravity.TOP,
-                                                          timeInSecForIosWeb: 1,
-                                                          fontSize: 16.0.sp);
-                                                    }),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 16.sp,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Text(
-                                                  Jiffy('${events[index]['event']['event_date']} ${events[index]['event']['event_time']}')
-                                                      .format(
-                                                          'MMM do yyyy, h:mm a'),
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-
-                                                // Text(
-                                                //   events[index]['user']
-                                                //       ['username'],
-                                                //   style: TextStyle(
-                                                //       fontSize: 18.sp,
-                                                //       color: Colors.black,
-                                                //       fontWeight:
-                                                //           FontWeight.bold),
-                                                // ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 12.sp),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Text(
-                                                  events[index]['user']
-                                                      ['username'],
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: Colors.grey),
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    events[index]['status'] ==
-                                                            "approved"
-                                                        ? Text(
-                                                            '${events[index]['status']}',
-                                                            style: TextStyle(
-                                                                fontSize: 12.sp,
-                                                                color:
-                                                                    kotgGreen),
-                                                          )
-                                                        : Text(
-                                                            events[index]
-                                                                ['status'],
-                                                            style: TextStyle(
-                                                                fontSize: 12.sp,
-                                                                color: Colors
-                                                                    .grey),
-                                                          ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(
-                                            left: 16, right: 16, bottom: 12),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(20),
-                                                bottomRight:
-                                                    Radius.circular(20))),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            // OutlinedButton(
-                                            //     style: ElevatedButton.styleFrom(
-                                            //         onPrimary: Colors.white,
-                                            //         primary: kotgPurple),
-                                            //     onPressed: () async {
-                                            //       _reminder.eventDetails(
-                                            //         title:
-                                            //             'King of The Grid Esports ${events[index]['event']['name']}',
-                                            //         description: events[index]
-                                            //             ['user']['username'],
-                                            //         location: events[index]['event']
-                                            //             ['name'],
-                                            //         startDate: DateTime.parse(
-                                            //             events[index]['event']
-                                            //                 ['event_date']),
-                                            //         endDate: DateTime.parse(
-                                            //             events[index]['event']
-                                            //                 ['event_date']),
-                                            //       );
-                                            //     },
-                                            //     child: Text('Set Reminder',
-                                            //         style: GoogleFonts.poppins(
-                                            //           fontWeight: FontWeight.w600,
-                                            //           fontSize: 15.sp,
-                                            //         ))),
-                                            IconButton(
-                                                onPressed: () {
-                                                  Clipboard.setData(
-                                                      ClipboardData(
-                                                    text: events[index]
-                                                        ['reference'],
-                                                  ));
-
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          'Copied to Clipboard',
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity: ToastGravity.TOP,
-                                                      timeInSecForIosWeb: 1,
-                                                      fontSize: 16.0.sp);
-                                                },
-                                                icon: Icon(
-                                                  Ionicons.share_outline,
-                                                  color: kotgBlack,
-                                                ))
-                                          ],
-                                        ),
+                                      TicketMaterial(
+                                        height: 150,
+                                        colorBackground: Colors.white,
+                                        leftChild: _buildLeft(),
+                                        rightChild: _buildRight(),
                                       ),
                                     ],
                                   );
                                 },
-                                layout: SwiperLayout.STACK,
+                                layout: SwiperLayout.TINDER,
                                 itemCount: events.length,
                                 itemHeight: 250.sp,
                                 itemWidth: 450.sp,
@@ -507,7 +480,7 @@ class HomePage extends ConsumerWidget {
                         }
                         // Otherwise, show something whilst waiting for initialization to complete
                         return Container(
-                          height: 200.sp,
+                          // height: 150.sp,
                           child: Swiper(
                             itemBuilder: (BuildContext context, int index) {
                               return Container(

@@ -1,12 +1,16 @@
 // import 'package:supabase/supabase.dart';
+import 'dart:io';
+
 import 'package:graphql/client.dart';
 import 'package:kotgltd/data/enviroment_creds.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/team/graphql/team_queries.dart';
 import 'package:kotgltd/features/team/interfaces/i_team_repository.dart';
 import 'package:kotgltd/features/team/model/team.dart';
+import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
+import 'package:http/http.dart' as http;
 // import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TeamRepository extends ITeamRepository {
@@ -39,77 +43,175 @@ class TeamRepository extends ITeamRepository {
   }
 
   @override
-  Future<List?> getMyCreatedTeamMembers() async {
-    User? _user = user.getAt(0);
+  Future<Team> getTeam() async {
     try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.getMyCreatedTeam()),
-          variables: {"captain_id": _user!.id}); //TODO Variable
+      final response = await http.get(
+        Uri.parse('${Env.baseUrl}/api/team'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+          'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+        },
+      );
 
-      final QueryResult? result = await graphQLClient().query(options);
+      final jsonResponse = json.decode(response.body);
 
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
+      if (response.statusCode == 404) {
+        throw Exception('Not Found');
       }
 
-      var response = result.data!['teams'] as List?;
+      if (response.statusCode == 400) {
+        throw Exception(jsonResponse['error']['message']);
+      }
 
-      print(response);
+      if (response.statusCode == 401) {
+        throw Exception('Token Expired');
+      }
 
-      return response;
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw Exception(response.body);
+      }
+
+      return Team.fromJson(jsonResponse['data']);
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<List?> getJoinedTeam() async {
-    User? _user = user.getAt(0);
+  Future leaveTeam() async {
     try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.getJoinedTeam()),
-          variables: {"member_id": _user!.id}); //TODO Variable
+      final response = await http.post(
+        Uri.parse('${Env.baseUrl}/api/team/leave'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+          'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+        },
+      );
 
-      final QueryResult? result = await graphQLClient().query(options);
+      final jsonResponse = json.decode(response.body);
 
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
+      if (response.statusCode == 404) {
+        throw Exception('Not Found');
       }
 
-      var response = result.data!['teamJoinRequests'] as List;
+      if (response.statusCode == 400) {
+        throw Exception(jsonResponse['error']['message']);
+      }
 
-      return response;
+      if (response.statusCode == 401) {
+        throw Exception('Token Expired');
+      }
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw Exception(response.body);
+      }
+
+      return jsonResponse['data'];
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<List?> getMyCreatedTeam() async {
-    User? _user = user.getAt(0);
+  Future createTeam({
+    required String teamName,
+  }) async {
     try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.getMyCreatedTeam()),
-          variables: {"captain_id": _user!.id}); //TODO Variable
+      final response = await http.post(
+        Uri.parse('${Env.baseUrl}/api/team/create/${teamName}'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+          'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+        },
+      );
 
-      final QueryResult? result = await graphQLClient().query(options);
+      final jsonResponse = json.decode(response.body);
 
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
+      if (response.statusCode == 404) {
+        throw Exception('Not Found');
       }
 
-      var response = result.data!['teams'];
+      if (response.statusCode == 400) {
+        throw Exception(jsonResponse['error']['message']);
+      }
 
-      print(response);
+      if (response.statusCode == 401) {
+        throw Exception('Token Expired');
+      }
 
-      return response;
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw Exception(response.body);
+      }
+
+      return jsonResponse['data']['message'];
     } catch (e) {
       rethrow;
     }
   }
+
+  @override
+  Future deleteTeam() async {
+    try {
+      final response = await http.delete(
+        Uri.parse('${Env.baseUrl}/api/team/delete'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+          'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+        },
+      );
+
+      final jsonResponse = json.decode(response.body);
+
+      if (response.statusCode == 404) {
+        throw Exception('Not Found');
+      }
+
+      if (response.statusCode == 400) {
+        throw Exception(jsonResponse['error']['message']);
+      }
+
+      if (response.statusCode == 401) {
+        throw Exception('Token Expired');
+      }
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw Exception(response.body);
+      }
+
+      return jsonResponse['data'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // @override
+  // Future<List?> getMyCreatedTeamMembers() async {
+  //   User? _user = user.getAt(0);
+  //   try {
+  //     final QueryOptions options = QueryOptions(
+  //         document: gql(TeamQueries.getMyCreatedTeam()),
+  //         variables: {"captain_id": _user!.id}); //TODO Variable
+
+  //     final QueryResult? result = await graphQLClient().query(options);
+
+  //     if (result!.hasException) {
+  //       print(result.exception.toString());
+  //       throw Exception(result.exception!.graphqlErrors.first.message);
+  //     }
+
+  //     var response = result.data!['teams'] as List?;
+
+  //     print(response);
+
+  //     return response;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   @override
   Future<List?> getJoinRequests({required String inviteCode}) async {
@@ -125,9 +227,7 @@ class TeamRepository extends ITeamRepository {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
-      var response = result.data!['teamJoinRequests'] as List;
-
-      print(response);
+      var response = result.data!['invites']['data'] as List;
 
       return response;
     } catch (e) {
@@ -136,7 +236,7 @@ class TeamRepository extends ITeamRepository {
   }
 
   @override
-  Future<num> getJoinRequestsCount({required String inviteCode}) async {
+  Future<num> getInviteCount({required String inviteCode}) async {
     try {
       final QueryOptions options = QueryOptions(
           document: gql(TeamQueries.fetchTeamJoinRequestsCount()),
@@ -149,10 +249,7 @@ class TeamRepository extends ITeamRepository {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
-      var response =
-          result.data!['teamJoinRequestsConnection']['aggregate']['count'];
-
-      print(response);
+      var response = result.data!['invites']['meta']['pagination']['total'];
 
       return response;
     } catch (e) {
@@ -160,135 +257,55 @@ class TeamRepository extends ITeamRepository {
     }
   }
 
-  @override
-  Future<List?> deleteTeamJoinRequests({required String id}) async {
-    try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.deleteTeamJoinRequests()),
-          variables: {"request_id": id}); //TODO Variable
+  // @override
+  // Future<void> deleteTeam({required int teamId}) async {
+  //   try {
+  //     final QueryOptions options = QueryOptions(
+  //         document: gql(TeamQueries.deleteTeam()),
+  //         variables: {"team_id": teamId}); //TODO Variable
 
-      final QueryResult? result = await graphQLClient().query(options);
+  //     final QueryResult? result = await graphQLClient().query(options);
 
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
-      }
+  //     if (result!.hasException) {
+  //       print(result.exception.toString());
+  //       throw Exception(result.exception!.graphqlErrors.first.message);
+  //     }
 
-      var response = result.data!['teamJoinRequests'];
+  //     var response = result.data!['invites'];
 
-      print(response);
+  //     print(response);
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  // @override
+  // Future<String> createTeam({
+  //   required String teamName,
+  // }) async {
+  //   User? _user = user.getAt(0);
+  //   try {
+  //     final QueryOptions options = QueryOptions(
+  //         document: gql(
+  //           TeamQueries.createTeam(),
+  //         ),
+  //         variables: {
+  //           "team_name": teamName,
+  //           "captain": _user!.id,
+  //         });
+  //     final QueryResult? result = await graphQLClient().query(options);
 
-  @override
-  Future<void> deleteTeam({required String teamId}) async {
-    try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.deleteTeam()),
-          variables: {"team_id": teamId}); //TODO Variable
+  //     if (result!.hasException) {
+  //       throw Exception(result.exception!.graphqlErrors.first.message);
+  //     }
 
-      final QueryResult? result = await graphQLClient().query(options);
+  //     var response = result.data!['createTeam']['team']['team_name'];
 
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
-      }
+  //     print(response);
 
-      var response = result.data!['teamJoinRequests'];
-
-      print(response);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> createJoinRequest({
-    required String inviteCode,
-  }) async {
-    User? _user = user.getAt(0);
-    try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.createJoinRequest()),
-          variables: {"invite_code": inviteCode, "member_id": _user!.id});
-      final QueryResult? result = await graphQLClient().query(options);
-
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
-      }
-
-      var response =
-          result.data!['createTeamJoinRequest']['teamJoinRequest']['id'];
-
-      print(response);
-
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> claimJoinRequest({
-    required String id,
-    required String teamId,
-  }) async {
-    try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.claimJoinRequest()),
-          variables: {"request_id": id, "team_id": teamId});
-
-      final QueryResult? result = await graphQLClient().query(options);
-
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
-      }
-
-      var response = result.data!['teamJoinRequests'];
-
-      print(response);
-
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<String> createTeam({
-    required String teamName,
-    required String inviteCode,
-  }) async {
-    User? _user = user.getAt(0);
-    try {
-      final QueryOptions options = QueryOptions(
-          document: gql(
-            TeamQueries.createTeam(),
-          ),
-          variables: {
-            "team_name": teamName,
-            "invite_code": inviteCode,
-            "captain": _user!.id,
-          });
-      final QueryResult? result = await graphQLClient().query(options);
-
-      if (result!.hasException) {
-        throw Exception(result.exception!.graphqlErrors.first.message);
-      }
-
-      var response = result.data!['createTeam']['team']['team_name'];
-
-      print(response);
-
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  //     return response;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 }

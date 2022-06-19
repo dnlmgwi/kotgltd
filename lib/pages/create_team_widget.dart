@@ -19,7 +19,6 @@ class CreateTeamWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _userRepo = ref.watch(teamRepoProvider);
-    final _inviteCodeProvider = ref.watch(inviteCodeProvider);
     final _teamName = ref.watch(teamNameProvider.state);
 
     return LoaderOverlay(
@@ -73,7 +72,7 @@ class CreateTeamWidget extends ConsumerWidget {
                                   borderSide:
                                       BorderSide(color: kotgPurple, width: 2)),
                               filled: true,
-                              contentPadding: EdgeInsets.all(10.sp),
+                              contentPadding: EdgeInsets.all(13.sp),
                               labelText: 'Enter Your Team Name'.toUpperCase(),
                               labelStyle: GoogleFonts.oxygen(
                                   color: kotgPurple,
@@ -119,22 +118,23 @@ class CreateTeamWidget extends ConsumerWidget {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                context.loaderOverlay.show();
                                 _userRepo
                                     .createTeam(
-                                      inviteCode:
-                                          _inviteCodeProvider.value!.trim(),
-                                      teamName: teamNameController.text,
-                                    )
-                                    .catchError((error, stackTrace) {
-                                      context.loaderOverlay.hide();
-                                      Get.snackbar(
-                                          "Connection Error", error!.toString(),
-                                          backgroundColor: Colors.red,
-                                          snackPosition: SnackPosition.BOTTOM);
-                                    })
-                                    .then((value) =>
-                                        ref.refresh(teamRepoProvider))
-                                    .whenComplete(() => Get.back());
+                                  teamName: teamNameController.text,
+                                )
+                                    .onError((error, stackTrace) {
+                                  context.loaderOverlay.hide();
+                                  Get.snackbar("Error", error!.toString(),
+                                      backgroundColor: Colors.red,
+                                      snackPosition: SnackPosition.TOP);
+                                }).then((value) {
+                                  Get.snackbar("Success", value,
+                                      snackPosition: SnackPosition.TOP);
+                                  context.loaderOverlay.hide();
+                                  ref.refresh(teamRepoProvider);
+                                  Get.back();
+                                });
                               }
                             },
                           ),

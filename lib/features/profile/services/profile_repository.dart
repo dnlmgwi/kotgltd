@@ -5,6 +5,7 @@ import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
 // import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/profile/graphql/profile_queries.dart';
+import 'package:kotgltd/features/profile/model/profile.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
@@ -41,105 +42,104 @@ class ProfileRepository {
     return client;
   }
 
-  Future createProfile({
-    required String firstName,
-    required String lastName,
-    required DateTime dateOfBirth,
-    required PhoneNumber phoneNumber,
-    required String avatarId,
-    // required String userId,
-  }) async {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String dob = formatter.format(dateOfBirth);
-    User? _user = user.values.first;
-
-    try {
-      final MutationOptions options = MutationOptions(
-          document: gql(ProfileQueries.createProfile()),
-          variables: {
-            "first_name": firstName,
-            "last_name": lastName,
-            "date_of_birth": dob,
-            "user": _user.id,
-            "iso_code": phoneNumber.isoCode,
-            "phone_number": phoneNumber.nsn,
-            "avatar_id": avatarId
-          });
-      final QueryResult? result = await graphQLClient().mutate(options);
-
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
-      }
-
-      var response = result.data!['createProfile'];
-
-      // profile.put(0, Profile.fromJson(response['profile']));
-
-      print(response);
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future editProfile({
-    required String avatarId,
-    // required String userId,
-  }) async {
-    User? _user = user.values.first;
-
-    try {
-      final MutationOptions options = MutationOptions(
-          document: gql(ProfileQueries.editProfile()),
-          variables: {
-            "user": _user.id,
-            "avatar_id": avatarId,
-          });
-      final QueryResult? result = await graphQLClient().mutate(options);
-
-      if (result!.hasException) {
-        print(result.exception.toString());
-        throw Exception(result.exception!.graphqlErrors.first.message);
-      }
-
-      var response = result.data!['updateProfile'];
-
-      // profile.put(0, Profile.fromJson(response['profile']));
-
-      print(response);
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  // Future<Profile> getProfile() async {
+  // Future createProfile({
+  //   required String firstName,
+  //   required String lastName,
+  //   required DateTime dateOfBirth,
+  //   required PhoneNumber phoneNumber,
+  //   required String avatarId,
+  //   // required String userId,
+  // }) async {
+  //   final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  //   final String dob = formatter.format(dateOfBirth);
   //   User? _user = user.values.first;
-  //   try {
-  //     final QueryOptions options =
-  //         QueryOptions(document: gql(ProfileQueries.getProfile()), variables: {
-  //       "user_id": _user.id,
-  //     });
 
-  //     final QueryResult? result = await graphQLClient().query(options);
+  //   try {
+  //     final MutationOptions options = MutationOptions(
+  //         document: gql(ProfileQueries.updateProfile()),
+  //         variables: {
+  //           "first_name": firstName,
+  //           "last_name": lastName,
+  //           "date_of_birth": dob,
+  //           "user": _user.id,
+  //           "iso_code": phoneNumber.isoCode,
+  //           "phone_number": phoneNumber.nsn,
+  //           "avatar_id": avatarId
+  //         });
+  //     final QueryResult? result = await graphQLClient().mutate(options);
 
   //     if (result!.hasException) {
   //       print(result.exception.toString());
   //       throw Exception(result.exception!.graphqlErrors.first.message);
   //     }
 
-  //     var response = result.data!['user'];
+  //     var response = result.data!['createProfile'];
 
-  //     if (response['profile'] == null) {
-  //       throw NoProfileException(); //TODO User has No Profile
-  //     }
+  //     // profile.put(0, Profile.fromJson(response['profile']));
 
-  //     return Profile.fromJson(response['profile']);
+  //     print(response);
+  //     return response;
   //   } catch (e) {
   //     rethrow;
   //   }
   // }
+
+  Future updateProfile({
+    required String firstName,
+    required String lastName,
+    required String dateOfBirth,
+    required PhoneNumber phoneNumber,
+  }) async {
+    User? _user = user.values.first;
+
+    try {
+      final MutationOptions options = MutationOptions(
+          document: gql(ProfileQueries.updateProfile()),
+          variables: {
+            "user": _user.id,
+            "first_name": firstName,
+            "last_name": lastName,
+            "phone_number": phoneNumber.nsn,
+            "iso_code": phoneNumber.isoCode.name,
+            "date_of_birth": dateOfBirth
+          });
+      final QueryResult? result = await graphQLClient().mutate(options);
+
+      if (result!.hasException) {
+        print(result.exception.toString());
+        throw Exception(result.exception!.graphqlErrors.first.message);
+      }
+
+      var response = result.data!['updateUsersPermissionsUser']['data'];
+
+      return Profile.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Profile> getProfile() async {
+    User? _user = user.values.first;
+    try {
+      final QueryOptions options =
+          QueryOptions(document: gql(ProfileQueries.getProfile()), variables: {
+        "user_id": _user.id,
+      });
+
+      final QueryResult? result = await graphQLClient().query(options);
+
+      if (result!.hasException) {
+        print(result.exception.toString());
+        throw Exception(result.exception!.graphqlErrors.first.message);
+      }
+
+      var response = result.data!['usersPermissionsUser']['data'];
+
+      return Profile.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   // Future<List> getAvatars() async {
   //   try {

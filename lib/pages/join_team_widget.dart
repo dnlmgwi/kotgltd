@@ -15,6 +15,7 @@ class JoinTeamWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _userRepo = ref.watch(teamRepoProvider);
+    final _inviteRepo = ref.watch(inviteRepoProvider);
 
     return LoaderOverlay(
       overlayOpacity: 0.8,
@@ -61,13 +62,13 @@ class JoinTeamWidget extends ConsumerWidget {
                         controller: inviteCodeController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(13.sp),
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5.0)),
                               borderSide:
                                   BorderSide(color: kotgGreen, width: 2)),
                           filled: true,
-                          contentPadding: EdgeInsets.all(10.sp),
                           labelText: 'Enter Invite Code'.toUpperCase(),
                           labelStyle: GoogleFonts.oxygen(
                               color: kotgGreen,
@@ -102,7 +103,7 @@ class JoinTeamWidget extends ConsumerWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              "Join ",
+                              "Join",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -111,19 +112,24 @@ class JoinTeamWidget extends ConsumerWidget {
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            _userRepo
-                                .createJoinRequest(
-                                  inviteCode: inviteCodeController.text,
-                                )
-                                .catchError((error, stackTrace) {
-                                  context.loaderOverlay.hide();
-                                  Get.snackbar(
-                                      "Connection Error", error!.toString(),
-                                      backgroundColor: Colors.red,
-                                      snackPosition: SnackPosition.BOTTOM);
-                                })
-                                .then((value) => ref.refresh(teamRepoProvider))
-                                .whenComplete(() => Get.back());
+                            context.loaderOverlay.show();
+                            _inviteRepo
+                                .sendInvite(
+                              inviteCode: inviteCodeController.text,
+                            )
+                                .then((value) {
+                              context.loaderOverlay.hide();
+                              Get.snackbar("Success", value.toString(),
+                                  snackPosition: SnackPosition.TOP);
+                              context.loaderOverlay.hide();
+                              ref.refresh(teamRepoProvider);
+                              Get.back();
+                            }).onError((error, stackTrace) {
+                              context.loaderOverlay.hide();
+                              Get.snackbar("Error", error!.toString(),
+                                  backgroundColor: Colors.red,
+                                  snackPosition: SnackPosition.TOP);
+                            });
                           }
                         },
                       ),

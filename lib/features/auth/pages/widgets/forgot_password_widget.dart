@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/auth/providers/email_password_providers.dart';
@@ -69,7 +68,7 @@ class ForgotPasswordWidget extends ConsumerWidget {
                                   borderSide:
                                       BorderSide(color: kotgGreen, width: 2)),
                               filled: true,
-                              contentPadding: EdgeInsets.all(13),
+                              contentPadding: EdgeInsets.all(13.sp),
                               labelText: 'Email Address'.toUpperCase(),
                               labelStyle: GoogleFonts.oxygen(
                                   color: kotgGreen,

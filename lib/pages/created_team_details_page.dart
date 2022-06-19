@@ -4,6 +4,7 @@
 // import 'package:flutter_slidable/flutter_slidable.dart';
 // import 'package:google_fonts/google_fonts.dart';
 // import 'package:ionicons/ionicons.dart';
+// import 'package:kotgltd/features/team/model/team.dart';
 // import 'package:kotgltd/features/team/providers/team_providers.dart';
 // import 'package:kotgltd/common/color.dart';
 // import 'package:kotgltd/packages/dependencies.dart';
@@ -19,8 +20,10 @@
 //   @override
 //   Widget build(BuildContext context, ref) {
 //     final _userRepo = ref.watch(teamRepoProvider);
+//     final _inviteRepo = ref.watch(inviteRepoProvider);
+
 //     void _showManageTeamBottomSheet(
-//         {required String inviteCode, required String teamId}) async {
+//         {required String inviteCode, required int teamId}) async {
 //       await Get.bottomSheet(Container(
 //         width: double.infinity,
 //         height: 60.h,
@@ -78,12 +81,67 @@
 //                             )),
 //                       );
 //                     }
+
 //                     return Expanded(
 //                       child: ListView.builder(
 //                           itemCount: joinRequest.length,
 //                           itemBuilder: (BuildContext context, int index) {
+//                             void accept(BuildContext context) {
+//                               _inviteRepo
+//                                   .acceptInvite(
+//                                     inviteID: joinRequest[index]['id'],
+//                                   )
+//                                   .then(
+//                                       (value) => ref.refresh(teamRepoProvider))
+//                                   .then((value) => Get.back());
+//                             }
+
+//                             void decline(BuildContext context) {
+//                               _inviteRepo
+//                                   .declineInvite(
+//                                     inviteID: joinRequest[index]['id'],
+//                                   )
+//                                   .then(
+//                                       (value) => ref.refresh(teamRepoProvider))
+//                                   .then((value) => Get.back());
+//                             }
+
 //                             return Slidable(
-//                               actionPane: SlidableDrawerActionPane(),
+//                               startActionPane: ActionPane(
+//                                 // A motion is a widget used to control how the pane animates.
+//                                 motion: const ScrollMotion(),
+
+//                                 // A pane can dismiss the Slidable.
+//                                 dismissible:
+//                                     DismissiblePane(onDismissed: () {}),
+
+//                                 // All actions are defined in the children parameter.
+//                                 children: [
+//                                   // A SlidableAction can have an icon and/or a label.
+//                                   SlidableAction(
+//                                     onPressed: decline,
+//                                     backgroundColor: Color(0xFFFE4A49),
+//                                     foregroundColor: Colors.white,
+//                                     icon: Icons.delete,
+//                                     label: 'Decline',
+//                                   ),
+//                                 ],
+//                               ),
+
+//                               // The end action pane is the one at the right or the bottom side.
+//                               endActionPane: ActionPane(
+//                                 motion: ScrollMotion(),
+//                                 children: [
+//                                   SlidableAction(
+//                                     onPressed: accept,
+//                                     backgroundColor: Color(0xFF0392CF),
+//                                     foregroundColor: Colors.white,
+//                                     icon: Ionicons.add_circle_outline,
+//                                     label: 'Accept',
+//                                   ),
+//                                 ],
+//                               ),
+
 //                               child: ListTile(
 //                                 leading: ClipOval(
 //                                   child: Image.network(
@@ -101,39 +159,6 @@
 //                                         ? Text('Member')
 //                                         : Text(''),
 //                               ),
-//                               actions: <Widget>[
-//                                 IconSlideAction(
-//                                   caption: 'Remove',
-//                                   color: Colors.red,
-//                                   icon: Ionicons.trash_outline,
-//                                   onTap: () => {
-//                                     _userRepo
-//                                         .deleteTeamJoinRequests(
-//                                             id: joinRequest[index]['id'])
-//                                         .then((value) => //TODO Show Toast
-//                                             ref.refresh(teamRepoProvider))
-//                                         .then((value) => Get.back())
-//                                   },
-//                                 ),
-//                               ],
-//                               secondaryActions: [
-//                                 if (!(joinRequest[index]['claimed'] as bool))
-//                                   IconSlideAction(
-//                                     caption: 'Accept',
-//                                     color: kotgGreen,
-//                                     icon: Ionicons.add_circle_outline,
-//                                     onTap: () => {
-//                                       _userRepo
-//                                           .claimJoinRequest(
-//                                             id: joinRequest[index]['id'],
-//                                             teamId: teamId,
-//                                           )
-//                                           .then((value) =>
-//                                               ref.refresh(teamRepoProvider))
-//                                           .then((value) => Get.back())
-//                                     },
-//                                   ),
-//                               ],
 //                             );
 //                           }),
 //                     );
@@ -150,7 +175,7 @@
 //       print('The Bottom Sheet has gone away!');
 //     }
 
-//     void _showOptionsBottomSheet({required String teamId}) async {
+//     void _showOptionsBottomSheet({required int teamId}) async {
 //       await Get.bottomSheet(Container(
 //         width: double.infinity,
 //         height: 60.h,
@@ -202,7 +227,7 @@
 //               ),
 //               subtitle: Text('You will no longer be able to manage this team'),
 //               onTap: () {
-//                 _userRepo.deleteTeam(teamId: teamId).then((value) {
+//                 _userRepo.deleteTeam().then((value) {
 //                   ref.refresh(teamRepoProvider);
 //                   Get.back();
 //                 });
@@ -220,10 +245,11 @@
 //       child: Scaffold(
 //         body: Container(
 //           child: FutureBuilder(
-//               future: _userRepo.getMyCreatedTeamMembers(),
+//               future: _userRepo.getTeam(),
 //               builder: (context, snapshot) {
 //                 // Check for errors
 //                 if (snapshot.hasError) {
+//                   //TODO Show Create or Join
 //                   return Center(
 //                     child: Icon(
 //                       Ionicons.pulse_outline,
@@ -233,216 +259,9 @@
 //                 }
 //                 // Once complete, show your application
 //                 if (snapshot.connectionState == ConnectionState.done) {
-//                   var team = snapshot.data as List;
+//                   var team = snapshot.data as Team;
 
-//                   return Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Card(
-//                           child: Padding(
-//                             padding: const EdgeInsets.only(
-//                                 left: 35, top: 30, bottom: 25),
-//                             child: ListTile(
-//                               title: Text(
-//                                 team[0]['team_name'],
-//                                 style: TextStyle(fontSize: 25.sp),
-//                               ),
-//                               trailing: IconButton(
-//                                   onPressed: () {
-//                                     _showOptionsBottomSheet(
-//                                         teamId: team[0]['id']);
-//                                   },
-//                                   icon: Icon(
-//                                     Ionicons.ellipsis_vertical_outline,
-//                                   )),
-
-//                               // Get.toNamed('/joinRequests',
-//                               //     arguments: {
-//                               //       'inviteCode': team[0]['invite_code'],
-//                               //       'teamId': team[0]['id']
-//                               //     })
-//                             ),
-//                           ),
-//                         ),
-//                         Column(
-//                           children: [
-//                             ListTile(
-//                               leading: Icon(Ionicons.share_outline),
-//                               title: Text('Send Invite Code'),
-//                               onTap: () => Share.share(team[0]['invite_code']),
-//                             ),
-//                             ListTile(
-//                               leading: Icon(Ionicons.person_add_outline),
-//                               title: Text('Join Requests'),
-//                               trailing: FutureBuilder(
-//                                   future: _userRepo.getJoinRequestsCount(
-//                                       inviteCode: team[0]['invite_code']),
-//                                   builder: (context, snapshot) {
-//                                     // Check for errors
-//                                     if (snapshot.hasError) {
-//                                       return Center(
-//                                         child: Icon(
-//                                           Ionicons.pulse_outline,
-//                                           color: Colors.white,
-//                                         ), //TODO Error Icon
-//                                       );
-//                                     }
-//                                     // Once complete, show your application
-//                                     if (snapshot.connectionState ==
-//                                         ConnectionState.done) {
-//                                       var count = snapshot.data as num;
-
-//                                       if (count == 0) {
-//                                         return Text('');
-//                                       }
-
-//                                       return Badge(
-//                                         position: BadgePosition.topEnd(
-//                                             top: 0, end: 3),
-//                                         animationDuration:
-//                                             Duration(milliseconds: 300),
-//                                         animationType: BadgeAnimationType.slide,
-//                                         badgeContent: Text(
-//                                           count.toString(),
-//                                           style: TextStyle(color: Colors.white),
-//                                         ),
-//                                       );
-//                                     }
-//                                     // Otherwise, show something whilst waiting for initialization to complete
-//                                     return Badge(
-//                                       position:
-//                                           BadgePosition.topEnd(top: 0, end: 3),
-//                                       animationDuration:
-//                                           Duration(milliseconds: 300),
-//                                       animationType: BadgeAnimationType.slide,
-//                                       badgeContent: Text(
-//                                         '',
-//                                         style: TextStyle(color: Colors.white),
-//                                       ),
-//                                     );
-//                                   }),
-//                               onTap: () => _showManageTeamBottomSheet(
-//                                 inviteCode: team[0]['invite_code'],
-//                                 teamId: team[0]['id'],
-//                               ),
-//                             ),
-//                             // ListTile(
-//                             //   leading: Icon(Ionicons.notifications_outline),
-//                             //   trailing: Text('Coming Soon'),
-//                             //   enabled: false,
-//                             //   title: Text('Notifications'),
-//                             //   // trailing: Badge(
-//                             //   //   position: BadgePosition.topEnd(top: 0, end: 3),
-//                             //   //   animationDuration: Duration(milliseconds: 300),
-//                             //   //   animationType: BadgeAnimationType.slide,
-//                             //   //   badgeContent: Text(
-//                             //   //     '2',
-//                             //   //     style: TextStyle(color: Colors.white),
-//                             //   //   ),
-//                             //   // ),
-//                             //   onTap: () {},
-//                             // ),
-//                             ListTile(
-//                               leading: Icon(Ionicons.stats_chart_outline),
-//                               title: Text('Team Stats'),
-//                               trailing: Text('Coming Soon'),
-//                               enabled: false,
-//                               onTap: () {},
-//                             ),
-//                           ],
-//                         ),
-//                         Divider(),
-//                         Padding(
-//                           padding: const EdgeInsets.only(
-//                               left: 15, top: 18, bottom: 15),
-//                           child: Text(
-//                             'Team Members',
-//                             style: GoogleFonts.sarala(
-//                               fontWeight: FontWeight.w600,
-//                               color: Colors.grey,
-//                             ),
-//                           ),
-//                         ),
-//                         Expanded(
-//                           child: (team[0]['team_members'] as List).isEmpty
-//                               ? Padding(
-//                                   padding: const EdgeInsets.only(
-//                                       left: 15, top: 18, bottom: 15),
-//                                   child: Center(
-//                                     child: Column(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.center,
-//                                       children: [
-//                                         Text(
-//                                           'Looking abit too empty here...player?',
-//                                           style: GoogleFonts.sarala(
-//                                             fontWeight: FontWeight.w600,
-//                                             fontSize: 10.sp,
-//                                             color: Colors.grey,
-//                                           ),
-//                                         ),
-//                                         SizedBox(
-//                                           height: 35,
-//                                         ),
-//                                         Container(
-//                                           width: 50.w,
-//                                           child: ElevatedButton.icon(
-//                                             style: OutlinedButton.styleFrom(
-//                                               shape: RoundedRectangleBorder(
-//                                                 borderRadius:
-//                                                     BorderRadius.circular(5.0),
-//                                               ),
-//                                               enableFeedback: true,
-//                                               primary: kotgBlack,
-//                                               backgroundColor: kotgGreen,
-//                                             ),
-//                                             icon: Icon(Ionicons.share_outline),
-//                                             label: Text(
-//                                               'Send Invite Code',
-//                                               style: TextStyle(
-//                                                 fontWeight: FontWeight.bold,
-//                                               ),
-//                                             ),
-//                                             onPressed: () {
-//                                               Share.share(
-//                                                   team[0]['invite_code']);
-//                                             },
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ))
-//                               : ListView.builder(
-//                                   itemCount:
-//                                       (team[0]['team_members'] as List).length,
-//                                   itemBuilder:
-//                                       (BuildContext context, int index) {
-//                                     return ListTile(
-//                                       leading: ClipOval(
-//                                         child: Image.network(
-//                                           team[0]['team_members'][index]
-//                                                   ['member']['profile']
-//                                               ['avatar']['image']['url'],
-//                                           width: 40,
-//                                           height: 40,
-//                                           fit: BoxFit.cover,
-//                                         ),
-//                                       ),
-//                                       title: Text(
-//                                         team[0]['team_members'][index]['member']
-//                                             ['username'],
-//                                         style: GoogleFonts.sarala(
-//                                           fontWeight: FontWeight.w600,
-//                                           fontSize: 20.sp,
-//                                           color: Colors.grey,
-//                                         ),
-//                                       ),
-//                                     );
-//                                   },
-//                                 ),
-//                         )
-//                       ]);
-//                 }
+//                   }
 //                 // Otherwise, show something whilst waiting for initialization to complete
 //                 return ListView.builder(
 //                     itemCount: 2,

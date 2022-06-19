@@ -126,8 +126,8 @@ class AuthStateNotifier extends ChangeNotifier {
         user.put(0, response.register.user);
 
         isAuth();
-        return response;
       }
+      return response;
     } catch (e) {
       print(e);
       isNotAuth();

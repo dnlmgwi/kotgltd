@@ -116,10 +116,8 @@ class AuthRepository extends IAuthRepository {
       final MutationOptions options =
           MutationOptions(document: gql(AuthQueries.signUp()), variables: {
         'email': email,
-        // 'iso_code': phoneNumber.isoCode,
-        // 'phone_number': phoneNumber.nsn,
         'password': password,
-        'username': username
+        'username': username,
       });
 
       final QueryResult? result = await client.mutate(options).timeout(
