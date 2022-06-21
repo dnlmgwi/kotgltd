@@ -77,6 +77,36 @@ class InvalidEmailException implements Exception {
   }
 }
 
+class InvalidPhoneNumberException implements Exception {
+  ///This Exception is thrown when there is an invalid Input Entered in the DB
+  late String _message;
+
+  InvalidEmailException(
+      [String message = 'Please provide a valid Phone Number']) {
+    _message = message;
+  }
+
+  @override
+  String toString() {
+    return _message;
+  }
+}
+
+class InvalidNumberAreaException implements Exception {
+  ///This Exception is thrown when there is an invalid Input Entered in the DB
+  late String _message;
+
+  InvalidEmailException(
+      [String message = 'Please provide a valid Phone Number in our Region']) {
+    _message = message;
+  }
+
+  @override
+  String toString() {
+    return _message;
+  }
+}
+
 class UnauthorisedException implements Exception {
   ///This Exception is thrown when there is an excisting account in the DB
   late String _message;

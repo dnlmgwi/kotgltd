@@ -12,6 +12,8 @@ class ProfileAttributes {
   @JsonKey(name: 'date_of_birth')
   late String dateOfBirth;
 
+  late String gender;
+
   @JsonKey(name: 'iso_code')
   String? isoCode;
 
@@ -28,11 +30,12 @@ class ProfileAttributes {
     required this.createdAt,
     required this.email,
     required this.username,
-    this.dateOfBirth ="",
-    this.firstName ="",
+    required this.gender,
+    this.dateOfBirth = "",
+    this.firstName = "",
     this.isoCode,
-    this.lastName ="",
-    this.phoneNumber,
+    this.lastName = "",
+    this.phoneNumber = "",
   });
 
   factory ProfileAttributes.fromJson(Map<String, dynamic> json) =>

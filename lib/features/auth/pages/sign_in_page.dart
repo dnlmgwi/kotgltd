@@ -19,35 +19,18 @@ class SignInPage extends ConsumerWidget {
     final _repo = ref.read(authProvider);
     final passwordVisibility =
         ref.watch(passwordVisibilityProvider.state).state;
-    final _password = ref.watch(passwordProvider.state).state;
-    final _username = ref.watch(usernameProvider.state).state;
 
-    void updateUsername(BuildContext context, String username) {
-      ref.read(usernameProvider.state).state = username;
+    final _password = ref.watch(passwordProvider.state).state;
+
+    final _email = ref.watch(emailProvider.state).state;
+
+    void updateEmail(BuildContext context, String email) {
+      ref.read(emailProvider.state).state = email;
     }
 
     void updatePassword(BuildContext context, String pass) {
       ref.read(passwordProvider.state).state = pass;
     }
-
-    // void _showBottomSheetSignUp() async {
-    //   await Get.bottomSheet(
-    //     Container(
-    //       width: double.infinity,
-    //       height: 80.h,
-    //       color: kotgBlack,
-    //       child: SignUpPage(),
-    //     ),
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.vertical(
-    //         top: Radius.circular(20),
-    //       ),
-    //     ),
-    //   );
-
-    //   // The code below will run after the bottom sheet goes away
-    //   print('The Bottom Sheet has gone away!');
-    // }
 
     void _showBottomSheetForgotPassword() async {
       await Get.bottomSheet(
@@ -111,15 +94,17 @@ class SignInPage extends ConsumerWidget {
                                         FilteringTextInputFormatter.deny(
                                             RegExp("[ ]")),
                                       ],
-                                      initialValue: _username,
+                                      initialValue: _email,
                                       autofillHints: [AutofillHints.username],
                                       keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(13.sp),
+                                        contentPadding: EdgeInsets.all(10.sp),
                                         focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(5.0)),
                                             borderSide: BorderSide(
                                                 color: kotgGreen, width: 2)),
-                                        filled: true,
+                                        filled: false,
                                         labelText: 'Email',
                                         labelStyle: GoogleFonts.oxygen(
                                             color: kotgGreen,
@@ -130,7 +115,7 @@ class SignInPage extends ConsumerWidget {
                                       maxLines: 1,
 
                                       onChanged: (String username) =>
-                                          updateUsername(context, username),
+                                          updateEmail(context, username),
                                       showCursor: true,
                                       // The validator receives the text that the user has entered.
                                       validator: (value) {
@@ -154,7 +139,7 @@ class SignInPage extends ConsumerWidget {
                                                 Radius.circular(5.0)),
                                             borderSide: BorderSide(
                                                 color: kotgGreen, width: 2)),
-                                        filled: true,
+                                        filled: false,
                                         suffix: GestureDetector(
                                           child: passwordVisibility
                                               ? Icon(
@@ -172,7 +157,7 @@ class SignInPage extends ConsumerWidget {
                                                 .state = !passwordVisibility;
                                           },
                                         ),
-                                        contentPadding: EdgeInsets.all(13.sp),
+                                        contentPadding: EdgeInsets.all(10.sp),
                                         labelText: 'Password',
                                         labelStyle: GoogleFonts.oxygen(
                                             color: kotgGreen,
@@ -229,11 +214,11 @@ class SignInPage extends ConsumerWidget {
                       if (_formKey.currentState!.validate()) {
                         context.loaderOverlay.show();
                         _repo
-                            .signIn(password: _password, email: _username)
+                            .signIn(password: _password, email: _email)
                             .catchError((error) {
                           context.loaderOverlay.hide();
                           Get.snackbar(
-                            "Error",
+                            "Login Error",
                             error!.toString(),
                             backgroundColor: Colors.red,
                             snackPosition: SnackPosition.BOTTOM,
@@ -246,7 +231,7 @@ class SignInPage extends ConsumerWidget {
                     style: ButtonStyle(
                         enableFeedback: true,
                         splashFactory: NoSplash.splashFactory),
-                    onPressed: () => Get.to(SignUpPage()),
+                    onPressed: () => Get.to(() => SignUpPage()),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -13,6 +13,7 @@ class AuthRepository extends IAuthRepository {
     Env.baseUrl + '/graphql',
   );
 
+  //Create Singleton
   final GraphQLClient client = GraphQLClient(
     cache: GraphQLCache(partialDataPolicy: PartialDataCachePolicy.accept),
     link: httpLink,
@@ -118,6 +119,7 @@ class AuthRepository extends IAuthRepository {
         'email': email,
         'password': password,
         'username': username,
+        
       });
 
       final QueryResult? result = await client.mutate(options).timeout(
@@ -125,11 +127,7 @@ class AuthRepository extends IAuthRepository {
           );
 
       if (result!.hasException) {
-        if (result.exception!.linkException!.originalException
-            .toString()
-            .isNotEmpty) {
-          throw NoConnectionException();
-        }
+        throw AuthError(result.exception!.graphqlErrors.first.message);
       }
 
       return RegisterResponse.fromJson(result.data!);

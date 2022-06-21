@@ -26,6 +26,20 @@ class NoConnectionException implements Exception {
   }
 }
 
+class AuthError implements Exception {
+  ///This Exception is thrown when there is an invalid Input Entered in the DB
+  late String _message;
+
+  AuthError([String message = 'Details Have Been Registered']) {
+    _message = message;
+  }
+
+  @override
+  String toString() {
+    return _message;
+  }
+}
+
 // class NetworkErrorException implements Exception {
 //   final message = 'A Network problem';
 // }

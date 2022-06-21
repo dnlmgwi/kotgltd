@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -19,18 +22,22 @@ class UpdateProfileWidget extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final _firstName = ref.watch(firstNameProvider.state);
     final _lastName = ref.watch(lastNameProvider.state);
-    // final _avatarId = ref.watch(avatarProvider.state);
     var _phoneNumber = ref.watch(phoneNumberProvider.state);
-    final _dateofBirth = ref.watch(dateOfBirthProvider.state);
 
-    final _dateofBirthFinal =
-        ref.watch(dateOfBirthFinalProvider(_dateofBirth.state).state);
+    final _gender = ref.watch(genderProvider.state);
 
     final _repo = ref.watch(profileRepoProvider);
 
     // void updatePhoneNumber(BuildContext context, PhoneNumber phoneNumber) {
     //   ref.read(phoneNumberProvider.state).state = phoneNumber;
     // }
+
+    final _dateofBirth = ref.watch(dateOfBirthProvider.state);
+    final _dateofBirthFormatted =
+        ref.watch(dateOfBirthFinalProvider(_dateofBirth.state).state);
+    void updateDateofBirth(BuildContext context, DateTime dateOfBirth) {
+      ref.read(dateOfBirthProvider.state).state = dateOfBirth;
+    }
 
     void updateFirstName(BuildContext context, String firstName) {
       ref.read(firstNameProvider.state).state = firstName.trim();
@@ -40,8 +47,8 @@ class UpdateProfileWidget extends ConsumerWidget {
       ref.read(lastNameProvider.state).state = lastName.trim();
     }
 
-    void updateDateofBirth(BuildContext context, DateTime dateOfBirth) {
-      ref.read(dateOfBirthProvider.state).state = dateOfBirth;
+    void updateGender(BuildContext context, String gender) {
+      ref.read(genderProvider.state).state = gender;
     }
 
     void updateValue(state, String id) {
@@ -110,6 +117,7 @@ class UpdateProfileWidget extends ConsumerWidget {
                             return Form(
                               key: _formKey,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   // FormField<String>(
                                   //   onSaved: (value) {
@@ -215,29 +223,27 @@ class UpdateProfileWidget extends ConsumerWidget {
                                     subtitle: Text(timeago.format(data
                                         .value.profileAttributes.createdAt)),
                                   ),
+                                  Divider(),
                                   SizedBox(
                                     height: 15,
                                   ),
-
                                   TextFormField(
                                     initialValue:
                                         data.value.profileAttributes.firstName,
                                     enabled: data.value.profileAttributes
-                                            .firstName.isEmpty
-                                        ? true
-                                        : false,
+                                        .firstName.isEmpty,
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(13.sp),
+                                      contentPadding: EdgeInsets.all(10.sp),
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(5.0)),
                                           borderSide: BorderSide(
                                               color: kotgGreen, width: 2)),
-                                      filled: true,
-                                      labelText: 'First Name',
+                                      filled: false,
+                                      labelText: 'Firstname',
                                       labelStyle: GoogleFonts.oxygen(
                                           color: kotgGreen,
-                                          fontSize: 15.sp,
+                                          fontSize: 10.sp,
                                           fontWeight: FontWeight.bold),
                                     ),
 
@@ -260,9 +266,7 @@ class UpdateProfileWidget extends ConsumerWidget {
                                     initialValue:
                                         data.value.profileAttributes.lastName,
                                     enabled: data.value.profileAttributes
-                                            .lastName.isEmpty
-                                        ? true
-                                        : false,
+                                        .lastName.isEmpty,
                                     keyboardType: TextInputType.emailAddress,
 
                                     decoration: InputDecoration(
@@ -271,12 +275,12 @@ class UpdateProfileWidget extends ConsumerWidget {
                                               Radius.circular(5.0)),
                                           borderSide: BorderSide(
                                               color: kotgGreen, width: 2)),
-                                      filled: true,
-                                      contentPadding: EdgeInsets.all(13.sp),
-                                      labelText: 'Last Name',
+                                      filled: false,
+                                      contentPadding: EdgeInsets.all(10.sp),
+                                      labelText: 'Lastname',
                                       labelStyle: GoogleFonts.oxygen(
                                           color: kotgGreen,
-                                          fontSize: 15.sp,
+                                          fontSize: 10.sp,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     // autofocus: true,
@@ -292,6 +296,103 @@ class UpdateProfileWidget extends ConsumerWidget {
                                       return null;
                                     },
                                   ),
+                                  SizedBox(
+                                    height: 35,
+                                  ),
+
+                                  //If Gender is empty hide option
+                                  data.value.profileAttributes.gender.isEmpty
+                                      ? Container(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Wrap(
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.start,
+                                            runAlignment: WrapAlignment.start,
+                                            direction: Axis.horizontal,
+                                            children: [
+                                              Text(
+                                                'Gender',
+                                                style: GoogleFonts.oxygen(
+                                                    color: kotgGreen,
+                                                    fontSize: 10.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              DropdownButton(
+                                                  hint: Text(
+                                                      'Select your gender'),
+                                                  alignment: Alignment.center,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(5.0)),
+
+                                                  // isExpanded: true,
+                                                  enableFeedback: true,
+                                                  value: _gender.state,
+                                                  items: Gender.values.map<
+                                                      DropdownMenuItem<
+                                                          String>>((value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value.name,
+                                                      child: Text(
+                                                        value.name.replaceAll(
+                                                            '_', ' '),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (value) {
+                                                    updateGender(context,
+                                                        value.toString());
+                                                  }),
+                                            ],
+                                          ),
+                                        )
+                                      : Container(),
+                                  SizedBox(
+                                    height: 35,
+                                  ),
+                                  data.value.profileAttributes.dateOfBirth
+                                          .isEmpty
+                                      ? Container(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Wrap(
+                                            direction: Axis.vertical,
+                                            spacing: 15.sp,
+                                            children: [
+                                              Text(
+                                                'Date Of Birth',
+                                                style: GoogleFonts.oxygen(
+                                                    color: kotgGreen,
+                                                    fontSize: 10.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                height: 70,
+                                                child: ScrollDatePicker(
+                                                  style: DatePickerStyle(
+                                                    textStyle: TextStyle(
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  selectedDate:
+                                                      _dateofBirth.state,
+                                                  locale: DatePickerLocale.enUS,
+                                                  onDateTimeChanged:
+                                                      (DateTime value) {
+                                                    updateDateofBirth(
+                                                        context, value);
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container(),
                                   SizedBox(
                                     height: 35,
                                   ),
@@ -376,7 +477,17 @@ class UpdateProfileWidget extends ConsumerWidget {
                                       backgroundColor: kotgGreen,
                                     ),
                                     onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
+                                      if (_gender.state == Gender.none.name ||
+                                          data.value.profileAttributes.gender
+                                              .isEmpty) {
+                                        Fluttertoast.showToast(
+                                            msg: "Please Select Gender",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.TOP,
+                                            timeInSecForIosWeb: 1,
+                                            fontSize: 16.0.sp);
+                                      } else if (_formKey.currentState!
+                                          .validate()) {
                                         context.loaderOverlay.show();
 
                                         if (_firstName.state != "" ||
@@ -385,14 +496,14 @@ class UpdateProfileWidget extends ConsumerWidget {
                                               .updateProfile(
                                             firstName: _firstName.state,
                                             lastName: _lastName.state,
+                                            gender: _gender.state,
                                             dateOfBirth:
-                                                _dateofBirthFinal.state,
-                                            phoneNumber: _phoneNumber.state,
+                                                _dateofBirthFormatted.state,
                                           )
                                               .then((value) {
                                             context.loaderOverlay.hide();
                                             ref.refresh(profileProvider);
-                                          }).onError((error, stackTrace) {
+                                          }).catchError((error, stackTrace) {
                                             Get.snackbar(
                                               "Update Error",
                                               error!.toString(),

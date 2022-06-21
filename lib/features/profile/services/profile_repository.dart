@@ -2,6 +2,8 @@
 import 'package:graphql/client.dart';
 import 'package:kotgltd/data/enviroment_creds.dart';
 import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
+import 'package:kotgltd/features/auth/exception/input_exception.dart';
+import 'package:kotgltd/features/auth/interfaces/i_profile_repository.dart';
 // import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/profile/graphql/profile_queries.dart';
@@ -9,10 +11,9 @@ import 'package:kotgltd/features/profile/model/profile.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
-import 'package:intl/intl.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
-class ProfileRepository {
+class ProfileRepository extends IProfileRepository {
   final user = Hive.box<User>('user');
 
   static final HttpLink httpLink = HttpLink(
@@ -42,55 +43,22 @@ class ProfileRepository {
     return client;
   }
 
-  // Future createProfile({
-  //   required String firstName,
-  //   required String lastName,
-  //   required DateTime dateOfBirth,
-  //   required PhoneNumber phoneNumber,
-  //   required String avatarId,
-  //   // required String userId,
-  // }) async {
-  //   final DateFormat formatter = DateFormat('yyyy-MM-dd');
-  //   final String dob = formatter.format(dateOfBirth);
-  //   User? _user = user.values.first;
-
-  //   try {
-  //     final MutationOptions options = MutationOptions(
-  //         document: gql(ProfileQueries.updateProfile()),
-  //         variables: {
-  //           "first_name": firstName,
-  //           "last_name": lastName,
-  //           "date_of_birth": dob,
-  //           "user": _user.id,
-  //           "iso_code": phoneNumber.isoCode,
-  //           "phone_number": phoneNumber.nsn,
-  //           "avatar_id": avatarId
-  //         });
-  //     final QueryResult? result = await graphQLClient().mutate(options);
-
-  //     if (result!.hasException) {
-  //       print(result.exception.toString());
-  //       throw Exception(result.exception!.graphqlErrors.first.message);
-  //     }
-
-  //     var response = result.data!['createProfile'];
-
-  //     // profile.put(0, Profile.fromJson(response['profile']));
-
-  //     print(response);
-  //     return response;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
-
+  @override
   Future updateProfile({
     required String firstName,
     required String lastName,
+    required String gender,
     required String dateOfBirth,
-    required PhoneNumber phoneNumber,
   }) async {
     User? _user = user.values.first;
+
+    // if (phoneNumber.nsn.isEmpty) {
+    //   throw InvalidPhoneNumberException();
+    // }
+
+    // if (phoneNumber.isoCode != IsoCode.MW) {
+    //   throw InvalidNumberAreaException();
+    // }
 
     try {
       final MutationOptions options = MutationOptions(
@@ -99,8 +67,9 @@ class ProfileRepository {
             "user": _user.id,
             "first_name": firstName,
             "last_name": lastName,
-            "phone_number": phoneNumber.nsn,
-            "iso_code": phoneNumber.isoCode.name,
+            "gender": gender,
+            // "phone_number": phoneNumber.nsn, //TODO Fix Phone Number
+            // "iso_code": phoneNumber.isoCode.name,
             "date_of_birth": dateOfBirth
           });
       final QueryResult? result = await graphQLClient().mutate(options);
@@ -118,6 +87,7 @@ class ProfileRepository {
     }
   }
 
+  @override
   Future<Profile> getProfile() async {
     User? _user = user.values.first;
     try {
@@ -140,26 +110,4 @@ class ProfileRepository {
       rethrow;
     }
   }
-
-  // Future<List> getAvatars() async {
-  //   try {
-  //     final QueryOptions options = QueryOptions(
-  //       document: gql(ProfileQueries.getAvatars()),
-  //     );
-  //     final QueryResult? result = await graphQLClient().query(options);
-
-  //     if (result!.hasException) {
-  //       print(result.exception.toString());
-  //       throw Exception(result.exception!.graphqlErrors.first.message);
-  //     }
-
-  //     var response = result.data!['avatars'];
-
-  //     print(response);
-
-  //     return response;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
 }
