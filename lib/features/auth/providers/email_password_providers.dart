@@ -8,7 +8,7 @@ final emailProvider = StateProvider<String>((ref) => '');
 
 final usernameProvider = StateProvider<String>((ref) => '');
 
-final passwordVisibilityProvider = StateProvider<bool>((ref) {
+final passwordVisibilityProvider = StateProvider.autoDispose<bool>((ref) {
   return true;
 });
 

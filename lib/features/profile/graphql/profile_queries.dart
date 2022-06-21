@@ -11,8 +11,7 @@ class ProfileQueries {
     return r'''mutation(
       $first_name: String!
       $last_name: String!
-      $phone_number: String!
-      $iso_code: String!
+      $gender: ENUM_USERSPERMISSIONSUSER_GENDER!
       $date_of_birth: Date!
       $user: ID!
       ) {
@@ -21,8 +20,7 @@ class ProfileQueries {
             first_name: $first_name
             last_name: $last_name
             date_of_birth: $date_of_birth
-            iso_code: $iso_code
-            phone_number: $phone_number
+            gender: $gender
           }
           id: $user
         ) {
@@ -34,6 +32,7 @@ class ProfileQueries {
               date_of_birth
               iso_code
               phone_number
+              gender
               username
               email
               createdAt
@@ -52,6 +51,7 @@ class ProfileQueries {
             username
             email
             first_name
+            gender
             last_name
             date_of_birth
             phone_number

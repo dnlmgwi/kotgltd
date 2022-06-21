@@ -14,11 +14,14 @@ var profileRepoProvider = Provider(
 //   return avatarClient.getAvatars();
 // });
 
-var avatarProvider = StateProvider<String>((ref) => '');
-
 var firstNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
 var lastNameProvider = StateProvider.autoDispose<String>((ref) => '');
+
+enum Gender { male, female, rather_not_say, none }
+
+var genderProvider =
+    StateProvider.autoDispose<String>((ref) => Gender.none.name);
 
 var phoneNumberProvider = StateProvider<PhoneNumber>((ref) => PhoneNumber(
       isoCode: IsoCode.MW,

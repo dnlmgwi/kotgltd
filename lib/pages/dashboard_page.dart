@@ -123,8 +123,8 @@ class DashboardPage extends ConsumerWidget {
           selectedIconTheme: IconThemeData(color: kotgGreen, size: 20.sp),
           unselectedItemColor: Colors.white54,
           enableFeedback: true,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
           selectedItemColor: Colors.white54,
           backgroundColor: kotgBlack,
           items: <BottomNavigationBarItem>[

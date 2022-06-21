@@ -449,6 +449,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.41.0"
+  flip_card:
+    dependency: "direct main"
+    description:
+      name: flip_card
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -1204,6 +1211,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  scroll_date_picker:
+    dependency: "direct main"
+    description:
+      name: scroll_date_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.4.0"
   scroll_snap_list:
     dependency: "direct main"
     description:

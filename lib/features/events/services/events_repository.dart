@@ -5,6 +5,7 @@ import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/events/graphql/events_queries.dart';
 import 'package:kotgltd/features/events/model/kotgEvent.dart';
+// ignore: unused_import
 import 'package:kotgltd/features/events/model/kotgEvents.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';

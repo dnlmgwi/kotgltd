@@ -2,7 +2,9 @@ import 'package:flutter/services.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/auth/pages/sign_in_page.dart';
-import 'package:kotgltd/features/auth/pages/widgets/auth_state.dart';
+// ignore: unused_import
+import 'package:kotgltd/features/auth/pages/sign_up_page.dart';
+import 'package:kotgltd/features/auth/services/auth_state.dart';
 import 'package:kotgltd/features/team/model/team.dart';
 import 'package:kotgltd/features/wallet/models/wallet.dart';
 import 'package:kotgltd/packages/dependencies.dart';
@@ -23,10 +25,8 @@ void main() async {
   Hive.registerAdapter(TokenAdapter());
   Hive.registerAdapter(TeamAdapter());
   Hive.registerAdapter(WalletAdapter());
-  // Hive.registerAdapter(ProfileAdapter());
   await Hive.openBox<User>('user');
   await Hive.openBox<Team>('team');
-  // await Hive.openBox<Profile>('profile');
   await Hive.openBox<Token>('token');
 
   runApp(

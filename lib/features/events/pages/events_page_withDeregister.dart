@@ -14,7 +14,7 @@ import 'package:skeleton_animation/skeleton_animation.dart';
 class EventsPage extends ConsumerWidget {
   EventsPage({Key? key}) : super(key: key);
 
-  final scrollController = ScrollController(keepScrollOffset: true);
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context, ref) {
@@ -485,43 +485,43 @@ class EventsPage extends ConsumerWidget {
                                                                     : OutlinedButton(
                                                                         onPressed:
                                                                             () {
-                                                                          // context
-                                                                          //     .loaderOverlay
-                                                                          //     .show();
-                                                                          // ref
-                                                                          //     .watch(
-                                                                          //       deRegisterEventsProvider(
-                                                                          //         int.parse(
-                                                                          //           events.value.kotgEvents.eventData.elementAt(index).id,
-                                                                          //         ),
-                                                                          //       ),
-                                                                          //     )
-                                                                          //     .catchError((error) => Get.snackbar(
-                                                                          //           "Deregistration Error",
-                                                                          //           error.toString(),
-                                                                          //           backgroundColor: Colors.red,
-                                                                          //           snackPosition: SnackPosition.TOP,
-                                                                          //         ))
-                                                                          //     .whenComplete(() {
-                                                                          //   Get.snackbar(
-                                                                          //     "Successfully Deregistered",
-                                                                          //     'Sad To See you leave!',
-                                                                          //     snackPosition: SnackPosition.TOP,
-                                                                          //   );
-                                                                          //   ref.refresh(
-                                                                          //     registeredEventsProvider(
-                                                                          //       int.parse(events.value.kotgEvents.eventData.elementAt(index).id),
-                                                                          //     ),
-                                                                          //   );
-                                                                          // }).whenComplete(() {
-                                                                          //   context.loaderOverlay.hide();
+                                                                          context
+                                                                              .loaderOverlay
+                                                                              .show();
+                                                                          ref
+                                                                              .watch(
+                                                                                deRegisterEventsProvider(
+                                                                                  int.parse(
+                                                                                    events.value.kotgEvents.eventData.elementAt(index).id,
+                                                                                  ),
+                                                                                ),
+                                                                              )
+                                                                              .catchError((error) => Get.snackbar(
+                                                                                    "Deregistration Error",
+                                                                                    error.toString(),
+                                                                                    backgroundColor: Colors.red,
+                                                                                    snackPosition: SnackPosition.TOP,
+                                                                                  ))
+                                                                              .whenComplete(() {
+                                                                            Get.snackbar(
+                                                                              "Successfully Deregistered",
+                                                                              'Sad To See you leave!',
+                                                                              snackPosition: SnackPosition.TOP,
+                                                                            );
+                                                                            ref.refresh(
+                                                                              registeredEventsProvider(
+                                                                                int.parse(events.value.kotgEvents.eventData.elementAt(index).id),
+                                                                              ),
+                                                                            );
+                                                                          }).whenComplete(() {
+                                                                            context.loaderOverlay.hide();
 
-                                                                          //   // ref.refresh(
-                                                                          //   //     eventsProvider);
-                                                                          // });
+                                                                            // ref.refresh(
+                                                                            //     eventsProvider);
+                                                                          });
                                                                         },
                                                                         child: Text(
-                                                                            'Registered',
+                                                                            'Deregister',
                                                                             style:
                                                                                 GoogleFonts.poppins(
                                                                               fontWeight: FontWeight.w600,

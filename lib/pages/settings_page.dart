@@ -1,8 +1,10 @@
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
-import 'package:kotgltd/features/profile/widgets/update_profile_widget.dart';
+import 'package:kotgltd/features/profile/widgets/edit_profile_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
@@ -15,23 +17,10 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final _auth = ref.read(authProvider);
 
-    // final _system = ref.watch(systemStatusProvider);
-    final Uri _urlGef = Uri.parse('https://www.globalesports.org/');
-    final Uri _urlFeedback = Uri.parse('https://forms.gle/R7ctyVzPgN6KupTj7');
-    final Uri _urlWA =
-        Uri.parse(r'''https://wa.me/265997176756?text=KOTG%20Feedback''');
+    final Uri _urlDiscord = Uri.parse('https://discord.gg/kF7kng6xXt');
 
-    void _launchGEFURL() async {
-      if (!await launch(_urlGef.toString())) throw 'Could not launch $_urlGef';
-    }
-
-    void _launchFeedbackURL() async {
-      if (!await launch(_urlFeedback.toString()))
-        throw 'Could not launch $_urlFeedback';
-    }
-
-    void _launchWAURL() async {
-      if (!await launch(_urlWA.toString())) throw 'Could not launch $_urlWA';
+    void _launchDiscordURL() async {
+      if (!await launchUrl(_urlDiscord)) throw 'Could not launch $_urlDiscord';
     }
 
     void _showEventDestailsBottomSheet() async {
@@ -202,7 +191,7 @@ class SettingsPage extends ConsumerWidget {
                       padding:
                           const EdgeInsets.only(left: 15, top: 18, bottom: 15),
                       child: Text(
-                        'Settings',
+                        'Billing',
                         style: GoogleFonts.sarala(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -210,17 +199,19 @@ class SettingsPage extends ConsumerWidget {
                       ),
                     ),
                     ListTile(
-                      leading: LineIcon.doorOpen(),
-                      title: Text('Logout'),
+                      leading: Icon(Ionicons.receipt_outline),
+                      title: Text('Transactions'),
+                      subtitle: Text('Coming Soon'),
                       enableFeedback: true,
-                      onTap: () => _auth.logout(),
+                      enabled: false,
+                      onTap: () {},
                     ),
                     Divider(),
                     Padding(
                       padding:
                           const EdgeInsets.only(left: 15, top: 18, bottom: 15),
                       child: Text(
-                        'General',
+                        'Support',
                         style: GoogleFonts.sarala(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -239,46 +230,65 @@ class SettingsPage extends ConsumerWidget {
                     //   subtitle: Text('in partnership with iMind Malawi'),
                     //   enabled: false,
                     // ),
-                    ListTile(
-                      leading: LineIcon.link(),
-                      title: Text('Global Esports Federation'),
-                      subtitle: Text('A Proud Affiliate'),
-                      enabled: true,
-                      enableFeedback: true,
-                      onTap: () async {
-                        _launchGEFURL();
-                      },
-                    ),
+                    // ListTile(
+                    //   leading: LineIcon.link(),
+                    //   title: Text('Global Esports Federation'),
+                    //   subtitle: Text('A Proud Affiliate'),
+                    //   enabled: true,
+                    //   enableFeedback: true,
+                    //   onTap: () async {
+                    //     _launchGEFURL();
+                    //   },
+                    // ),
                     // ListTile(
                     //   leading: LineIcon.award(),
                     //   title: Text('Benefits'),
                     //   enabled: false,
                     // ),
+                    // ListTile(
+                    //   leading: LineIcon.file(),
+                    //   title: Text('Feedback'),
+                    //   enabled: true,
+                    //   enableFeedback: true,
+                    //   onTap: () async {
+                    //     _launchFeedbackURL();
+                    //   },
+                    // ),
+                    // ListTile(
+                    //   leading: LineIcon.peopleCarry(),
+                    //   title: Text('Partners'),
+                    //   enableFeedback: true,
+                    //   enabled: true,
+                    //   onTap: () {
+                    //     _showEventDestailsBottomSheet();
+                    //   },
+                    // ),
                     ListTile(
-                      leading: LineIcon.file(),
-                      title: Text('Feedback'),
-                      enabled: true,
-                      enableFeedback: true,
-                      onTap: () async {
-                        _launchFeedbackURL();
-                      },
-                    ),
-                    ListTile(
-                      leading: LineIcon.peopleCarry(),
-                      title: Text('Partners'),
-                      enableFeedback: true,
-                      enabled: true,
-                      onTap: () {
-                        _showEventDestailsBottomSheet();
-                      },
-                    ),
-                    ListTile(
-                      leading: LineIcon.phone(),
+                      leading: Icon(Ionicons.logo_discord),
                       title: Text('Contact Us'),
+                      subtitle:
+                          Text('For any event related or prompt assistance '),
                       enableFeedback: true,
                       enabled: true,
                       onTap: () async {
-                        _launchWAURL();
+                        _launchDiscordURL();
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Ionicons.mail_unread_outline),
+                      title: Text('Email Us'),
+                      subtitle: Text('For feedback and suggestions.'),
+                      enableFeedback: true,
+                      onTap: () {
+                        Clipboard.setData(
+                            ClipboardData(text: 'info@kotg.club'));
+
+                        Fluttertoast.showToast(
+                            msg: 'Copied to Clipboard: info@kotg.club',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 1,
+                            fontSize: 10.0.sp);
                       },
                     ),
                     // ListTile(
@@ -302,7 +312,7 @@ class SettingsPage extends ConsumerWidget {
                     ),
                     ListTile(
                       leading: LineIcon.fileContract(),
-                      title: Text('Privacy Policies'),
+                      title: Text('Privacy Policy'),
                       enableFeedback: true,
                       enabled: false,
                       onTap: () {},
@@ -314,6 +324,13 @@ class SettingsPage extends ConsumerWidget {
                       enabled: false,
                       onTap: () {},
                     ),
+                    Divider(),
+                    ListTile(
+                      leading: LineIcon.doorOpen(),
+                      title: Text('Logout'),
+                      enableFeedback: true,
+                      onTap: () => _auth.logout(),
+                    ),
                   ],
                 ),
               ),
@@ -322,7 +339,7 @@ class SettingsPage extends ConsumerWidget {
               padding: const EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  'KOTG Esports Ltd.',
+                  'KOTG Ltd.',
                   style: GoogleFonts.sarala(
                     fontWeight: FontWeight.normal,
                     color: Colors.grey,
