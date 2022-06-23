@@ -198,9 +198,8 @@ class TicketsPage extends ConsumerWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 15),
-                child: Text(
-                    'Touch ticket for more details, touch again to copy ticket reference',
+                padding: const EdgeInsets.only(left: 15, top: 5, bottom: 15),
+                child: Text('Touch ticket to copy ticket reference',
                     style: GoogleFonts.sarala(
                         fontWeight: FontWeight.normal,
                         fontSize: 10.sp,
@@ -459,6 +458,51 @@ class TicketsPage extends ConsumerWidget {
                                     // );
                                   }
 
+                                  Widget _buildQRRight() {
+                                    return tickets[index]['status'] ==
+                                            "approved"
+                                        ? Container(
+                                            color: kotgGreen,
+                                            child: Lottie.asset(
+                                              'assets/images/check-green.json',
+                                              height: 110.sp,
+                                              repeat: false,
+                                            ),
+                                          )
+                                        : Container(
+                                            color: Colors.grey,
+                                            child: Lottie.asset(
+                                              'assets/images/processing-animation.json',
+                                              height: 110.sp,
+                                              repeat: false,
+                                            ),
+                                          );
+                                    // return Container(
+                                    //   child: Center(
+                                    //     child: GestureDetector(
+                                    //         child: QrImage(
+                                    //           data: events[index]['reference'],
+                                    //           version: QrVersions.auto,
+                                    //           size: 90.sp,
+                                    //         ),
+                                    //         onTap: () {
+                                    //           Clipboard.setData(ClipboardData(
+                                    //             text: events[index]
+                                    //                 ['reference'],
+                                    //           ));
+
+                                    //           Fluttertoast.showToast(
+                                    //               msg: 'Copied to Clipboard',
+                                    //               toastLength:
+                                    //                   Toast.LENGTH_SHORT,
+                                    //               gravity: ToastGravity.TOP,
+                                    //               timeInSecForIosWeb: 1,
+                                    //               fontSize: 16.0.sp);
+                                    //         }),
+                                    //   ),
+                                    // );
+                                  }
+
                                   Widget _buildQRLeft() {
                                     return Column(
                                       crossAxisAlignment:
@@ -479,42 +523,25 @@ class TicketsPage extends ConsumerWidget {
                                       delay: Duration(milliseconds: 500),
                                       child: Padding(
                                         padding: const EdgeInsets.all(15.0),
-                                        child: FlipCard(
-                                          controller: _controller,
-                                          fill: Fill
-                                              .fillBack, // Fill the back side of the card to make in the same size as the front.
-                                          direction: FlipDirection
-                                              .HORIZONTAL, // default
-                                          front: TicketMaterial(
-                                              height: 150,
-                                              colorBackground: Colors.white,
-                                              leftChild: _buildLeft(),
-                                              rightChild: _buildRight(),
-                                              tapHandler: () {
-                                                _controller.toggleCard();
-                                              }),
-                                          back: TicketMaterial(
-                                              height: 150,
-                                              colorBackground: Colors.white,
-                                              leftChild: _buildQRLeft(),
-                                              rightChild: _buildRight(),
-                                              tapHandler: () {
-                                                Clipboard.setData(ClipboardData(
-                                                  text: tickets[index]
-                                                      ['reference'],
-                                                ));
+                                        child: TicketMaterial(
+                                            height: 150,
+                                            colorBackground: Colors.white,
+                                            leftChild: _buildLeft(),
+                                            rightChild: _buildRight(),
+                                            tapHandler: () {
+                                              Clipboard.setData(ClipboardData(
+                                                text: tickets[index]
+                                                    ['reference'],
+                                              ));
 
-                                                Fluttertoast.showToast(
-                                                    msg: 'Copied to Clipboard',
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    gravity: ToastGravity.TOP,
-                                                    timeInSecForIosWeb: 1,
-                                                    fontSize: 10.0.sp);
-
-                                                _controller.toggleCard();
-                                              }),
-                                        ),
+                                              Fluttertoast.showToast(
+                                                  msg: 'Copied to Clipboard',
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.TOP,
+                                                  timeInSecForIosWeb: 1,
+                                                  fontSize: 16.0.sp);
+                                            }),
                                       ));
                                 });
                           }
