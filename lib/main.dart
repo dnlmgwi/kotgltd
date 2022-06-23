@@ -20,6 +20,14 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: kotgBlack,
+    systemNavigationBarColor: kotgBlack,
+    statusBarIconBrightness: Brightness.light,
+    statusBarBrightness: Brightness.dark, // as you need dark or light
+  ));
+
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(TokenAdapter());

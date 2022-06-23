@@ -345,6 +345,18 @@ class EventsPage extends ConsumerWidget {
                                 initialSelectedDate: DateTime.now(),
                                 selectionColor: kotgPurple,
                                 daysCount: 14,
+                                dateTextStyle: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
+                                dayTextStyle: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
+                                monthTextStyle: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
                                 selectedTextColor: Colors.white,
                                 onDateChange: (date) {
                                   // // New date selected
