@@ -10,6 +10,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 // import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class EventsPage extends ConsumerWidget {
   EventsPage({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class EventsPage extends ConsumerWidget {
         required String maxParticipants,
         required String price,
         required String dateTime,
-        String link = 'http://www.google.com',
+        String link = 'http://www.kotg.club',
         required String prize,
         required String eventDate}) async {
       await Get.bottomSheet(Container(
@@ -73,10 +74,27 @@ class EventsPage extends ConsumerWidget {
               Container(
                 margin: EdgeInsets.all(10),
                 height: 200,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    image: DecorationImage(
-                        image: NetworkImage(imageUrl), fit: BoxFit.cover)),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      image: DecorationImage(
+                          //image size fill
+                          image: imageProvider,
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                  placeholder: (context, url) => Container(
+                    alignment: Alignment.center,
+                    child:
+                        CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
+                  ), //show progress  while loading image
+                  errorWidget: (context, url, error) =>
+                      Icon(LineIcons.imageFile),
+                  //show no iamge availalbe image on error laoding
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -434,13 +452,50 @@ class EventsPage extends ConsumerWidget {
                                           padding: const EdgeInsets.all(5.0),
                                           child: Container(
                                             height: 200,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
+                                            child: Stack(
+                                              alignment: AlignmentDirectional
+                                                  .bottomStart,
                                               children: [
-                                                Spacer(),
+                                                CachedNetworkImage(
+                                                  imageUrl: events.value
+                                                      .kotgEvents.eventData
+                                                      .elementAt(
+                                                        index,
+                                                      )
+                                                      .eventAttributes
+                                                      .kotgEventImage
+                                                      .eventImageData
+                                                      .kotgEventImageAttributes
+                                                      .url,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    height: 200,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  15)),
+                                                      image: DecorationImage(
+                                                        //image size fill
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      Container(
+                                                    alignment: Alignment.center,
+                                                    child:
+                                                        CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
+                                                  ), //show progress  while loading image
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(
+                                                    LineIcons.imageFile,
+                                                  ),
+                                                  //show no iamge availalbe image on error laoding
+                                                ),
                                                 Container(
                                                   height: 70,
                                                   child: Card(
@@ -668,21 +723,6 @@ class EventsPage extends ConsumerWidget {
                                                 ),
                                               ],
                                             ),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(15)),
-                                                image: DecorationImage(
-                                                    image: NetworkImage(
-                                                      events.value.kotgEvents
-                                                          .eventData
-                                                          .elementAt(index)
-                                                          .eventAttributes
-                                                          .kotgEventImage
-                                                          .eventImageData
-                                                          .kotgEventImageAttributes
-                                                          .url,
-                                                    ),
-                                                    fit: BoxFit.cover)),
                                           ),
                                         ),
                                       ),

@@ -15,10 +15,10 @@ class ProfileAttributes {
   late String gender;
 
   @JsonKey(name: 'iso_code')
-  String? isoCode;
+  late String isoCode;
 
   @JsonKey(name: 'phone_number')
-  String? phoneNumber;
+  late String phoneNumber;
 
   String username;
 
@@ -30,10 +30,10 @@ class ProfileAttributes {
     required this.createdAt,
     required this.email,
     required this.username,
-    required this.gender,
+    this.gender = "",
     this.dateOfBirth = "",
     this.firstName = "",
-    this.isoCode,
+    this.isoCode = "",
     this.lastName = "",
     this.phoneNumber = "",
   });

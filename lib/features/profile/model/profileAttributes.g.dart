@@ -11,10 +11,10 @@ ProfileAttributes _$ProfileAttributesFromJson(Map<String, dynamic> json) =>
       createdAt: DateTime.parse(json['createdAt'] as String),
       email: json['email'] as String,
       username: json['username'] as String,
-      gender: json['gender'] as String,
+      gender: json['gender'] as String? ?? "",
       dateOfBirth: json['date_of_birth'] as String? ?? "",
       firstName: json['first_name'] as String? ?? "",
-      isoCode: json['iso_code'] as String?,
+      isoCode: json['iso_code'] as String? ?? "",
       lastName: json['last_name'] as String? ?? "",
       phoneNumber: json['phone_number'] as String? ?? "",
     );

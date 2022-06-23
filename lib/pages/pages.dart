@@ -1,14 +1,6 @@
-import 'package:kotgltd/features/Tickets/pages/tickets_page.dart';
-import 'package:kotgltd/features/auth/pages/sign_in_page.dart';
-import 'package:kotgltd/features/auth/pages/sign_up_page.dart';
-import 'package:kotgltd/features/events/pages/event_details_page.dart';
-import 'package:kotgltd/features/profile/widgets/edit_profile_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
-import 'package:kotgltd/pages/create_team_widget.dart';
-import 'package:kotgltd/pages/dashboard_page.dart';
-import 'package:kotgltd/features/events/pages/events_page.dart';
-import 'package:kotgltd/pages/invite_requests_widget.dart';
-import 'package:kotgltd/pages/join_team_widget.dart';
+import 'package:kotgltd/packages/features.dart';
+import 'package:kotgltd/packages/pages.dart';
 
 class Pages {
   static final List<GetPage<dynamic>> routes = [

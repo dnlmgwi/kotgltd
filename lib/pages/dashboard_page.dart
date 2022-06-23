@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
+import 'package:kotgltd/features/settings/settings_page.dart';
+import 'package:kotgltd/features/team/pages/team_page.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/features/events/pages/events_page.dart';
 import 'package:kotgltd/features/home/pages/home_page.dart';
-import 'package:kotgltd/pages/settings_page.dart';
-import 'package:kotgltd/pages/team_page.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class DashboardPage extends ConsumerWidget {

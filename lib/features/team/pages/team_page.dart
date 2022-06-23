@@ -7,11 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/team/providers/team_providers.dart';
+import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
+import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
-import 'package:kotgltd/pages/create_team_widget.dart';
-import 'package:kotgltd/pages/created_team_details_page.dart';
-import 'package:kotgltd/pages/join_team_widget.dart';
-import 'package:kotgltd/pages/joined_team_details_page.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 

@@ -479,7 +479,7 @@ class UpdateProfileWidget extends ConsumerWidget {
                                     onPressed: () {
                                       if (_gender.state == Gender.none.name ||
                                           data.value.profileAttributes.gender
-                                              .isEmpty) {
+                                              .isNotEmpty) {
                                         Fluttertoast.showToast(
                                             msg: "Please Select Gender",
                                             toastLength: Toast.LENGTH_SHORT,
@@ -494,12 +494,12 @@ class UpdateProfileWidget extends ConsumerWidget {
                                             _lastName.state != "") {
                                           _repo
                                               .updateProfile(
-                                            firstName: _firstName.state,
-                                            lastName: _lastName.state,
-                                            gender: _gender.state,
-                                            dateOfBirth:
-                                                _dateofBirthFormatted.state,
-                                          )
+                                                  firstName: _firstName.state,
+                                                  lastName: _lastName.state,
+                                                  gender: _gender.state,
+                                                  dateOfBirth:
+                                                      _dateofBirthFormatted
+                                                          .state)
                                               .then((value) {
                                             context.loaderOverlay.hide();
                                             ref.refresh(profileProvider);

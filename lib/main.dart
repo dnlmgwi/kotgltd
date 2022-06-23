@@ -25,7 +25,7 @@ void main() async {
     statusBarColor: kotgBlack,
     systemNavigationBarColor: kotgBlack,
     statusBarIconBrightness: Brightness.light,
-    statusBarBrightness: Brightness.dark, // as you need dark or light
+    statusBarBrightness: Brightness.dark,
   ));
 
   await Hive.initFlutter();
