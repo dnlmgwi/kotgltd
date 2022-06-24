@@ -1,17 +1,13 @@
 // import 'package:supabase/supabase.dart';
 import 'package:graphql/client.dart';
 import 'package:kotgltd/data/enviroment_creds.dart';
-import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
-import 'package:kotgltd/features/auth/exception/input_exception.dart';
 import 'package:kotgltd/features/auth/interfaces/i_profile_repository.dart';
 // import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/profile/graphql/profile_queries.dart';
-import 'package:kotgltd/features/profile/model/profile.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
-import 'package:phone_form_field/phone_form_field.dart';
 
 class ProfileRepository extends IProfileRepository {
   final user = Hive.box<User>('user');

@@ -5,7 +5,6 @@ import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/auth/providers/email_password_providers.dart';
-import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 

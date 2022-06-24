@@ -1,11 +1,10 @@
 import 'package:badges/badges.dart';
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:kotgltd/common/color.dart';
+import 'package:kotgltd/common/components.dart';
+import 'package:kotgltd/features/team/model/invitesData.dart';
+import 'package:kotgltd/features/team/model/userEntity.dart';
 import 'package:kotgltd/features/team/providers/team_providers.dart';
 import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
 import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
@@ -53,151 +52,137 @@ class TeamsPage extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BottomSheetHandle(),
                       Padding(
                         padding:
                             const EdgeInsets.only(left: 15, top: 18, bottom: 5),
                         child: Text(
-                          'Join Requests',
+                          'Team List',
                           style: GoogleFonts.sarala(
                             fontWeight: FontWeight.w600,
-                            fontSize: 26.sp,
-                            color: Colors.grey,
+                            fontSize: 20.sp,
+                            color: kotgGreen,
                           ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            right: 35, left: 35, bottom: 5),
-                        child: Text(
-                            'Swipe Right to add a gamer or swipe left to remove a gamer',
+                        padding:
+                            const EdgeInsets.only(left: 15, top: 5, bottom: 5),
+                        child: Text('Manage your invites here',
                             style: GoogleFonts.sarala(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 10.sp,
-                            )),
+                                fontWeight: FontWeight.normal,
+                                fontSize: 10.sp,
+                                color: Colors.grey)),
                       ),
                       Divider(),
-                      Expanded(
-                        child: FutureBuilder(
-                          // Initialize FlutterFire:
-                          future:
-                              _userRepo.getJoinRequests(inviteCode: inviteCode),
-                          builder: (context, snapshot) {
-                            // Check for errors
-                            if (snapshot.hasError) {
+                      FutureBuilder(
+                        // Initialize FlutterFire:
+                        future: _userRepo.getInvites(inviteCode: inviteCode),
+                        builder: (context, snapshot) {
+                          // Check for errors
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Icon(
+                                Ionicons.pulse_outline,
+                                color: Colors.white,
+                              ), //TODO Error Icon
+                            );
+                          }
+                          // Once complete, show your application
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            var invite = snapshot.data as List<InviteEntity>;
+
+                            if (invite.isEmpty) {
+                              //print('project snapshot data is: ${projectSnap.data}');
                               return Center(
-                                child: Icon(
-                                  Ionicons.pulse_outline,
-                                  color: Colors.white,
-                                ), //TODO Error Icon
+                                child: Text("We couldn't find any requests",
+                                    style: GoogleFonts.sarala(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 10.sp,
+                                    )),
                               );
                             }
-                            // Once complete, show your application
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              var invite = snapshot.data as List;
 
-                              if (invite.isEmpty) {
-                                //print('project snapshot data is: ${projectSnap.data}');
-                                return Center(
-                                  child: Text("We couldn't find any requests",
-                                      style: GoogleFonts.sarala(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 10.sp,
-                                      )),
-                                );
-                              }
+                            return Expanded(
+                              child: ListView.builder(
+                                  itemCount: invite.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    void accept() {
+                                      _inviteRepo
+                                          .acceptInvite(
+                                            inviteID: invite[index].id,
+                                          )
+                                          .then((value) =>
+                                              ref.refresh(teamRepoProvider))
+                                          .then((value) => Get.back());
+                                    }
 
-                              return Expanded(
-                                child: ListView.builder(
-                                    itemCount: invite.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      void accept(BuildContext context) {
-                                        _inviteRepo
-                                            .acceptInvite(
-                                              inviteID: invite[index]['id'],
-                                            )
-                                            .then((value) =>
-                                                ref.refresh(teamRepoProvider))
-                                            .then((value) => Get.back());
-                                      }
+                                    void decline() {
+                                      _inviteRepo
+                                          .declineInvite(
+                                            inviteID: invite[index].id,
+                                          )
+                                          .then((value) =>
+                                              ref.refresh(teamRepoProvider))
+                                          .then((value) => Get.back());
+                                    }
 
-                                      void decline(BuildContext context) {
-                                        _inviteRepo
-                                            .declineInvite(
-                                              inviteID: invite[index]['id'],
-                                            )
-                                            .then((value) =>
-                                                ref.refresh(teamRepoProvider))
-                                            .then((value) => Get.back());
-                                      }
-
-                                      return Slidable(
-                                        startActionPane: ActionPane(
-                                          // A motion is a widget used to control how the pane animates.
-                                          motion: const ScrollMotion(),
-
-                                          // A pane can dismiss the Slidable.
-                                          // dismissible: DismissiblePane(
-                                          //     onDismissed: () {}),
-
-                                          // All actions are defined in the children parameter.
-                                          children: [
-                                            // A SlidableAction can have an icon and/or a label.
-                                            SlidableAction(
-                                              onPressed: decline,
-                                              backgroundColor:
-                                                  Color(0xFFFE4A49),
-                                              foregroundColor: Colors.white,
-                                              icon: Icons.delete,
-                                              label: 'Decline',
-                                            ),
-                                          ],
-                                        ),
-
-                                        // The end action pane is the one at the right or the bottom side.
-                                        endActionPane: ActionPane(
-                                          motion: ScrollMotion(),
-                                          children: [
-                                            SlidableAction(
-                                              onPressed: accept,
-                                              backgroundColor:
-                                                  Color(0xFF0392CF),
-                                              foregroundColor: Colors.white,
-                                              icon: Ionicons.add_circle_outline,
-                                              label: 'Accept',
-                                            ),
-                                          ],
-                                        ),
-
-                                        child: ListTile(
-                                          leading: TextAvatar(
-                                            shape: Shape.Circular,
-                                            size: 50,
-                                            textColor: Colors.white,
-                                            fontSize: 35,
-                                            upperCase: true,
-                                            numberLetters: 2,
-                                            text: invite[index]['attributes']
-                                                    ['user']['data']
-                                                ['attributes']['email'],
-                                          ),
-                                          title: Text(invite[index]
-                                                  ['attributes']['user']['data']
-                                              ['attributes']['email']),
-                                          trailing: (invite[index]['attributes']
-                                                  ['claimed'] as bool)
+                                    return ListTile(
+                                      leading: TextAvatar(
+                                        shape: Shape.Circular,
+                                        size: 50,
+                                        textColor: Colors.white,
+                                        fontSize: 35,
+                                        upperCase: true,
+                                        numberLetters: 2,
+                                        text: invite[index]
+                                            .inviteAttributes
+                                            .user
+                                            .data
+                                            .userAttributes
+                                            .email,
+                                      ),
+                                      title: Text(invite[index]
+                                          .inviteAttributes
+                                          .user
+                                          .data
+                                          .userAttributes
+                                          .email),
+                                      subtitle:
+                                          invite[index].inviteAttributes.claimed
                                               ? Text('Member')
                                               : Text(''),
-                                        ),
-                                      );
-                                    }),
-                              );
-                            }
-                            // Otherwise, show something whilst waiting for initialization to complete
-                            return Center(child: CircularProgressIndicator());
-                          },
-                        ),
+                                      trailing: Wrap(
+                                        spacing: 10.sp,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: accept,
+                                            child: Icon(Ionicons.checkmark),
+                                            style: ElevatedButton.styleFrom(
+                                              shape: CircleBorder(),
+                                              padding: EdgeInsets.all(14.sp),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: decline,
+                                            child: Icon(Ionicons.close),
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.red,
+                                              shape: CircleBorder(),
+                                              padding: EdgeInsets.all(14.sp),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            );
+                          }
+                          // Otherwise, show something whilst waiting for initialization to complete
+                          return Center(child: CircularProgressIndicator());
+                        },
                       ),
                     ],
                   ),
@@ -215,18 +200,21 @@ class TeamsPage extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BottomSheetHandle(),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15, top: 18, bottom: 25),
+                        padding:
+                            const EdgeInsets.only(left: 15, top: 18, bottom: 5),
                         child: Text(
                           'Options',
                           style: GoogleFonts.sarala(
                             fontWeight: FontWeight.w600,
-                            fontSize: 26.sp,
+                            fontSize: 20.sp,
                             color: Colors.grey,
                           ),
                         ),
                       ),
+                      Divider(),
+
                       // ListTile(
                       //   leading: Icon(Ionicons.share_social_outline),
                       //   title: Text('Send Invite Code'),
@@ -243,7 +231,11 @@ class TeamsPage extends ConsumerWidget {
                         title: Text(
                           'Team Captain Rules',
                         ),
-                        subtitle: Text('knowledge is power'),
+                        subtitle: Text('Learn about your role as team captain',
+                            style: GoogleFonts.sarala(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 10.sp,
+                                color: Colors.grey)),
                         onTap: () {},
                       ),
                       ListTile(
@@ -258,7 +250,11 @@ class TeamsPage extends ConsumerWidget {
                           ),
                         ),
                         subtitle: Text(
-                            'You will no longer be able to manage this team'),
+                            'You will no longer be able to manage this team',
+                            style: GoogleFonts.sarala(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 10.sp,
+                                color: Colors.grey)),
                         onTap: () {
                           _userRepo.deleteTeam().then((value) {
                             ref.refresh(teamRepoProvider);

@@ -6,7 +6,9 @@ import 'package:kotgltd/data/enviroment_creds.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/team/graphql/team_queries.dart';
 import 'package:kotgltd/features/team/interfaces/i_team_repository.dart';
+import 'package:kotgltd/features/team/model/invitesData.dart';
 import 'package:kotgltd/features/team/model/team.dart';
+import 'package:kotgltd/features/team/model/userEntity.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
@@ -214,7 +216,7 @@ class TeamRepository extends ITeamRepository {
   // }
 
   @override
-  Future<List?> getJoinRequests({required String inviteCode}) async {
+  Future<List<InviteEntity>> getInvites({required String inviteCode}) async {
     try {
       final QueryOptions options = QueryOptions(
           document: gql(TeamQueries.fetchTeamJoinRequests()),
@@ -227,7 +229,7 @@ class TeamRepository extends ITeamRepository {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
-      var response = result.data!['invites']['data'] as List;
+      var response = InvitesData.fromJson(result.data!).invites.inviteData;
 
       return response;
     } catch (e) {

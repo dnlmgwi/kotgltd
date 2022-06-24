@@ -1,9 +1,6 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -14,10 +11,7 @@ import 'package:kotgltd/features/profile/widgets/edit_profile_widget.dart';
 // import 'package:kotgltd/features/reminder/providers/reminder_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 // import 'package:share_plus/share_plus.dart';
-import 'package:skeleton_animation/skeleton_animation.dart';
-import 'package:ticket_material/ticket_material.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({Key? key}) : super(key: key);

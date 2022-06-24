@@ -1,4 +1,6 @@
+import 'package:kotgltd/features/team/model/invitesData.dart';
 import 'package:kotgltd/features/team/model/team.dart';
+import 'package:kotgltd/features/team/model/userEntity.dart';
 
 abstract class ITeamRepository {
   Future createTeam({
@@ -11,7 +13,7 @@ abstract class ITeamRepository {
 
   Future<Team> getTeam();
 
-  Future<List?> getJoinRequests({required String inviteCode});
+  Future<List<InviteEntity>> getInvites({required String inviteCode});
 
   Future<num> getInviteCount({required String inviteCode});
 }

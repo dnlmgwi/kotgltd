@@ -1,7 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kotgltd/common/components.dart';
 import 'package:kotgltd/features/team/providers/team_providers.dart';
-import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -19,30 +18,30 @@ class JoinTeamWidget extends ConsumerWidget {
 
     return LoaderOverlay(
       overlayOpacity: 0.8,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Wrap(
         children: [
+          BottomSheetHandle(),
           Padding(
-            padding: const EdgeInsets.only(left: 35, top: 18, bottom: 25),
+            padding: const EdgeInsets.only(left: 35, top: 18, bottom: 5),
             child: Text(
               'Join Team',
               style: GoogleFonts.sarala(
                 fontWeight: FontWeight.w600,
-                fontSize: 26.sp,
+                fontSize: 20.sp,
                 color: kotgGreen,
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 35, left: 35, top: 25),
+            padding: const EdgeInsets.only(right: 35, left: 35, bottom: 5),
             child: Text(
-                'Request a join code from a friend so that you can be added to a team',
+                'Request a join code from a friend so that you can be added to a team.',
                 style: GoogleFonts.sarala(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 10.sp,
-                )),
+                    fontWeight: FontWeight.normal,
+                    fontSize: 10.sp,
+                    color: Colors.grey)),
           ),
+          Divider(),
           SizedBox(
             height: 35,
           ),

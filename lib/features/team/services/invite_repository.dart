@@ -1,9 +1,6 @@
 // import 'package:supabase/supabase.dart';
-import 'package:graphql/client.dart';
 import 'package:kotgltd/data/enviroment_creds.dart';
-import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
-import 'package:kotgltd/features/events/graphql/events_queries.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:kotgltd/common/color.dart';
+import 'package:kotgltd/common/components.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
 import 'package:kotgltd/features/tickets/widgets/ticket_page_skeleton.dart';
@@ -15,13 +15,11 @@ import 'package:lottie/lottie.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:ticket_material/ticket_material.dart';
 // import 'package:external_app_launcher/external_app_launcher.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 class TicketsPage extends ConsumerWidget {
   TicketsPage({Key? key}) : super(key: key);
 
   final scrollController = ScrollController();
-  final _controller = FlipCardController();
 
   @override
   Widget build(BuildContext context, ref) {
@@ -186,8 +184,9 @@ class TicketsPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              BottomSheetHandle(),
               Padding(
-                padding: const EdgeInsets.only(left: 15, top: 18, bottom: 15),
+                padding: const EdgeInsets.only(left: 15, top: 18, bottom: 5),
                 child: Text(
                   'My Tickets',
                   style: GoogleFonts.sarala(
@@ -198,7 +197,7 @@ class TicketsPage extends ConsumerWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 15, top: 5, bottom: 15),
+                padding: const EdgeInsets.only(left: 15, top: 5, bottom: 5),
                 child: Text('Touch ticket to copy ticket reference',
                     style: GoogleFonts.sarala(
                         fontWeight: FontWeight.normal,

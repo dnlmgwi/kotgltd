@@ -7,7 +7,6 @@ import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/profile/widgets/edit_profile_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends ConsumerWidget {

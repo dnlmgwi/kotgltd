@@ -2,9 +2,9 @@ import 'package:flutter/services.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/auth/pages/sign_in_page.dart';
-// ignore: unused_import
-import 'package:kotgltd/features/auth/pages/sign_up_page.dart';
 import 'package:kotgltd/features/auth/services/auth_state.dart';
+import 'package:kotgltd/features/onBoarding/onBoardingPages.dart';
+import 'package:kotgltd/features/onBoarding/onboarding.dart';
 import 'package:kotgltd/features/team/model/team.dart';
 import 'package:kotgltd/features/wallet/models/wallet.dart';
 import 'package:kotgltd/packages/dependencies.dart';
@@ -45,8 +45,6 @@ void main() async {
 }
 
 class MyApp extends ConsumerWidget {
-  final tokens = Hive.box<Token>('token');
-
   @override
   Widget build(BuildContext context, ref) {
     return Sizer(builder: (context, orientation, deviceType) {
@@ -69,7 +67,8 @@ class MyApp extends ConsumerWidget {
                   return AuthStateWidget(
                       signedInBuilder: (_) => DashboardPage(),
                       // noProfileBuilder: (_) => CreateProfileWidget(),
-                      signedOutBuilder: (_) => SignInPage());
+                      signedOutBuilder: (_) =>
+                          OnboardingPage(pages: onBoardingPages));
                 } else {
                   return Scaffold(
                     body: Center(

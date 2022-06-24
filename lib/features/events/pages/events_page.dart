@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:kotgltd/common/bottomSheetHandle.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/events/widgets/events_page_skeleton.dart';
@@ -42,154 +43,161 @@ class EventsPage extends ConsumerWidget {
         required String eventDate}) async {
       await Get.bottomSheet(Container(
         color: kotgBlack,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 15,
-                  top: 18,
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      eventName,
-                      style: GoogleFonts.sarala(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 26.sp,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Spacer(),
-                    IconButton(
-                        onPressed: () => Get.back(),
-                        icon: Icon(
-                          Ionicons.close,
-                        ))
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                height: 200,
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  imageBuilder: (context, imageProvider) => Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      image: DecorationImage(
-                          //image size fill
-                          image: imageProvider,
-                          fit: BoxFit.cover),
-                    ),
+        child: Scrollbar(
+          interactive: true,
+          thickness: 10, //width of scrollbar
+          radius: Radius.circular(20), //corner radius of scrollbar
+          scrollbarOrientation: ScrollbarOrientation.left,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BottomSheetHandle(),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15,
+                    top: 18,
                   ),
-                  placeholder: (context, url) => Container(
-                    alignment: Alignment.center,
-                    child:
-                        CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
-                  ), //show progress  while loading image
-                  errorWidget: (context, url, error) =>
-                      Icon(LineIcons.imageFile),
-                  //show no iamge availalbe image on error laoding
+                  child: Row(
+                    children: [
+                      Text(
+                        eventName,
+                        style: GoogleFonts.sarala(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20.sp,
+                          color: kotgGreen,
+                        ),
+                      ),
+                      Spacer(),
+                      IconButton(
+                          onPressed: () => Get.back(),
+                          icon: Icon(
+                            Ionicons.close,
+                          ))
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: 5,
-                      ),
-                      child: Icon(
-                        LineIcons.calendarAlt,
-                      ),
-                    ),
-                    Text(Jiffy(eventDate).format('dd MMM yyyy'),
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5, left: 20),
-                      child: Icon(
-                        LineIcons.clockAlt,
+                Container(
+                  margin: EdgeInsets.all(10),
+                  height: 200,
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        image: DecorationImage(
+                            //image size fill
+                            image: imageProvider,
+                            fit: BoxFit.cover),
                       ),
                     ),
-                    Text(Jiffy(dateTime).format('h:mm a'),
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5, left: 20),
-                      child: Icon(
-                        Ionicons.people,
-                      ),
-                    ),
-                    Text(maxParticipants,
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5, left: 20),
-                      child: Icon(
-                        Ionicons.ticket_outline,
-                      ),
-                    ),
-                    Text('MWK ${price}',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ],
+                    placeholder: (context, url) => Container(
+                      alignment: Alignment.center,
+                      child:
+                          CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
+                    ), //show progress  while loading image
+                    errorWidget: (context, url, error) =>
+                        Icon(LineIcons.imageFile),
+                    //show no iamge availalbe image on error laoding
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: 5,
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right: 5,
+                        ),
+                        child: Icon(
+                          LineIcons.calendarAlt,
+                        ),
                       ),
-                      child: Icon(
-                        LineIcons.trophy,
+                      Text(Jiffy(eventDate).format('dd MMM yyyy'),
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5, left: 20),
+                        child: Icon(
+                          LineIcons.clockAlt,
+                        ),
                       ),
-                    ),
-                    Text('MWK ${prize}',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5, left: 20),
-                      child: Icon(
-                        LineIcons.link,
+                      Text(Jiffy(dateTime).format('h:mm a'),
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5, left: 20),
+                        child: Icon(
+                          Ionicons.people,
+                        ),
                       ),
-                    ),
-                    Text(link,
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ],
+                      Text(maxParticipants,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5, left: 20),
+                        child: Icon(
+                          Ionicons.ticket_outline,
+                        ),
+                      ),
+                      Text('MWK ${price}',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: MarkdownBody(
-                  shrinkWrap: true,
-                  data: desciption,
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right: 5,
+                        ),
+                        child: Icon(
+                          LineIcons.trophy,
+                        ),
+                      ),
+                      Text('MWK ${prize}',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5, left: 20),
+                        child: Icon(
+                          LineIcons.link,
+                        ),
+                      ),
+                      Text(link,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: MarkdownBody(
+                    shrinkWrap: true,
+                    data: desciption,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ));

@@ -59,8 +59,6 @@ class EventsRepository {
 
       var response = result.data!;
 
-      print(response);
-
       return KOTGEvent.fromJson(response);
     } on TimeoutException {
       ///30 Seconds Timeout
