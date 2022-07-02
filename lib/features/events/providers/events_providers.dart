@@ -17,6 +17,11 @@ final usereventsProvider = FutureProvider((ref) async {
   return eventsClient.userEvents();
 });
 
+final userPayProvider = FutureProvider.family((ref, String reference) async {
+  final eventsClient = ref.watch(eventsRepoProvider);
+  return eventsClient.ticketPay(reference: reference);
+});
+
 final registeredEventsProvider =
     FutureProvider.family<List?, int>((ref, eventId) async {
   final eventsClient = ref.watch(eventsRepoProvider);

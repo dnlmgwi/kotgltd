@@ -1,13 +1,10 @@
 // import 'package:supabase/supabase.dart';
-import 'dart:io';
 
 import 'package:graphql/client.dart';
 import 'package:kotgltd/data/enviroment_creds.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/team/graphql/team_queries.dart';
 import 'package:kotgltd/features/team/interfaces/i_team_repository.dart';
-import 'package:kotgltd/features/team/model/invitesData.dart';
-import 'package:kotgltd/features/team/model/team.dart';
 import 'package:kotgltd/features/team/model/userEntity.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';

@@ -135,6 +135,48 @@ class EventsRepository {
     }
   }
 
+  Future ticketPay({required String reference}) async {
+    try {
+      final response =
+          await http.post(Uri.parse('${Env.baseUrl}/api/v1/mpamba/pay'),
+              headers: <String, String>{
+                HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+                'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+              },
+              body: jsonEncode({
+                "msisdn": "265880649774",
+                "tran_id": reference,
+              }));
+      if (response.statusCode == 404) {
+        throw Exception('Not Found');
+      }
+
+      if (response.statusCode == 403) {
+        throw Exception('Forbidden');
+      }
+
+      if (response.statusCode == 401) {
+        throw Exception('Token Expired');
+      }
+
+      if (response.statusCode == 400) {
+        throw Exception('Bad Request');
+      }
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw Exception(response.body);
+      }
+
+      // Decode the json response
+      final jsonResponse = json.decode(response.body);
+
+      return jsonResponse['data'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> deregisterEvent({
     required int eventID,
   }) async {

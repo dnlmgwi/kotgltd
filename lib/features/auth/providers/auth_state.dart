@@ -10,7 +10,7 @@ import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 
 // import 'package:supabase/supabase.dart';
-enum AuthState { isAuth, isNotAuth, isReturning }
+enum AuthState { isLoggedIn, isNotLoggedIn, isReturning }
 
 class AuthStateNotifier extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -18,41 +18,39 @@ class AuthStateNotifier extends ChangeNotifier {
 
   AuthStateNotifier(this._authRepository);
 
-  Enum? _authState = isReturning();
+  static Enum authState = isReturning();
 
   // ignore: unnecessary_this
-  get authState => this._authState;
+  Enum get _authState => authState;
 
-  final tokens = Hive.box<Token>('token');
-  final user = Hive.box<User>('user');
-  // final profile = Hive.box<Profile>('profile');
+  final _tokens = Hive.box<Token>('token');
+  final _user = Hive.box<User>('user');
 
   void isAuth() {
-    _authState = AuthState.isAuth;
+    authState = AuthState.isLoggedIn;
     notifyListeners();
   }
 
   void isNotAuth() {
-    _authState = AuthState.isNotAuth;
+    authState = AuthState.isNotLoggedIn;
     notifyListeners();
   }
 
-  static AuthState isReturning() {
+  static Enum isReturning() {
     final tokens = Hive.box<Token>('token');
     // final profile = Hive.box<Profile>('profile');
-    AuthState _authState;
 
     if (tokens.isNotEmpty) {
       /// If The Token has not expired or if the token is less than 30 Days Old Auto Login
       !JWTChecker.hasExpired(tokens.values.first.jwt) ||
               JWTChecker.isTooOld(tokens.values.first.jwt) < 30
-          ? _authState = AuthState.isAuth
-          : _authState = AuthState.isNotAuth;
+          ? authState = AuthState.isLoggedIn
+          : authState = AuthState.isNotLoggedIn;
       // }
     } else {
-      _authState = AuthState.isNotAuth;
+      authState = AuthState.isNotLoggedIn;
     }
-    return _authState;
+    return authState;
   }
 
   Stream<Enum?> authStateChanges() => Stream<Enum?>.value(_authState);
@@ -68,21 +66,18 @@ class AuthStateNotifier extends ChangeNotifier {
         email: email,
         password: password,
       );
-
       var token = Token(jwt: response!.login.jwt);
-
       //Store User Data
-      user.put(0, response.login.user);
+      _user.put(0, response.login.user);
       //Store Token Data
-      tokens.put(0, token);
-
+      _tokens.put(0, token);
       //Change Auth State
       isAuth();
     } catch (e) {
       print(e);
       isNotAuth();
-      tokens.clear(); //Todo Network Exceptions
-      user.clear();
+      _tokens.clear(); //Todo Network Exceptions
+      _user.clear();
       // profile.clear();
       rethrow;
     }
@@ -107,8 +102,8 @@ class AuthStateNotifier extends ChangeNotifier {
       if (response!.toJson().isNotEmpty) {
         //success
         var token = Token(jwt: response.register.jwt);
-        tokens.put(0, token);
-        user.put(0, response.register.user);
+        _tokens.put(0, token);
+        _user.put(0, response.register.user);
 
         isAuth();
       }
@@ -117,8 +112,8 @@ class AuthStateNotifier extends ChangeNotifier {
       print(e);
       isNotAuth();
       // userTeam.clear();
-      tokens.clear(); //Todo Network Exceptions
-      user.clear();
+      _tokens.clear(); //Todo Network Exceptions
+      _user.clear();
       // profile.clear();
       rethrow;
     }
@@ -144,8 +139,8 @@ class AuthStateNotifier extends ChangeNotifier {
       if (response!.toJson().isNotEmpty) {
         //success
         var token = Token(jwt: response.register.jwt);
-        tokens.put(0, token);
-        user.put(0, response.register.user);
+        _tokens.put(0, token);
+        _user.put(0, response.register.user);
 
         isAuth();
       }
@@ -154,8 +149,8 @@ class AuthStateNotifier extends ChangeNotifier {
       print(e);
       isNotAuth();
       // userTeam.clear();
-      tokens.clear(); //Todo Network Exceptions
-      user.clear();
+      _tokens.clear(); //Todo Network Exceptions
+      _user.clear();
       // profile.clear();
       rethrow;
     }
@@ -163,12 +158,13 @@ class AuthStateNotifier extends ChangeNotifier {
 
   Future<void> logout() async {
     try {
-      await user.clear();
-      await tokens.clear();
+      await _user.clear();
+      await _tokens.clear();
       // await profile.clear();
+
+      isNotAuth();
     } catch (e) {
       isNotAuth();
     }
-    isNotAuth();
   }
 }

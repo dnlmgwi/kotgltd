@@ -41,166 +41,170 @@ class EventsPage extends ConsumerWidget {
         String link = 'http://www.kotg.club',
         required String prize,
         required String eventDate}) async {
-      await Get.bottomSheet(Container(
-        color: kotgBlack,
-        child: Scrollbar(
-          interactive: true,
-          thickness: 10, //width of scrollbar
-          radius: Radius.circular(20), //corner radius of scrollbar
-          scrollbarOrientation: ScrollbarOrientation.left,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BottomSheetHandle(),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 15,
-                    top: 18,
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        eventName,
-                        style: GoogleFonts.sarala(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.sp,
-                          color: kotgGreen,
-                        ),
-                      ),
-                      Spacer(),
-                      IconButton(
-                          onPressed: () => Get.back(),
-                          icon: Icon(
-                            Ionicons.close,
-                          ))
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  height: 200,
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    imageBuilder: (context, imageProvider) => Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        image: DecorationImage(
-                            //image size fill
-                            image: imageProvider,
-                            fit: BoxFit.cover),
-                      ),
+      await showMaterialModalBottomSheet(
+        isDismissible: false,
+        context: context,
+        builder: (context) => Container(
+          color: kotgBlack,
+          child: Scrollbar(
+            interactive: true,
+            thickness: 10, //width of scrollbar
+            radius: Radius.circular(20), //corner radius of scrollbar
+            scrollbarOrientation: ScrollbarOrientation.left,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BottomSheetHandle(),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 15,
+                      top: 18,
                     ),
-                    placeholder: (context, url) => Container(
-                      alignment: Alignment.center,
-                      child:
-                          CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
-                    ), //show progress  while loading image
-                    errorWidget: (context, url, error) =>
-                        Icon(LineIcons.imageFile),
-                    //show no iamge availalbe image on error laoding
+                    child: Row(
+                      children: [
+                        Text(
+                          eventName,
+                          style: GoogleFonts.sarala(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20.sp,
+                            color: kotgGreen,
+                          ),
+                        ),
+                        Spacer(),
+                        // IconButton(
+                        //     onPressed: () => context.pop(),
+                        //     icon: Icon(
+                        //       Ionicons.close,
+                        //     ))
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          right: 5,
-                        ),
-                        child: Icon(
-                          LineIcons.calendarAlt,
-                        ),
-                      ),
-                      Text(Jiffy(eventDate).format('dd MMM yyyy'),
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5, left: 20),
-                        child: Icon(
-                          LineIcons.clockAlt,
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    height: 200,
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      imageBuilder: (context, imageProvider) => Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          image: DecorationImage(
+                              //image size fill
+                              image: imageProvider,
+                              fit: BoxFit.cover),
                         ),
                       ),
-                      Text(Jiffy(dateTime).format('h:mm a'),
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5, left: 20),
-                        child: Icon(
-                          Ionicons.people,
-                        ),
-                      ),
-                      Text(maxParticipants,
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5, left: 20),
-                        child: Icon(
-                          Ionicons.ticket_outline,
-                        ),
-                      ),
-                      Text('MWK ${price}',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ],
+                      placeholder: (context, url) => Container(
+                        alignment: Alignment.center,
+                        child:
+                            CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
+                      ), //show progress  while loading image
+                      errorWidget: (context, url, error) =>
+                          Icon(LineIcons.imageFile),
+                      //show no iamge availalbe image on error laoding
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          right: 5,
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            right: 5,
+                          ),
+                          child: Icon(
+                            LineIcons.calendarAlt,
+                          ),
                         ),
-                        child: Icon(
-                          LineIcons.trophy,
+                        Text(Jiffy(eventDate).format('dd MMM yyyy'),
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5, left: 20),
+                          child: Icon(
+                            LineIcons.clockAlt,
+                          ),
                         ),
-                      ),
-                      Text('MWK ${prize}',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5, left: 20),
-                        child: Icon(
-                          LineIcons.link,
+                        Text(Jiffy(dateTime).format('h:mm a'),
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5, left: 20),
+                          child: Icon(
+                            Ionicons.people,
+                          ),
                         ),
-                      ),
-                      Text(link,
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ],
+                        Text(maxParticipants,
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5, left: 20),
+                          child: Icon(
+                            Ionicons.ticket_outline,
+                          ),
+                        ),
+                        Text('MWK ${price}',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: MarkdownBody(
-                    shrinkWrap: true,
-                    data: desciption,
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            right: 5,
+                          ),
+                          child: Icon(
+                            LineIcons.trophy,
+                          ),
+                        ),
+                        Text('MWK ${prize}',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5, left: 20),
+                          child: Icon(
+                            LineIcons.link,
+                          ),
+                        ),
+                        Text(link,
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ],
+                    ),
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: MarkdownBody(
+                      shrinkWrap: true,
+                      data: desciption,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ));
+      );
     }
 
     void _showEventRegBottomSheet({
@@ -208,8 +212,10 @@ class EventsPage extends ConsumerWidget {
       required String eventName,
       required String eventPrice,
     }) async {
-      await Get.bottomSheet(
-        LoaderOverlay(
+      await showMaterialModalBottomSheet(
+        isDismissible: false,
+        context: context,
+        builder: (context) => LoaderOverlay(
           overlayOpacity: 1.0,
           child: Container(
             color: kotgBlack,
@@ -218,6 +224,7 @@ class EventsPage extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  BottomSheetHandle(),
                   Padding(
                     padding: const EdgeInsets.only(
                       left: 15,
@@ -234,15 +241,15 @@ class EventsPage extends ConsumerWidget {
                           ),
                         ),
                         Spacer(),
-                        Consumer(builder: (context, ref, _) {
-                          final _tc = ref.watch(tcEventsProvider.state).state;
+                        // Consumer(builder: (context, ref, _) {
+                        //   final _tc = ref.watch(tcEventsProvider.state).state;
 
-                          return _tc
-                              ? Container()
-                              : IconButton(
-                                  onPressed: () => Get.back(),
-                                  icon: Icon(Ionicons.close));
-                        })
+                        //   return _tc
+                        //       ? Container()
+                        //       : IconButton(
+                        //           onPressed: () => context.pop(),
+                        //           icon: Icon(Ionicons.close));
+                        // })
                       ],
                     ),
                   ),
@@ -279,11 +286,14 @@ class EventsPage extends ConsumerWidget {
                                           int.parse(eventId),
                                         ),
                                       );
-                                      Get.back();
+                                      context.pop();
                                     }).whenComplete(() {
-                                      Get.snackbar("Successfully Reserved",
-                                          'We Are Ready For You!',
-                                          snackPosition: SnackPosition.TOP);
+                                      const snackBar = SnackBar(
+                                        content: Text("Successfully Reserved"),
+                                      );
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
                                       context.loaderOverlay.hide();
                                       Gaimon.success();
                                       ref.refresh(registeredEventsProvider(
@@ -293,10 +303,12 @@ class EventsPage extends ConsumerWidget {
                                       ));
                                     }).catchError(
                                       (error) {
-                                        Get.snackbar("Reservation Error",
-                                            error.toString(),
-                                            backgroundColor: Colors.red,
-                                            snackPosition: SnackPosition.TOP);
+                                        const snackBar = SnackBar(
+                                          content: Text("Error"), //TODO Error
+                                        );
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                         context.loaderOverlay.hide();
                                         Gaimon.error();
                                       },
@@ -304,11 +316,13 @@ class EventsPage extends ConsumerWidget {
                                   } else {
                                     context.loaderOverlay.hide();
                                     Gaimon.error();
-                                    Get.snackbar(
-                                        "Please Accept Terms And Conditions",
-                                        "You need to agree to our terms to proceed",
-                                        backgroundColor: Colors.red,
-                                        snackPosition: SnackPosition.TOP);
+                                    const snackBar = SnackBar(
+                                      content: Text(
+                                          "Please Accept Terms And Conditions"), //TODO Error
+                                    );
+
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   }
                                 })),
                       ],
@@ -319,7 +333,6 @@ class EventsPage extends ConsumerWidget {
             ),
           ),
         ),
-        isDismissible: false,
       );
       // The code below will run after the bottom sheet goes away
       print('The Bottom Sheet has gone away!');
@@ -741,9 +754,11 @@ class EventsPage extends ConsumerWidget {
                         );
                       },
                       error: (error) {
-                        Get.snackbar("Connection Error", error.toString(),
-                            backgroundColor: Colors.red,
-                            snackPosition: SnackPosition.TOP);
+                        const snackBar = SnackBar(
+                          content: Text("Connection Error"), //TODO Error
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                         return ListView.builder(
                             itemCount: 5,

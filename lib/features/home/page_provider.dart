@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kotgltd/features/auth/model/user.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 

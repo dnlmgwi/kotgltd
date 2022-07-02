@@ -63,7 +63,7 @@
 //               onTap: () {
 //                 _userRepo.leaveTeam().then((value) {
 //                   ref.refresh(teamRepoProvider);
-//                   Get.back();
+//                   context.pop();
 //                 });
 //               },
 //             ),

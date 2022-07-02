@@ -4,10 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
-import 'package:kotgltd/features/profile/widgets/edit_profile_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icon.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -23,55 +21,59 @@ class SettingsPage extends ConsumerWidget {
     }
 
     void _showEventDestailsBottomSheet() async {
-      await Get.bottomSheet(Container(
-        color: kotgBlack,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 15,
-                  top: 18,
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 35, bottom: 25),
-                      child: Text(
-                        'Partners',
-                        style: GoogleFonts.sarala(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 26.sp,
-                          color: Colors.grey,
+      await showMaterialModalBottomSheet(
+        context: context,
+        builder: (context) => Container(
+          color: kotgBlack,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15,
+                    top: 18,
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 35, bottom: 25),
+                        child: Text(
+                          'Partners',
+                          style: GoogleFonts.sarala(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 26.sp,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
-                    ),
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 35, bottom: 25),
-                      child: IconButton(
-                          onPressed: () => Get.back(),
-                          icon: Icon(
-                            Ionicons.close,
-                          )),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 35, left: 35, bottom: 25),
-                child: Center(
-                  child: Container(
-                    child: Text('Coming Soon!'),
+                      Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 35, bottom: 25),
+                        child: IconButton(
+                            onPressed: () => context.pop(),
+                            icon: Icon(
+                              Ionicons.close,
+                            )),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding:
+                      const EdgeInsets.only(right: 35, left: 35, bottom: 25),
+                  child: Center(
+                    child: Container(
+                      child: Text('Coming Soon!'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ));
+      );
     }
 
     return SafeArea(
@@ -178,7 +180,7 @@ class SettingsPage extends ConsumerWidget {
             ListTile(
               leading: LineIcon.user(),
               title: Text('Profile'),
-              onTap: () => Get.to(UpdateProfileWidget()),
+              onTap: () => context.push('/dashboard/profile'),
             ),
             Divider(),
             Expanded(

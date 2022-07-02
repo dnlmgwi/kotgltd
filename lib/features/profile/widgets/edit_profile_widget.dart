@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
@@ -7,15 +5,14 @@ import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart' as pn;
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class UpdateProfileWidget extends ConsumerWidget {
-  UpdateProfileWidget({Key? key}) : super(key: key);
+class ProfilePage extends ConsumerWidget {
+  ProfilePage({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -72,7 +69,7 @@ class UpdateProfileWidget extends ConsumerWidget {
             'Edit Profile',
             style: GoogleFonts.sarala(
               fontWeight: FontWeight.w600,
-              fontSize: 26.sp,
+              fontSize: 25.sp,
               color: kotgGreen,
             ),
           ),
@@ -82,7 +79,7 @@ class UpdateProfileWidget extends ConsumerWidget {
               color: kotgGreen,
             ),
             onTap: () {
-              Navigator.pop(context);
+              context.pop();
             },
           ),
         ),
@@ -504,21 +501,25 @@ class UpdateProfileWidget extends ConsumerWidget {
                                             context.loaderOverlay.hide();
                                             ref.refresh(profileProvider);
                                           }).catchError((error, stackTrace) {
-                                            Get.snackbar(
-                                              "Update Error",
-                                              error!.toString(),
-                                              backgroundColor: Colors.red,
-                                              snackPosition: SnackPosition.TOP,
+                                            const snackBar = SnackBar(
+                                              content: Text(
+                                                  "Update Error"), //TODO Error
                                             );
+
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackBar);
+
                                             context.loaderOverlay.hide();
                                           }); //TODO Show Error
                                         } else {
-                                          Get.snackbar(
-                                            "Update Error",
-                                            r'''You Can't Make This Change''',
-                                            backgroundColor: Colors.red,
-                                            snackPosition: SnackPosition.TOP,
+                                          const snackBar = SnackBar(
+                                            content: Text(
+                                                "Update Error"), //TODO Error
                                           );
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+
                                           context.loaderOverlay.hide();
                                         }
                                       }

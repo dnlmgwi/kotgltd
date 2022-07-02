@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,47 +9,17 @@ import 'package:kotgltd/features/auth/providers/email_password_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-class SignUpPage extends ConsumerWidget {
+class SignUpPage extends StatelessWidget {
   SignUpPage({Key? key}) : super(key: key);
+
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context, ref) {
-    final _repo = ref.read(authProvider);
-
-    final passwordVisibility = ref.watch(passwordVisibilityProvider);
-
-    final _password = ref.watch(passwordProvider.state).state;
-    final _passwordCheck = ref.watch(passwordCheckProvider.state).state;
-
-    final _email = ref.watch(emailProvider.state).state;
-    final _username = ref.watch(usernameProvider.state).state;
-
-    void updatePassword(BuildContext context, String pass) {
-      ref.read(passwordProvider.state).state = pass;
-    }
-
-    void updatePasswordCheck(BuildContext context, String pass) {
-      ref.watch(passwordCheckProvider.state).state = pass;
-    }
-
-    void updateUsername(BuildContext context, String username) {
-      ref.read(usernameProvider.state).state = username;
-    }
-
-    void updateEmail(BuildContext context, String email) {
-      ref.read(emailProvider.state).state = email;
-    }
-
-    final _tc = ref.watch(tcProvider.state).state;
-
-    void updateTermsAndConditions(BuildContext context, bool tc) {
-      ref.read(tcProvider.state).state = tc;
-    }
-
+  Widget build(BuildContext context) {
     return LoaderOverlay(
       overlayOpacity: 0.8,
       child: Scaffold(
+        appBar: AppBar(),
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -57,8 +28,45 @@ class SignUpPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Consumer(
-                    builder: (context, watch, _) {
+                  HookConsumer(
+                    builder: (context, ref, watch) {
+                      final _repo = ref.read(authProvider);
+
+                      final passwordVisibility =
+                          ref.watch(passwordVisibilityProvider);
+
+                      final _password = ref.watch(passwordProvider.state).state;
+                      final _passwordCheck =
+                          ref.watch(passwordCheckProvider.state).state;
+
+                      final _email = ref.watch(emailProvider.state).state;
+                      final _username = ref.watch(usernameProvider.state).state;
+
+                      void updatePassword(BuildContext context, String pass) {
+                        ref.read(passwordProvider.state).state = pass;
+                      }
+
+                      void updatePasswordCheck(
+                          BuildContext context, String pass) {
+                        ref.watch(passwordCheckProvider.state).state = pass;
+                      }
+
+                      void updateUsername(
+                          BuildContext context, String username) {
+                        ref.read(usernameProvider.state).state = username;
+                      }
+
+                      void updateEmail(BuildContext context, String email) {
+                        ref.read(emailProvider.state).state = email;
+                      }
+
+                      final _tc = ref.watch(tcProvider.state).state;
+
+                      void updateTermsAndConditions(
+                          BuildContext context, bool tc) {
+                        ref.read(tcProvider.state).state = tc;
+                      }
+
                       return Form(
                         key: _formKey,
                         child: Column(
@@ -355,18 +363,33 @@ class SignUpPage extends ConsumerWidget {
                                     password: _password,
                                   )
                                       .then((value) {
-                                    Get.back();
-                                    Get.snackbar(
-                                      "Successful",
-                                      'Ready Player One!',
-                                      snackPosition: SnackPosition.BOTTOM,
+                                    context.pop();
+                                    var snackBar = SnackBar(
+                                      elevation: 0,
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.transparent,
+                                      content: AwesomeSnackbarContent(
+                                        title: "Success",
+                                        message: "Ready Player One!",
+                                        contentType: ContentType.success,
+                                      ),
                                     );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   }).catchError((error, stackTrace) {
                                     context.loaderOverlay.hide();
-                                    Get.snackbar(
-                                        "Request Error", error!.toString(),
-                                        backgroundColor: Colors.red,
-                                        snackPosition: SnackPosition.BOTTOM);
+                                    var snackBar = SnackBar(
+                                      elevation: 0,
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Colors.transparent,
+                                      content: AwesomeSnackbarContent(
+                                        title: "Request Error",
+                                        message: error!.toString(),
+                                        contentType: ContentType.failure,
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   });
                                 }
                               },
@@ -398,7 +421,7 @@ class SignUpPage extends ConsumerWidget {
                     style: ButtonStyle(
                         enableFeedback: true,
                         splashFactory: NoSplash.splashFactory),
-                    onPressed: () => Get.back(),
+                    onPressed: () => context.pop(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

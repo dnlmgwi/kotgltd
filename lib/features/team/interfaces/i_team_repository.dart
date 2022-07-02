@@ -1,5 +1,4 @@
 import 'package:kotgltd/features/team/model/invitesData.dart';
-import 'package:kotgltd/features/team/model/team.dart';
 import 'package:kotgltd/features/team/model/userEntity.dart';
 
 abstract class ITeamRepository {
