@@ -1,4 +1,5 @@
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_phone_number/get_phone_number.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -6,6 +7,7 @@ import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:pinput/pinput.dart';
 
 class PhoneNumberPage extends ConsumerWidget {
   PhoneNumberPage({
@@ -24,17 +26,6 @@ class PhoneNumberPage extends ConsumerWidget {
     void updatePhoneNumber(BuildContext context, PhoneNumber phoneNumber) {
       ref.read(phoneNumberProvider.state).state = phoneNumber;
     }
-    // void updateDetails(
-    //   BuildContext context,
-    //   String lastName,
-    //   String firstName,
-    // ) {
-    //   if (lastName.isEmpty) lastName = _lastName.state;
-    //   if (firstName.isEmpty) firstName = _firstName.state;
-
-    //   if (lastName.isNotEmpty) updateLastName(context, lastName);
-    //   if (firstName.isNotEmpty) updateFirstName(context, firstName);
-    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +64,7 @@ class PhoneNumberPage extends ConsumerWidget {
                         autofillHints: [
                           AutofillHints.telephoneNumber
                         ], // default to null
-                        enabled: true, // default
+                        enabled: false, // default
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -91,6 +82,7 @@ class PhoneNumberPage extends ConsumerWidget {
                             updatePhoneNumber(context, phone!),
                         defaultCountry: IsoCode.MW,
                         showFlagInInput: true,
+                        initialValue: _phoneNumber.state,
                         validator: PhoneValidator.validMobile(),
                         enableInteractiveSelection: true,
                         // initialValue: phoneNumber,
@@ -109,13 +101,13 @@ class PhoneNumberPage extends ConsumerWidget {
                           primary: kotgBlack,
                           backgroundColor: kotgGreen,
                         ),
-                        onPressed: () {
-                          // updateDetails(context, lastName, firstName);
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             context.loaderOverlay.show();
                             _repo
                                 .updatePhoneNumber(
-                                    phoneNumber: _phoneNumber.state)
+                              phoneNumber: _phoneNumber.state,
+                            )
                                 .then((value) {
                               context.loaderOverlay.hide();
                               ref.refresh(profileProvider);

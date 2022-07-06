@@ -18,7 +18,7 @@ var firstNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
 var lastNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
-enum Gender { male, female, rather_not_say, none }
+enum Gender { male, female, none }
 
 var genderProvider =
     StateProvider.autoDispose<String>((ref) => Gender.none.name);

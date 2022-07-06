@@ -268,7 +268,7 @@ class SettingsPage extends ConsumerWidget {
                       leading: Icon(Ionicons.logo_discord),
                       title: Text('Contact Us'),
                       subtitle:
-                          Text('For any event related or prompt assistance '),
+                          Text('For any event related or prompt assistance.'),
                       enableFeedback: true,
                       enabled: true,
                       onTap: () async {

@@ -6,7 +6,6 @@ import 'package:kotgltd/features/auth/interfaces/i_profile_repository.dart';
 // import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/profile/graphql/profile_queries.dart';
-import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
@@ -72,7 +71,6 @@ class ProfileRepository extends IProfileRepository {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
-      var response = result.data!['updateUsersPermissionsUser']['data'];
     } catch (e) {
       rethrow;
     }
@@ -84,16 +82,8 @@ class ProfileRepository extends IProfileRepository {
   }) async {
     User? _user = user.values.first;
 
-    if (Gender.rather_not_say.name == gender) {
-      gender = "ratherNotSay";
-    }
-
-    // if (phoneNumber.nsn.isEmpty) {
-    //   throw InvalidPhoneNumberException();
-    // }
-
-    // if (phoneNumber.isoCode != IsoCode.MW) {
-    //   throw InvalidNumberAreaException();
+    // if (Gender.rather_not_say.name == gender) {
+    //   gender = "ratherNotSay";
     // }
 
     try {
@@ -110,7 +100,6 @@ class ProfileRepository extends IProfileRepository {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
-      var response = result.data!['updateUsersPermissionsUser']['data'];
     } catch (e) {
       rethrow;
     }
@@ -145,7 +134,6 @@ class ProfileRepository extends IProfileRepository {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
-      var response = result.data!['updateUsersPermissionsUser']['data'];
     } catch (e) {
       rethrow;
     }
@@ -179,7 +167,6 @@ class ProfileRepository extends IProfileRepository {
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
-      var response = result.data!['updateUsersPermissionsUser']['data'];
     } catch (e) {
       rethrow;
     }

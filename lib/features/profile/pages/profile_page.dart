@@ -1,6 +1,7 @@
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_phone_number/get_phone_number.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -8,6 +9,7 @@ import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:phone_form_field/phone_form_field.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ProfilePage extends StatelessWidget {
@@ -92,10 +94,28 @@ class ProfilePage extends StatelessWidget {
                             }
 
                             bool enablePhoneNumberField({
-                              required String gender,
+                              required String phoneNumber,
                             }) {
-                              return data
-                                  .value.profileAttributes.gender.isNotEmpty;
+                              return data.value.profileAttributes.phoneNumber
+                                  .isNotEmpty;
+                            }
+
+                            final _phoneNumber =
+                                ref.watch(phoneNumberProvider.state);
+
+                            void updatePhoneNumber(
+                                BuildContext context, PhoneNumber phoneNumber) {
+                              ref.read(phoneNumberProvider.state).state =
+                                  phoneNumber;
+                            }
+
+                            autofill() async {
+                              String phoneNumber = await GetPhoneNumber().get();
+                              updatePhoneNumber(
+                                  context,
+                                  PhoneNumber(
+                                      isoCode: IsoCode.MW,
+                                      nsn: phoneNumber.split('+265')[1]));
                             }
 
                             return Column(
@@ -216,6 +236,9 @@ class ProfilePage extends StatelessWidget {
                                       Text(data.value.profileAttributes.email),
                                 ),
                                 ListTile(
+                                  enabled: !enablePhoneNumberField(
+                                      phoneNumber: data
+                                          .value.profileAttributes.phoneNumber),
                                   title: Text(
                                     'Phone Number',
                                     style: GoogleFonts.sarala(
@@ -223,8 +246,11 @@ class ProfilePage extends StatelessWidget {
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  onTap: () => context.push(
-                                      '/dashboard/profile/phoneNumber?phoneNumber=${data.value.profileAttributes.phoneNumber}'),
+                                  onTap: () async {
+                                    await autofill();
+                                    context.push(
+                                        '/dashboard/profile/phoneNumber?phoneNumber=${data.value.profileAttributes.phoneNumber}');
+                                  },
                                   trailing: Text(
                                       data.value.profileAttributes.phoneNumber),
                                 ),

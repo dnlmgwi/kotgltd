@@ -207,7 +207,7 @@ class EventsPage extends ConsumerWidget {
       );
     }
 
-    void _showEventRegBottomSheet({
+    void _showEventRegDialog({
       required String eventId,
       required String eventName,
       required String eventPrice,
@@ -218,99 +218,95 @@ class EventsPage extends ConsumerWidget {
           builder: ((context, ref, child) {
             final _tc = ref.watch(tcEventsProvider.state).state;
 
-            return AlertDialog(
-              backgroundColor: kotgBlack,
-              title: Text(
-                'Event Reservation',
-                style: GoogleFonts.sarala(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20.sp,
-                  color: Colors.grey,
+            return LoaderOverlay(
+              overlayOpacity: 0.8,
+              child: AlertDialog(
+                backgroundColor: kotgBlack,
+                title: Text(
+                  'Event Reservation',
+                  style: GoogleFonts.sarala(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20.sp,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 15),
-                      child: Text(
-                          r'''No responsibility disclaimers explain to users that your business will not be held responsible for any damages they suffer as a result of using your products or services.
-
-Because these agreements limit your liability, they are also often referred to online as “no liability” disclaimers.
-
-No responsibility disclaimers address both tangible and intangible damages — for example, physical harm caused by using a product, loss of profits or loss of data, and defamatory comments.''',
-                          style: GoogleFonts.sarala(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 10.sp,
-                              color: Colors.grey)),
-                    ),
-                    // BottomSheetHandle(),
-                    CheckboxListTile(
-                        activeColor: kotgBlack,
-                        checkColor: kotgGreen,
-                        selected: false,
-                        title: Text('I Accept the terms and conditions'),
-                        tileColor: kotgBlack,
-                        value: _tc,
-                        onChanged: (value) {
-                          updateTermsAndConditions(context, value!);
-                        }),
-                  ],
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5, bottom: 15),
+                        child: Text(
+                            'By selecting confirm your spot will be reserved, Go and find your ticket via My Tickets',
+                            style: GoogleFonts.sarala(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 10.sp,
+                                color: Colors.grey)),
+                      ),
+                      // BottomSheetHandle(),
+                      CheckboxListTile(
+                          activeColor: kotgBlack,
+                          checkColor: kotgGreen,
+                          selected: false,
+                          title: Text('I Accept the terms and conditions'),
+                          tileColor: kotgBlack,
+                          value: _tc,
+                          onChanged: (value) {
+                            updateTermsAndConditions(context, value!);
+                          }),
+                    ],
+                  ),
                 ),
-              ),
-              actions: [
-                ElevatedButton(
-                    child: Text('Confirm'),
-                    onPressed: () {
-                      context.loaderOverlay.show();
-                      if (_tc) {
-                        _eventsRepo
-                            .registerEvent(
-                          eventID: eventId,
-                        )
-                            .then((value) {
-                          ref.refresh(
-                            registeredEventsProvider(
-                              int.parse(eventId),
-                            ),
-                          );
-                          Navigator.pop(context);
-                        }).whenComplete(() {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Sucessfully Reserved")));
-                          Gaimon.success();
-                          context.loaderOverlay.hide();
-                          ref.refresh(registeredEventsProvider(
-                            int.parse(
-                              eventId,
-                            ),
-                          ));
-                        }).catchError(
-                          (error) {
+                actions: [
+                  ElevatedButton(
+                      child: Text('Confirm'),
+                      onPressed: () {
+                        context.loaderOverlay.show();
+                        if (_tc) {
+                          _eventsRepo
+                              .registerEvent(
+                            eventID: eventId,
+                          )
+                              .then((value) {
+                            Navigator.pop(context);
+                          }).whenComplete(() {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(error.toString()),
-                                backgroundColor: Colors.red));
-                            Gaimon.error();
+                                content: Text("Sucessfully Reserved")));
+                            Gaimon.success();
                             context.loaderOverlay.hide();
-                          },
-                        );
-                      } else {
-                        Gaimon.error();
+                            ref.refresh(registeredEventsProvider(
+                              int.parse(
+                                eventId,
+                              ),
+                            ));
+                          }).catchError(
+                            (error) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(error.toString()),
+                                      backgroundColor: Colors.red));
+                              Gaimon.error();
+                              context.loaderOverlay.hide();
+                            },
+                          );
+                        } else {
+                          Gaimon.error();
 
-                        context.loaderOverlay.hide();
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Please Accept Terms And Conditions"),
-                            backgroundColor: Colors.red));
-                      }
-                    }),
-                OutlinedButton(
-                  child: Text('Cancel'),
-                  style: ButtonStyle(),
-                  onPressed: () => Navigator.pop(context),
-                )
-              ],
+                          context.loaderOverlay.hide();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text("Please Accept Terms And Conditions"),
+                              backgroundColor: Colors.red));
+                        }
+                      }),
+                  OutlinedButton(
+                    child: Text('Dismiss'),
+                    style: ButtonStyle(),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ],
+              ),
             );
           }),
         ),
@@ -532,7 +528,7 @@ No responsibility disclaimers address both tangible and intangible damages — f
                                                                               kotgPurple),
                                                                       onPressed:
                                                                           () {
-                                                                        _showEventRegBottomSheet(
+                                                                        _showEventRegDialog(
                                                                           eventId: events
                                                                               .value
                                                                               .kotgEvents
