@@ -1,4 +1,5 @@
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/auth/providers/email_password_providers.dart';
 import 'package:kotgltd/common/color.dart';
@@ -20,12 +21,34 @@ class ForgotPasswordPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _userRepo = ref.watch(authRepoProvider);
-    final _email = ref.watch(emailProvider.state);
+    final _email = ref.watch(emailProvider.state).state;
+
+    void updateEmail(BuildContext context, String email) {
+      ref.read(emailProvider.state).state = email;
+    }
 
     return LoaderOverlay(
       overlayOpacity: 0.8,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: kotgBlack,
+          leading: GestureDetector(
+            child: Icon(Ionicons.chevron_back, color: kotgGreen),
+            onTap: () {
+              context.pop();
+            },
+          ),
+          title: Text(
+            'Forgot Password',
+            style: GoogleFonts.sarala(
+              fontWeight: FontWeight.w600,
+              fontSize: 20.sp,
+              color: kotgGreen,
+            ),
+          ),
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -36,17 +59,17 @@ class ForgotPasswordPage extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 18),
-                      child: Text(
-                        'Forgot Password',
-                        style: GoogleFonts.sarala(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 25,
-                          color: kotgGreen,
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 18),
+                    //   child: Text(
+                    //     'Forgot Password',
+                    //     style: GoogleFonts.sarala(
+                    //       fontWeight: FontWeight.w600,
+                    //       fontSize: 25,
+                    //       color: kotgGreen,
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5, bottom: 15),
                       child: Text('Check your emails and follow the steps',
@@ -96,7 +119,7 @@ class ForgotPasswordPage extends ConsumerWidget {
                                 // autofocus: true,
                                 maxLines: 1,
                                 onChanged: (String email) =>
-                                    _email.state = email,
+                                    updateEmail(context, email),
                                 showCursor: true,
                                 // The validator receives the text that the user has entered.
                                 validator: (value) {
@@ -133,14 +156,14 @@ class ForgotPasswordPage extends ConsumerWidget {
                                   if (_formKey.currentState!.validate()) {
                                     context.loaderOverlay.show();
                                     _userRepo
-                                        .forgotPassword(email: _email.state)
+                                        .forgotPassword(email: _email)
                                         .onError((error, stackTrace) {
                                       context.loaderOverlay.hide();
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               content: Text(error!.toString()),
                                               backgroundColor: Colors.red));
-                                    }).whenComplete(() => context.pop());
+                                    });
                                   }
                                 },
                               ),

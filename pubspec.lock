@@ -1049,7 +1049,7 @@ packages:
       name: phone_form_field
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.3"
+    version: "6.1.0"
   phone_number_metadata:
     dependency: transitive
     description:

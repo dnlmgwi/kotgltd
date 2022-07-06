@@ -1,6 +1,10 @@
-import 'package:kotgltd/features/auth/pages/widgets/forgot_password_widget.dart';
+import 'package:kotgltd/features/auth/pages/forgot_password_page.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/auth/providers/auth_state.dart';
+import 'package:kotgltd/features/profile/pages/birthday_page.dart';
+import 'package:kotgltd/features/profile/pages/gender_page.dart';
+import 'package:kotgltd/features/profile/pages/name_page.dart';
+import 'package:kotgltd/features/profile/pages/phoneNumber_page.dart';
 import 'package:kotgltd/features/team/pages/team_page.dart';
 import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
 import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
@@ -20,6 +24,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: "/auth",
     debugLogDiagnostics: true,
+    
     redirect: (state) {
       // We want to READ the state, here.
       // GoRouter is already aware of state changes through `refreshListenable`
@@ -86,7 +91,45 @@ final routerProvider = Provider<GoRouter>((ref) {
             GoRoute(
                 path: 'profile',
                 builder: (context, state) => ProfilePage(),
-                routes: []),
+                routes: [
+                  GoRoute(
+                    path: 'name',
+                    builder: (context, state) {
+                      final firstName = state.queryParams['firstName'];
+                      final lastName = state.queryParams['lastName'];
+
+                      return NamePage(
+                        firstName: firstName!,
+                        lastName: lastName!,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                      path: 'gender',
+                      builder: (context, state) {
+                        final gender = state.queryParams['gender'];
+
+                        return GenderPage(gender: gender!);
+                      }),
+                  GoRoute(
+                      path: 'birthday',
+                      builder: (context, state) {
+                        final birthday = state.queryParams['dob'];
+
+                        return BirthdayPage(
+                          birthday: birthday!,
+                        );
+                      }),
+                  GoRoute(
+                      path: 'phoneNumber',
+                      builder: (context, state) {
+                        final phoneNumber = state.queryParams['phoneNumber'];
+
+                        return PhoneNumberPage(
+                          phoneNumber: phoneNumber!,
+                        );
+                      }),
+                ]),
             GoRoute(
                 path: 'team',
                 builder: (context, state) => TeamsPage(),

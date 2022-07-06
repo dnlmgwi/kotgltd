@@ -19,7 +19,25 @@ class SignUpPage extends StatelessWidget {
     return LoaderOverlay(
       overlayOpacity: 0.8,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: kotgBlack,
+          leading: GestureDetector(
+            child: Icon(Ionicons.chevron_back, color: kotgGreen),
+            onTap: () {
+              context.pop();
+            },
+          ),
+          title: Text(
+            'Create your account',
+            style: GoogleFonts.sarala(
+              fontWeight: FontWeight.w600,
+              fontSize: 20.sp,
+              color: kotgGreen,
+            ),
+          ),
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -34,13 +52,12 @@ class SignUpPage extends StatelessWidget {
 
                       final passwordVisibility =
                           ref.watch(passwordVisibilityProvider);
-
                       final _password = ref.watch(passwordProvider.state).state;
                       final _passwordCheck =
                           ref.watch(passwordCheckProvider.state).state;
-
                       final _email = ref.watch(emailProvider.state).state;
                       final _username = ref.watch(usernameProvider.state).state;
+                      final _tc = ref.watch(tcProvider.state).state;
 
                       void updatePassword(BuildContext context, String pass) {
                         ref.read(passwordProvider.state).state = pass;
@@ -60,8 +77,6 @@ class SignUpPage extends StatelessWidget {
                         ref.read(emailProvider.state).state = email;
                       }
 
-                      final _tc = ref.watch(tcProvider.state).state;
-
                       void updateTermsAndConditions(
                           BuildContext context, bool tc) {
                         ref.read(tcProvider.state).state = tc;
@@ -72,17 +87,17 @@ class SignUpPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 18),
-                              child: Text(
-                                'Create your account',
-                                style: GoogleFonts.sarala(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 25,
-                                  color: kotgGreen,
-                                ),
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 18),
+                            //   child: Text(
+                            //     'Create your account',
+                            //     style: GoogleFonts.sarala(
+                            //       fontWeight: FontWeight.w600,
+                            //       fontSize: 25,
+                            //       color: kotgGreen,
+                            //     ),
+                            //   ),
+                            // ),
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 5, bottom: 15),
@@ -337,20 +352,16 @@ class SignUpPage extends StatelessWidget {
                               ),
                               onPressed: () {
                                 if (_tc == false) {
-                                  Fluttertoast.showToast(
-                                      msg: "Please Accept T&C's",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.TOP,
-                                      timeInSecForIosWeb: 1,
-                                      fontSize: 16.0.sp);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text("Please Accept T&C's"),
+                                          backgroundColor: Colors.red));
                                 }
                                 if (!EmailValidator.validate(_email)) {
-                                  Fluttertoast.showToast(
-                                      msg: 'Enter a Valid Email',
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.TOP,
-                                      timeInSecForIosWeb: 1,
-                                      fontSize: 16.0.sp);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text('Enter a Valid Email'),
+                                          backgroundColor: Colors.red));
                                 }
                                 //if form has been filled == true
                                 if (_formKey.currentState!.validate() &&
@@ -362,34 +373,11 @@ class SignUpPage extends StatelessWidget {
                                     email: _email,
                                     password: _password,
                                   )
-                                      .then((value) {
-                                    context.pop();
-                                    var snackBar = SnackBar(
-                                      elevation: 0,
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Colors.transparent,
-                                      content: AwesomeSnackbarContent(
-                                        title: "Success",
-                                        message: "Ready Player One!",
-                                        contentType: ContentType.success,
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  }).catchError((error, stackTrace) {
-                                    context.loaderOverlay.hide();
-                                    var snackBar = SnackBar(
-                                      elevation: 0,
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor: Colors.transparent,
-                                      content: AwesomeSnackbarContent(
-                                        title: "Request Error",
-                                        message: error!.toString(),
-                                        contentType: ContentType.failure,
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                      .catchError((error, stackTrace) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(error!.toString()),
+                                            backgroundColor: Colors.red));
                                   });
                                 }
                               },

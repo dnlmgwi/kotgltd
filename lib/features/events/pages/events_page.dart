@@ -212,612 +212,597 @@ class EventsPage extends ConsumerWidget {
       required String eventName,
       required String eventPrice,
     }) async {
-      await showMaterialModalBottomSheet(
-        isDismissible: false,
+      await showDialog(
         context: context,
-        builder: (context) => LoaderOverlay(
-          overlayOpacity: 1.0,
-          child: Container(
-            color: kotgBlack,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BottomSheetHandle(),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                      top: 18,
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Event Reservation',
+        builder: (context) => Consumer(
+          builder: ((context, ref, child) {
+            final _tc = ref.watch(tcEventsProvider.state).state;
+
+            return AlertDialog(
+              backgroundColor: kotgBlack,
+              title: Text(
+                'Event Reservation',
+                style: GoogleFonts.sarala(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20.sp,
+                  color: Colors.grey,
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 15),
+                      child: Text(
+                          r'''No responsibility disclaimers explain to users that your business will not be held responsible for any damages they suffer as a result of using your products or services.
+
+Because these agreements limit your liability, they are also often referred to online as “no liability” disclaimers.
+
+No responsibility disclaimers address both tangible and intangible damages — for example, physical harm caused by using a product, loss of profits or loss of data, and defamatory comments.''',
                           style: GoogleFonts.sarala(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 25.sp,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        Spacer(),
-                        // Consumer(builder: (context, ref, _) {
-                        //   final _tc = ref.watch(tcEventsProvider.state).state;
-
-                        //   return _tc
-                        //       ? Container()
-                        //       : IconButton(
-                        //           onPressed: () => context.pop(),
-                        //           icon: Icon(Ionicons.close));
-                        // })
-                      ],
+                              fontWeight: FontWeight.normal,
+                              fontSize: 10.sp,
+                              color: Colors.grey)),
                     ),
-                  ),
-                  Consumer(builder: (context, ref, _) {
-                    final _tc = ref.watch(tcEventsProvider.state).state;
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CheckboxListTile(
-                            activeColor: kotgBlack,
-                            checkColor: kotgGreen,
-                            selected: false,
-                            title: Text('I Accept the terms and conditions'),
-                            tileColor: kotgBlack,
-                            value: _tc,
-                            onChanged: (value) {
-                              updateTermsAndConditions(context, value!);
-                            }),
-                        Padding(
-                            padding: EdgeInsets.only(top: 10.sp, bottom: 35.sp),
-                            child: ElevatedButton(
-                                child: Text('Confirm'),
-                                onPressed: () {
-                                  context.loaderOverlay.show();
-                                  if (_tc) {
-                                    _eventsRepo
-                                        .registerEvent(
-                                      eventID: eventId,
-                                    )
-                                        .then((value) {
-                                      ref.refresh(
-                                        registeredEventsProvider(
-                                          int.parse(eventId),
-                                        ),
-                                      );
-                                      context.pop();
-                                    }).whenComplete(() {
-                                      const snackBar = SnackBar(
-                                        content: Text("Successfully Reserved"),
-                                      );
+                    // BottomSheetHandle(),
+                    CheckboxListTile(
+                        activeColor: kotgBlack,
+                        checkColor: kotgGreen,
+                        selected: false,
+                        title: Text('I Accept the terms and conditions'),
+                        tileColor: kotgBlack,
+                        value: _tc,
+                        onChanged: (value) {
+                          updateTermsAndConditions(context, value!);
+                        }),
+                  ],
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                    child: Text('Confirm'),
+                    onPressed: () {
+                      context.loaderOverlay.show();
+                      if (_tc) {
+                        _eventsRepo
+                            .registerEvent(
+                          eventID: eventId,
+                        )
+                            .then((value) {
+                          ref.refresh(
+                            registeredEventsProvider(
+                              int.parse(eventId),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        }).whenComplete(() {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Sucessfully Reserved")));
+                          Gaimon.success();
+                          context.loaderOverlay.hide();
+                          ref.refresh(registeredEventsProvider(
+                            int.parse(
+                              eventId,
+                            ),
+                          ));
+                        }).catchError(
+                          (error) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(error.toString()),
+                                backgroundColor: Colors.red));
+                            Gaimon.error();
+                            context.loaderOverlay.hide();
+                          },
+                        );
+                      } else {
+                        Gaimon.error();
 
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                      context.loaderOverlay.hide();
-                                      Gaimon.success();
-                                      ref.refresh(registeredEventsProvider(
-                                        int.parse(
-                                          eventId,
-                                        ),
-                                      ));
-                                    }).catchError(
-                                      (error) {
-                                        const snackBar = SnackBar(
-                                          content: Text("Error"), //TODO Error
-                                        );
+                        context.loaderOverlay.hide();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("Please Accept Terms And Conditions"),
+                            backgroundColor: Colors.red));
+                      }
+                    }),
+                OutlinedButton(
+                  child: Text('Cancel'),
+                  style: ButtonStyle(),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ],
+            );
+          }),
+        ),
+      );
+    }
 
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
-                                        context.loaderOverlay.hide();
-                                        Gaimon.error();
-                                      },
-                                    );
-                                  } else {
-                                    context.loaderOverlay.hide();
-                                    Gaimon.error();
-                                    const snackBar = SnackBar(
-                                      content: Text(
-                                          "Please Accept Terms And Conditions"), //TODO Error
-                                    );
-
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  }
-                                })),
-                      ],
-                    );
-                  })
-                ],
+    return SafeArea(
+      child: Scaffold(
+          body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 15, top: 18, bottom: 15),
+            child: Text(
+              'Events',
+              style: GoogleFonts.sarala(
+                fontWeight: FontWeight.w600,
+                fontSize: 26.sp,
+                color: kotgGreen,
               ),
             ),
           ),
-        ),
-      );
-      // The code below will run after the bottom sheet goes away
-      print('The Bottom Sheet has gone away!');
-    }
+          Divider(),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => _refreshEvents(context),
+              child: Consumer(builder: (context, ref, _) {
+                final _events = ref.watch(eventsProvider);
+                // final _payment = ref.read(walletProvider);
 
-    return LoaderOverlay(
-      overlayOpacity: 0.8,
-      child: SafeArea(
-        child: Scaffold(
-            body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 15, top: 18, bottom: 15),
-              child: Text(
-                'Events',
-                style: GoogleFonts.sarala(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 26.sp,
-                  color: kotgGreen,
-                ),
-              ),
-            ),
-            Divider(),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () => _refreshEvents(context),
-                child: Consumer(builder: (context, ref, _) {
-                  final _events = ref.watch(eventsProvider);
-                  // final _payment = ref.read(walletProvider);
+                // print(_events);
+                return _events.map(
+                    data: (events) {
+                      if (events.value.kotgEvents.eventData.isEmpty) {
+                        //print('project snapshot data is: ${projectSnap.data}');
+                        return Center(
+                          child: Text("We couldn't find any events"),
+                        );
+                      }
 
-                  // print(_events);
-                  return _events.map(
-                      data: (events) {
-                        if (events.value.kotgEvents.eventData.isEmpty) {
-                          //print('project snapshot data is: ${projectSnap.data}');
-                          return Center(
-                            child: Text("We couldn't find any events"),
-                          );
-                        }
-
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: DatePicker(
-                                DateTime.now(),
-                                initialSelectedDate: DateTime.now(),
-                                selectionColor: kotgPurple,
-                                daysCount: 14,
-                                dateTextStyle: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey,
+                      return Column(
+                        children: [
+                          // Padding(
+                          //   padding: const EdgeInsets.all(5.0),
+                          //   child: DatePicker(
+                          //     DateTime.now(),
+                          //     initialSelectedDate: DateTime.now(),
+                          //     selectionColor: kotgPurple,
+                          //     daysCount: 14,
+                          //     dateTextStyle: GoogleFonts.poppins(
+                          //       fontWeight: FontWeight.w600,
+                          //       color: Colors.grey,
+                          //     ),
+                          //     dayTextStyle: GoogleFonts.poppins(
+                          //       fontWeight: FontWeight.w600,
+                          //       color: Colors.grey,
+                          //     ),
+                          //     monthTextStyle: GoogleFonts.poppins(
+                          //       fontWeight: FontWeight.w600,
+                          //       color: Colors.grey,
+                          //     ),
+                          //     selectedTextColor: Colors.white,
+                          //     onDateChange: (date) {
+                          //       // // New date selected
+                          //       // setState(() {
+                          //       //   _selectedValue = date;
+                          //       // });
+                          //     },
+                          //   ),
+                          // ),
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount:
+                                    events.value.kotgEvents.eventData.length,
+                                controller: scrollController,
+                                physics: BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics(),
                                 ),
-                                dayTextStyle: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey,
-                                ),
-                                monthTextStyle: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey,
-                                ),
-                                selectedTextColor: Colors.white,
-                                onDateChange: (date) {
-                                  // // New date selected
-                                  // setState(() {
-                                  //   _selectedValue = date;
-                                  // });
-                                },
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                  itemCount:
-                                      events.value.kotgEvents.eventData.length,
-                                  controller: scrollController,
-                                  physics: BouncingScrollPhysics(
-                                    parent: AlwaysScrollableScrollPhysics(),
-                                  ),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return FadeIn(
-                                      delay: Duration(milliseconds: 500),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          _showEventDestailsBottomSheet(
-                                            price: events
-                                                .value.kotgEvents.eventData
-                                                .elementAt(index)
-                                                .eventAttributes
-                                                .price
-                                                .toString(),
-                                            prize: events
-                                                .value.kotgEvents.eventData
-                                                .elementAt(index)
-                                                .eventAttributes
-                                                .prize
-                                                .toString(),
-                                            maxParticipants: events
-                                                .value.kotgEvents.eventData
-                                                .elementAt(index)
-                                                .eventAttributes
-                                                .maxParticipants
-                                                .toString(),
-                                            dateTime:
-                                                '${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventDate} ${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventTime}',
-                                            eventDate: events
-                                                .value.kotgEvents.eventData
-                                                .elementAt(index)
-                                                .eventAttributes
-                                                .eventDate,
-                                            eventId: events
-                                                .value.kotgEvents.eventData
-                                                .elementAt(index)
-                                                .id,
-                                            desciption: events
-                                                .value.kotgEvents.eventData
-                                                .elementAt(index)
-                                                .eventAttributes
-                                                .description,
-                                            eventName: events
-                                                .value.kotgEvents.eventData
-                                                .elementAt(index)
-                                                .eventAttributes
-                                                .name,
-                                            imageUrl: events
-                                                .value.kotgEvents.eventData
-                                                .elementAt(index)
-                                                .eventAttributes
-                                                .kotgEventImage
-                                                .eventImageData
-                                                .kotgEventImageAttributes
-                                                .url,
-                                          );
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Container(
-                                            height: 200,
-                                            child: Stack(
-                                              alignment: AlignmentDirectional
-                                                  .bottomStart,
-                                              children: [
-                                                CachedNetworkImage(
-                                                  imageUrl: events.value
-                                                      .kotgEvents.eventData
-                                                      .elementAt(
-                                                        index,
-                                                      )
-                                                      .eventAttributes
-                                                      .kotgEventImage
-                                                      .eventImageData
-                                                      .kotgEventImageAttributes
-                                                      .url,
-                                                  imageBuilder: (context,
-                                                          imageProvider) =>
-                                                      Container(
-                                                    height: 200,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  15)),
-                                                      image: DecorationImage(
-                                                        //image size fill
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover,
-                                                      ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return FadeIn(
+                                    delay: Duration(milliseconds: 500),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _showEventDestailsBottomSheet(
+                                          price: events
+                                              .value.kotgEvents.eventData
+                                              .elementAt(index)
+                                              .eventAttributes
+                                              .price
+                                              .toString(),
+                                          prize: events
+                                              .value.kotgEvents.eventData
+                                              .elementAt(index)
+                                              .eventAttributes
+                                              .prize
+                                              .toString(),
+                                          maxParticipants: events
+                                              .value.kotgEvents.eventData
+                                              .elementAt(index)
+                                              .eventAttributes
+                                              .maxParticipants
+                                              .toString(),
+                                          dateTime:
+                                              '${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventDate} ${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventTime}',
+                                          eventDate: events
+                                              .value.kotgEvents.eventData
+                                              .elementAt(index)
+                                              .eventAttributes
+                                              .eventDate,
+                                          eventId: events
+                                              .value.kotgEvents.eventData
+                                              .elementAt(index)
+                                              .id,
+                                          desciption: events
+                                              .value.kotgEvents.eventData
+                                              .elementAt(index)
+                                              .eventAttributes
+                                              .description,
+                                          eventName: events
+                                              .value.kotgEvents.eventData
+                                              .elementAt(index)
+                                              .eventAttributes
+                                              .name,
+                                          imageUrl: events
+                                              .value.kotgEvents.eventData
+                                              .elementAt(index)
+                                              .eventAttributes
+                                              .kotgEventImage
+                                              .eventImageData
+                                              .kotgEventImageAttributes
+                                              .url,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Container(
+                                          height: 200,
+                                          child: Stack(
+                                            alignment: AlignmentDirectional
+                                                .bottomStart,
+                                            children: [
+                                              CachedNetworkImage(
+                                                imageUrl: events
+                                                    .value.kotgEvents.eventData
+                                                    .elementAt(
+                                                      index,
+                                                    )
+                                                    .eventAttributes
+                                                    .kotgEventImage
+                                                    .eventImageData
+                                                    .kotgEventImageAttributes
+                                                    .url,
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  height: 200,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                15)),
+                                                    image: DecorationImage(
+                                                      //image size fill
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
                                                     ),
                                                   ),
-                                                  placeholder: (context, url) =>
-                                                      Container(
-                                                    alignment: Alignment.center,
-                                                    child:
-                                                        CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
-                                                  ), //show progress  while loading image
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Icon(
-                                                    LineIcons.imageFile,
-                                                  ),
-                                                  //show no iamge availalbe image on error laoding
                                                 ),
-                                                Container(
-                                                  height: 70,
-                                                  child: Card(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.0),
-                                                    ),
-                                                    color: Colors.black87,
-                                                    child: ListTile(
-                                                        trailing: Container(
-                                                            child: Consumer(
-                                                                builder:
-                                                                    (context,
-                                                                        ref,
-                                                                        _) {
-                                                          final _regRepo =
-                                                              ref.watch(
-                                                            registeredEventsProvider(
-                                                              int.parse(events
-                                                                  .value
-                                                                  .kotgEvents
-                                                                  .eventData
-                                                                  .elementAt(
-                                                                      index)
-                                                                  .id),
-                                                            ),
-                                                          );
-
-                                                          return _regRepo.map(
-                                                              data: (data) {
-                                                                return data
-                                                                        .value!
-                                                                        .isEmpty
-                                                                    ? OutlinedButton(
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            onPrimary: Colors
-                                                                                .white,
-                                                                            primary:
-                                                                                kotgPurple),
-                                                                        onPressed: () =>
-                                                                            _showEventRegBottomSheet(
-                                                                              eventId: events.value.kotgEvents.eventData.elementAt(index).id,
-                                                                              eventPrice: events.value.kotgEvents.eventData.elementAt(index).eventAttributes.price.toString(),
-                                                                              eventName: events.value.kotgEvents.eventData.elementAt(index).eventAttributes.name,
-                                                                            ),
-                                                                        child: Text(
-                                                                            'Join',
-                                                                            style: GoogleFonts
-                                                                                .poppins(
-                                                                              fontWeight: FontWeight.w600,
-                                                                            )))
-                                                                    : OutlinedButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          // context
-                                                                          //     .loaderOverlay
-                                                                          //     .show();
-                                                                          // ref
-                                                                          //     .watch(
-                                                                          //       deRegisterEventsProvider(
-                                                                          //         int.parse(
-                                                                          //           events.value.kotgEvents.eventData.elementAt(index).id,
-                                                                          //         ),
-                                                                          //       ),
-                                                                          //     )
-                                                                          //     .catchError((error) => Get.snackbar(
-                                                                          //           "Deregistration Error",
-                                                                          //           error.toString(),
-                                                                          //           backgroundColor: Colors.red,
-                                                                          //           snackPosition: SnackPosition.TOP,
-                                                                          //         ))
-                                                                          //     .whenComplete(() {
-                                                                          //   Get.snackbar(
-                                                                          //     "Successfully Deregistered",
-                                                                          //     'Sad To See you leave!',
-                                                                          //     snackPosition: SnackPosition.TOP,
-                                                                          //   );
-                                                                          //   ref.refresh(
-                                                                          //     registeredEventsProvider(
-                                                                          //       int.parse(events.value.kotgEvents.eventData.elementAt(index).id),
-                                                                          //     ),
-                                                                          //   );
-                                                                          // }).whenComplete(() {
-                                                                          //   context.loaderOverlay.hide();
-
-                                                                          //   // ref.refresh(
-                                                                          //   //     eventsProvider);
-                                                                          // });
-                                                                        },
-                                                                        child: Text(
-                                                                            'Registered',
-                                                                            style:
-                                                                                GoogleFonts.poppins(
-                                                                              fontWeight: FontWeight.w600,
-                                                                            )));
-                                                              },
-                                                              loading: (loading) =>
-                                                                  LoadingIndicator(
-                                                                    indicatorType:
-                                                                        Indicator
-                                                                            .ballPulseSync,
-                                                                    colors: [
-                                                                      kotgPurple
-                                                                    ],
-                                                                    strokeWidth:
-                                                                        0.5,
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .black,
-                                                                    pathBackgroundColor:
-                                                                        Colors
-                                                                            .black,
-                                                                  ),
-                                                              error: (error) =>
-                                                                  Text(
-                                                                      'Error')); //TODO Add Refresh
-                                                        })),
-                                                        subtitle: Wrap(
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                right: 5,
-                                                              ),
-                                                              child: Icon(
-                                                                LineIcons
-                                                                    .calendarAlt,
-                                                                size: 15,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                                Jiffy(events
-                                                                        .value
-                                                                        .kotgEvents
-                                                                        .eventData
-                                                                        .elementAt(
-                                                                            index)
-                                                                        .eventAttributes
-                                                                        .eventDate)
-                                                                    .format(
-                                                                        'dd MMM yyyy'),
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .poppins(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      right: 5,
-                                                                      left: 20),
-                                                              child: Icon(
-                                                                LineIcons
-                                                                    .clockAlt,
-                                                                size: 15,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                                Jiffy('${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventDate} ${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventTime}')
-                                                                    .format(
-                                                                        'h:mm a'),
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .poppins(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      right: 5,
-                                                                      left: 20),
-                                                              child: Icon(
-                                                                Ionicons.people,
-                                                                size: 15,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                                events
-                                                                    .value
-                                                                    .kotgEvents
-                                                                    .eventData
-                                                                    .elementAt(
-                                                                        index)
-                                                                    .eventAttributes
-                                                                    .maxParticipants
-                                                                    .toString(),
-                                                                style:
-                                                                    GoogleFonts
-                                                                        .poppins(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                )),
-                                                          ],
-                                                        ),
-                                                        title: Text(
-                                                            events
+                                                placeholder: (context, url) =>
+                                                    Container(
+                                                  alignment: Alignment.center,
+                                                  child:
+                                                      CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
+                                                ), //show progress  while loading image
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(
+                                                  LineIcons.imageFile,
+                                                ),
+                                                //show no iamge availalbe image on error laoding
+                                              ),
+                                              Container(
+                                                height: 70,
+                                                child: Card(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.0),
+                                                  ),
+                                                  color: Colors.black87,
+                                                  child: ListTile(
+                                                      trailing: Container(child:
+                                                          Consumer(builder:
+                                                              (context, ref,
+                                                                  _) {
+                                                        final _regRepo =
+                                                            ref.watch(
+                                                          registeredEventsProvider(
+                                                            int.parse(events
                                                                 .value
                                                                 .kotgEvents
                                                                 .eventData
                                                                 .elementAt(
                                                                     index)
-                                                                .eventAttributes
-                                                                .name,
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                              fontSize: 13.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ))),
-                                                  ),
+                                                                .id),
+                                                          ),
+                                                        );
+
+                                                        return _regRepo.map(
+                                                            data: (data) {
+                                                              return data.value!
+                                                                      .isEmpty
+                                                                  ? OutlinedButton(
+                                                                      style: ElevatedButton.styleFrom(
+                                                                          onPrimary: Colors
+                                                                              .white,
+                                                                          primary:
+                                                                              kotgPurple),
+                                                                      onPressed:
+                                                                          () {
+                                                                        _showEventRegBottomSheet(
+                                                                          eventId: events
+                                                                              .value
+                                                                              .kotgEvents
+                                                                              .eventData
+                                                                              .elementAt(index)
+                                                                              .id,
+                                                                          eventPrice: events
+                                                                              .value
+                                                                              .kotgEvents
+                                                                              .eventData
+                                                                              .elementAt(index)
+                                                                              .eventAttributes
+                                                                              .price
+                                                                              .toString(),
+                                                                          eventName: events
+                                                                              .value
+                                                                              .kotgEvents
+                                                                              .eventData
+                                                                              .elementAt(index)
+                                                                              .eventAttributes
+                                                                              .name,
+                                                                        );
+                                                                      },
+                                                                      child: Text(
+                                                                          'Join',
+                                                                          style: GoogleFonts
+                                                                              .poppins(
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                          )))
+                                                                  : OutlinedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        // context
+                                                                        //     .loaderOverlay
+                                                                        //     .show();
+                                                                        // ref
+                                                                        //     .watch(
+                                                                        //       deRegisterEventsProvider(
+                                                                        //         int.parse(
+                                                                        //           events.value.kotgEvents.eventData.elementAt(index).id,
+                                                                        //         ),
+                                                                        //       ),
+                                                                        //     )
+                                                                        //     .catchError((error) => Get.snackbar(
+                                                                        //           "Deregistration Error",
+                                                                        //           error.toString(),
+                                                                        //           backgroundColor: Colors.red,
+                                                                        //           snackPosition: SnackPosition.TOP,
+                                                                        //         ))
+                                                                        //     .whenComplete(() {
+                                                                        //   Get.snackbar(
+                                                                        //     "Successfully Deregistered",
+                                                                        //     'Sad To See you leave!',
+                                                                        //     snackPosition: SnackPosition.TOP,
+                                                                        //   );
+                                                                        //   ref.refresh(
+                                                                        //     registeredEventsProvider(
+                                                                        //       int.parse(events.value.kotgEvents.eventData.elementAt(index).id),
+                                                                        //     ),
+                                                                        //   );
+                                                                        // }).whenComplete(() {
+                                                                        //   context.loaderOverlay.hide();
+
+                                                                        //   // ref.refresh(
+                                                                        //   //     eventsProvider);
+                                                                        // });
+                                                                      },
+                                                                      child: Text(
+                                                                          'Registered',
+                                                                          style:
+                                                                              GoogleFonts.poppins(
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                          )));
+                                                            },
+                                                            loading: (loading) =>
+                                                                LoadingIndicator(
+                                                                  indicatorType:
+                                                                      Indicator
+                                                                          .ballPulseSync,
+                                                                  colors: [
+                                                                    kotgPurple
+                                                                  ],
+                                                                  strokeWidth:
+                                                                      0.5,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .black,
+                                                                  pathBackgroundColor:
+                                                                      Colors
+                                                                          .black,
+                                                                ),
+                                                            error: (error) => Text(
+                                                                'Error')); //TODO Add Refresh
+                                                      })),
+                                                      subtitle: Wrap(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                              right: 5,
+                                                            ),
+                                                            child: Icon(
+                                                              LineIcons
+                                                                  .calendarAlt,
+                                                              size: 15,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                              Jiffy(events
+                                                                      .value
+                                                                      .kotgEvents
+                                                                      .eventData
+                                                                      .elementAt(
+                                                                          index)
+                                                                      .eventAttributes
+                                                                      .eventDate)
+                                                                  .format(
+                                                                      'dd MMM yyyy'),
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right: 5,
+                                                                    left: 20),
+                                                            child: Icon(
+                                                              LineIcons
+                                                                  .clockAlt,
+                                                              size: 15,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                              Jiffy('${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventDate} ${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventTime}')
+                                                                  .format(
+                                                                      'h:mm a'),
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right: 5,
+                                                                    left: 20),
+                                                            child: Icon(
+                                                              Ionicons.people,
+                                                              size: 15,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                              events
+                                                                  .value
+                                                                  .kotgEvents
+                                                                  .eventData
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .eventAttributes
+                                                                  .maxParticipants
+                                                                  .toString(),
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              )),
+                                                        ],
+                                                      ),
+                                                      title: Text(
+                                                          events
+                                                              .value
+                                                              .kotgEvents
+                                                              .eventData
+                                                              .elementAt(index)
+                                                              .eventAttributes
+                                                              .name,
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            fontSize: 13.sp,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ))),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    );
-                                  }),
-                            ),
-                          ],
-                        );
-                      },
-                      error: (error) {
-                        const snackBar = SnackBar(
-                          content: Text("Connection Error"), //TODO Error
-                        );
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ],
+                      );
+                    },
+                    error: (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(error.toString()),
+                          backgroundColor: Colors.red));
 
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                        return ListView.builder(
-                            itemCount: 5,
-                            controller: scrollController,
-                            physics: BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics(),
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Container(
-                                  height: 200,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        height: 70,
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: ListTile(
-                                            title: Skeleton(
-                                                height: 12,
-                                                width: 24,
-                                                style: SkeletonStyle.text),
-                                            subtitle: Skeleton(
-                                                height: 12,
-                                                width: 15,
-                                                style: SkeletonStyle.text),
-                                            trailing: Skeleton(
-                                              height: 30,
-                                              width: 65,
-                                              style: SkeletonStyle.text,
-                                            ),
+                      return ListView.builder(
+                          itemCount: 5,
+                          controller: scrollController,
+                          physics: BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics(),
+                          ),
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                height: 200,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      height: 70,
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                        ),
+                                        child: ListTile(
+                                          title: Skeleton(
+                                              height: 12,
+                                              width: 24,
+                                              style: SkeletonStyle.text),
+                                          subtitle: Skeleton(
+                                              height: 12,
+                                              width: 15,
+                                              style: SkeletonStyle.text),
+                                          trailing: Skeleton(
+                                            height: 30,
+                                            width: 65,
+                                            style: SkeletonStyle.text,
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[800],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            });
-                      },
-                      loading: (loading) => EventsPageSkeletonWidget(
-                          scrollController: scrollController));
-                }),
-              ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[800],
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
+                              ),
+                            );
+                          });
+                    },
+                    loading: (loading) => EventsPageSkeletonWidget(
+                        scrollController: scrollController));
+              }),
             ),
-          ],
-        )),
-      ),
+          ),
+        ],
+      )),
     );
   }
 }

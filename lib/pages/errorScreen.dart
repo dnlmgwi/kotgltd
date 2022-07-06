@@ -19,7 +19,7 @@ class ErrorScreen extends StatelessWidget {
             children: [
               SelectableText(error.toString()),
               TextButton(
-                onPressed: () => context.go('/auth'),
+                onPressed: () => context.go('/dashboard'),
                 child: const Text('Home'),
               ),
             ],

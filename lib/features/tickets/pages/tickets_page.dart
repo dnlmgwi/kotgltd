@@ -377,7 +377,7 @@ class TicketsPage extends ConsumerWidget {
                                                   //       fontSize: 18.sp,
                                                   //       color: Colors.black,
                                                   //       fontWeight:
-                                                  //           FontWeight.bold),
+                                                  //           FontWeight.bold), 
                                                   // ),
                                                 ],
                                               ),
@@ -532,67 +532,6 @@ class TicketsPage extends ConsumerWidget {
                                         //         }),
                                         //   ),
                                         // );
-                                      }
-
-                                      Widget _buildQRRight() {
-                                        return tickets[index]['status'] ==
-                                                "approved"
-                                            ? Container(
-                                                color: kotgGreen,
-                                                child: Lottie.asset(
-                                                  'assets/images/check-green.json',
-                                                  height: 110.sp,
-                                                  repeat: false,
-                                                ),
-                                              )
-                                            : Container(
-                                                color: Colors.grey,
-                                                child: Lottie.asset(
-                                                  'assets/images/processing-animation.json',
-                                                  height: 110.sp,
-                                                  repeat: false,
-                                                ),
-                                              );
-                                        // return Container(
-                                        //   child: Center(
-                                        //     child: GestureDetector(
-                                        //         child: QrImage(
-                                        //           data: events[index]['reference'],
-                                        //           version: QrVersions.auto,
-                                        //           size: 90.sp,
-                                        //         ),
-                                        //         onTap: () {
-                                        //           Clipboard.setData(ClipboardData(
-                                        //             text: events[index]
-                                        //                 ['reference'],
-                                        //           ));
-
-                                        //           Fluttertoast.showToast(
-                                        //               msg: 'Copied to Clipboard',
-                                        //               toastLength:
-                                        //                   Toast.LENGTH_SHORT,
-                                        //               gravity: ToastGravity.TOP,
-                                        //               timeInSecForIosWeb: 1,
-                                        //               fontSize: 16.0.sp);
-                                        //         }),
-                                        //   ),
-                                        // );
-                                      }
-
-                                      Widget _buildQRLeft() {
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            QrImage(
-                                              data: tickets[index]['reference'],
-                                              version: QrVersions.auto,
-                                              size: 100.sp,
-                                            )
-                                          ],
-                                        );
                                       }
 
                                       return FadeIn(

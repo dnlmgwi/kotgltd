@@ -40,7 +40,7 @@ var dateOfBirthFinalProvider =
   return formatted;
 });
 
-var profileProvider = FutureProvider.autoDispose<Profile>((ref) async {
+var profileProvider = FutureProvider<Profile>((ref) async {
   final profileClient = ref.read(profileRepoProvider);
   return profileClient.getProfile();
 });

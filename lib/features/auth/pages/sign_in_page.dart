@@ -32,26 +32,6 @@ class SignInPage extends ConsumerWidget {
       ref.read(passwordProvider.state).state = pass;
     }
 
-    // void _showBottomSheetForgotPassword() async {
-    //   await Get.bottomSheet(
-    //     Container(
-    //       width: double.infinity,
-    //       height: MediaQuery.of(context).size.height,
-    //       color: kotgBlack,
-    //       child: ForgotPasswordWidget(),
-    //     ),
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.vertical(
-    //         top: Radius.circular(20),
-    //       ),
-    //     ),
-    //     isDismissible: false,
-    //   );
-
-    //   // The code below will run after the bottom sheet goes away
-    //   print('The Bottom Sheet has gone away!');
-    // }
-
     return LoaderOverlay(
       overlayOpacity: 0.8,
       child: Scaffold(
@@ -217,17 +197,9 @@ class SignInPage extends ConsumerWidget {
                             .signIn(password: _password, email: _email)
                             .catchError((error) {
                           context.loaderOverlay.hide();
-                          var snackBar = SnackBar(
-                            elevation: 0,
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Colors.transparent,
-                            content: AwesomeSnackbarContent(
-                              title: "Login Error",
-                              message: error!.toString(),
-                              contentType: ContentType.failure,
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(error!.toString()),
+                              backgroundColor: Colors.red));
                         });
                       }
                     },
@@ -257,16 +229,16 @@ class SignInPage extends ConsumerWidget {
                     ),
                   ),
                   Divider(),
-                  TextButton(
-                    style: ButtonStyle(
-                        enableFeedback: true,
-                        splashFactory: NoSplash.splashFactory),
-                    onPressed: () => context.push('/auth/forgot-password'),
-                    child: Text(
-                      "Forgot your password?",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  )
+                  // TextButton(
+                  //   style: ButtonStyle(
+                  //       enableFeedback: true,
+                  //       splashFactory: NoSplash.splashFactory),
+                  //   onPressed: () => context.push('/auth/forgot-password'),
+                  //   child: Text(
+                  //     "Forgot your password?",
+                  //     style: TextStyle(color: Colors.grey),
+                  //   ),
+                  // ) //TODO Unhide Forgot Password
                 ],
               ),
             ),

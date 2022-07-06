@@ -20,11 +20,11 @@ class ProfileAttributes {
   @JsonKey(name: 'phone_number')
   late String phoneNumber;
 
-  String username;
+  late String username;
 
-  String email;
+  late String email;
 
-  DateTime createdAt;
+  late DateTime createdAt;
 
   ProfileAttributes({
     required this.createdAt,
