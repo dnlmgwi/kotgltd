@@ -5,8 +5,6 @@ import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/components.dart';
 import 'package:kotgltd/features/team/model/userEntity.dart';
 import 'package:kotgltd/features/team/providers/team_providers.dart';
-import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
-import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
@@ -145,20 +143,20 @@ class TeamsPage extends ConsumerWidget {
                                                 numberLetters: 2,
                                                 text: invite[index]
                                                     .inviteAttributes
-                                                    .user
+                                                    .user!
                                                     .data
                                                     .userAttributes
                                                     .email,
                                               ),
                                               title: Text(invite[index]
                                                   .inviteAttributes
-                                                  .user
+                                                  .user!
                                                   .data
                                                   .userAttributes
                                                   .email),
                                               subtitle: invite[index]
                                                       .inviteAttributes
-                                                      .claimed
+                                                      .claimed!
                                                   ? Text('Member')
                                                   : Text(''),
                                               trailing: Wrap(
@@ -533,8 +531,7 @@ class TeamsPage extends ConsumerWidget {
                   ),
                 );
               }, error: (error) {
-                print(error);
-                return TeamsPageOptions();
+                return TeamsPageOptions(error: error.value);
               });
             }),
           ),
@@ -547,48 +544,13 @@ class TeamsPage extends ConsumerWidget {
 class TeamsPageOptions extends StatelessWidget {
   const TeamsPageOptions({
     Key? key,
+    String? error,
   }) : super(key: key);
+
+  final String error = "";
 
   @override
   Widget build(BuildContext context) {
-    void _showBottomSheetCreateTeam() async {
-      await showMaterialModalBottomSheet(
-        context: context,
-        builder: (context) => Container(
-          width: double.infinity,
-          height: 60.h,
-          color: kotgBlack,
-          child: CreateTeamWidget(),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
-        ),
-      );
-
-      // The code below will run after the bottom sheet goes away
-      print('The Bottom Sheet has gone away!');
-    }
-
-    void _showBottomSheetJoinTeam() async {
-      showMaterialModalBottomSheet(
-        context: context,
-        builder: (context) => Container(
-          width: double.infinity,
-          height: 60.h,
-          color: kotgBlack,
-          child: JoinTeamWidget(),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      );
-
-      // The code below will run after the bottom sheet goes away
-      print('The Bottom Sheet has gone away!');
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,

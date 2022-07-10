@@ -43,7 +43,7 @@ class SettingsPage extends ConsumerWidget {
                           'Partners',
                           style: GoogleFonts.sarala(
                             fontWeight: FontWeight.w600,
-                            fontSize: 26.sp,
+                            fontSize: 20.sp,
                             color: Colors.grey,
                           ),
                         ),
@@ -88,7 +88,7 @@ class SettingsPage extends ConsumerWidget {
                 'Options',
                 style: GoogleFonts.sarala(
                   fontWeight: FontWeight.w600,
-                  fontSize: 26.sp,
+                  fontSize: 20.sp,
                   color: kotgGreen,
                 ),
               ),

@@ -6,7 +6,6 @@ import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/Tickets/pages/tickets_page.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
-import 'package:kotgltd/features/profile/widgets/edit_profile_page.dart';
 // import 'package:kotgltd/features/reminder/providers/reminder_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icons.dart';

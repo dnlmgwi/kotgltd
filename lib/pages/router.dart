@@ -1,6 +1,7 @@
 import 'package:kotgltd/features/auth/pages/forgot_password_page.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/auth/providers/auth_state.dart';
+import 'package:kotgltd/features/checkout/payment_approval.dart';
 import 'package:kotgltd/features/profile/pages/birthday_page.dart';
 import 'package:kotgltd/features/profile/pages/gender_page.dart';
 import 'package:kotgltd/features/profile/pages/name_page.dart';
@@ -8,6 +9,7 @@ import 'package:kotgltd/features/profile/pages/phoneNumber_page.dart';
 import 'package:kotgltd/features/team/pages/team_page.dart';
 import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
 import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
+import 'package:kotgltd/features/tickets/pages/ticket_page.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/features.dart';
 import 'package:kotgltd/packages/pages.dart';
@@ -24,7 +26,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: "/auth",
     debugLogDiagnostics: true,
-    
+
     redirect: (state) {
       // We want to READ the state, here.
       // GoRouter is already aware of state changes through `refreshListenable`
@@ -149,9 +151,24 @@ final routerProvider = Provider<GoRouter>((ref) {
                 routes: []),
             GoRoute(
                 path: 'events',
-                builder: (context, state) => TicketsPage(),
-                routes: []),
+                builder: (context, state) => EventsPage(),
+                routes: [
+                  GoRoute(
+                    path: 'ticket/:id',
+                    builder: (context, state) {
+                      final eventId = state.params['id'];
+
+                      return TicketPage(
+                        eventId: eventId!,
+                      );
+                    },
+                  ),
+                ]),
           ]),
+      GoRoute(
+        path: '/payment-approval',
+        builder: (context, state) => PaymentApprovalPage(),
+      ),
     ],
   );
 });

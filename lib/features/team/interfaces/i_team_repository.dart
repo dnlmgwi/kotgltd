@@ -10,6 +10,12 @@ abstract class ITeamRepository {
 
   Future leaveTeam();
 
+  Future<void> deleteMyInvite({
+    required String inviteId,
+  });
+
+  Future<List<InviteEntity>> getMyInvites();
+
   Future<Team> getTeam();
 
   Future<List<InviteEntity>> getInvites({required String inviteCode});

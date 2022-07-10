@@ -1,5 +1,3 @@
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_phone_number/get_phone_number.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -7,7 +5,6 @@ import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:phone_form_field/phone_form_field.dart';
-import 'package:pinput/pinput.dart';
 
 class PhoneNumberPage extends ConsumerWidget {
   PhoneNumberPage({
@@ -64,7 +61,7 @@ class PhoneNumberPage extends ConsumerWidget {
                         autofillHints: [
                           AutofillHints.telephoneNumber
                         ], // default to null
-                        enabled: false, // default
+                        enabled: true, // default
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                               borderRadius:

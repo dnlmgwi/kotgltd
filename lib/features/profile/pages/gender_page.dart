@@ -1,4 +1,3 @@
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';

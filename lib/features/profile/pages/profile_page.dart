@@ -1,14 +1,10 @@
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_phone_number/get_phone_number.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
-import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:timeago/timeago.dart' as timeago;
 

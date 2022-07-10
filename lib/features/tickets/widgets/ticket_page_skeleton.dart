@@ -37,13 +37,15 @@ class TicketPageSkeletonWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Skeleton(
-                          height: 12.sp,
-                          width: 100.sp,
-                          style: SkeletonStyle.text),
+                        height: 12.sp,
+                        width: 100.sp,
+                        style: SkeletonStyle.text,
+                      ),
                       Skeleton(
-                          height: 12.sp,
-                          width: 50.sp,
-                          style: SkeletonStyle.text)
+                        height: 12.sp,
+                        width: 50.sp,
+                        style: SkeletonStyle.text,
+                      )
                     ],
                   ),
                 ],

@@ -14,8 +14,13 @@ class JoinTeamWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final _userRepo = ref.watch(teamRepoProvider);
     final _inviteRepo = ref.watch(inviteRepoProvider);
+
+    final _inviteCode = ref.watch(inviteCodeProvider.state).state;
+
+    void updateInviteCode(BuildContext context, String email) {
+      ref.read(inviteCodeProvider.state).state = email;
+    }
 
     return LoaderOverlay(
       overlayOpacity: 0.8,
@@ -75,7 +80,6 @@ class JoinTeamWidget extends ConsumerWidget {
                         child: Column(
                           children: <Widget>[
                             TextFormField(
-                              controller: inviteCodeController,
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(13.sp),
@@ -92,7 +96,10 @@ class JoinTeamWidget extends ConsumerWidget {
                                     fontWeight: FontWeight.bold),
                                 border: InputBorder.none,
                               ),
-                              // autofocus: true,
+                              autofocus: true,
+                              onChanged: (String inviteCode) =>
+                                  updateInviteCode(context, inviteCode),
+
                               maxLines: 1,
                               showCursor: true,
                               // The validator receives the text that the user has entered.
@@ -131,29 +138,25 @@ class JoinTeamWidget extends ConsumerWidget {
                                   context.loaderOverlay.show();
                                   _inviteRepo
                                       .sendInvite(
-                                    inviteCode: inviteCodeController.text,
+                                    inviteCode: _inviteCode,
                                   )
                                       .then((value) {
                                     context.loaderOverlay.hide();
-                                    const snackBar = SnackBar(
-                                      content: Text("Success"), //TODO Error
-                                    );
-
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                "Invite Sent, Successfully"),
+                                            backgroundColor: Colors.white));
 
                                     context.loaderOverlay.hide();
                                     ref.refresh(teamRepoProvider);
                                     context.pop();
                                   }).onError((error, stackTrace) {
                                     context.loaderOverlay.hide();
-                                    const snackBar = SnackBar(
-                                      content:
-                                          Text("Connection Error"), //TODO Error
-                                    );
-
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(error!.toString()),
+                                            backgroundColor: Colors.red));
                                   });
                                 }
                               },

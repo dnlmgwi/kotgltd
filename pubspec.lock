@@ -435,13 +435,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.41.0"
-  flip_card:
-    dependency: "direct main"
-    description:
-      name: flip_card
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -1363,6 +1356,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.1"
+  ticket_widget:
+    dependency: "direct main"
+    description:
+      name: ticket_widget
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   timeago:
     dependency: "direct main"
     description:

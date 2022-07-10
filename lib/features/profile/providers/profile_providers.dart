@@ -18,10 +18,10 @@ var firstNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
 var lastNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
-enum Gender { male, female, none }
+enum Gender { Man, Woman, None }
 
 var genderProvider =
-    StateProvider.autoDispose<String>((ref) => Gender.none.name);
+    StateProvider.autoDispose<String>((ref) => Gender.None.name);
 
 var phoneNumberProvider = StateProvider<PhoneNumber>((ref) => PhoneNumber(
       isoCode: IsoCode.MW,

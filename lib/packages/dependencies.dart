@@ -16,5 +16,5 @@ export 'package:gaimon/gaimon.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:scroll_date_picker/scroll_date_picker.dart';
 export 'package:date_picker_timeline/date_picker_timeline.dart';
-export 'package:flip_card/flip_card.dart';
+export 'package:ticket_widget/ticket_widget.dart';
 export 'package:go_router/go_router.dart';

@@ -30,7 +30,7 @@ class EventsPage extends ConsumerWidget {
 
     final _eventsRepo = ref.watch(eventsRepoProvider);
 
-    void _showEventDestailsBottomSheet(
+    void _showEventDetailsBottomSheet(
         {required String eventId,
         required String eventName,
         required String desciption,
@@ -207,6 +207,61 @@ class EventsPage extends ConsumerWidget {
       );
     }
 
+    void _showTicketBottomSheet({required String eventId}) async {
+      await showMaterialModalBottomSheet(
+        isDismissible: false,
+        context: context,
+        builder: (context) => Container(
+          color: kotgBlack,
+          child: Scrollbar(
+            interactive: true,
+            thickness: 10, //width of scrollbar
+            radius: Radius.circular(20), //corner radius of scrollbar
+            scrollbarOrientation: ScrollbarOrientation.left,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  BottomSheetHandle(),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 15, top: 18, bottom: 15),
+                    child: Row(
+                      children: [
+                        Text(
+                          "My Ticket",
+                          style: GoogleFonts.sarala(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18.sp,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Spacer(),
+
+                        // IconButton(
+                        //     onPressed: () => context.pop(),
+                        //     icon: Icon(
+                        //       Ionicons.close,
+                        //     ))
+                      ],
+                    ),
+                  ),
+                  TicketWidget(
+                    width: 350,
+                    height: 500,
+                    isCornerRounded: true,
+                    padding: EdgeInsets.all(20),
+                    child: Text(eventId),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     void _showEventRegDialog({
       required String eventId,
       required String eventName,
@@ -238,7 +293,7 @@ class EventsPage extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 5, bottom: 15),
                         child: Text(
-                            'By selecting confirm your spot will be reserved, Go and find your ticket via My Tickets',
+                            'By selecting confirm your spot will be reserved, until you pay the registration fee.',
                             style: GoogleFonts.sarala(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 10.sp,
@@ -268,20 +323,24 @@ class EventsPage extends ConsumerWidget {
                               .registerEvent(
                             eventID: eventId,
                           )
-                              .then((value) {
+                              .then((ticket) {
+                            Gaimon.success();
                             Navigator.pop(context);
-                          }).whenComplete(() {
+                            context.loaderOverlay.hide();
+
+                            context.push('/dashboard/events/ticket/${eventId}');
+
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text("Sucessfully Reserved")));
-                            Gaimon.success();
-                            context.loaderOverlay.hide();
+
                             ref.refresh(registeredEventsProvider(
                               int.parse(
                                 eventId,
                               ),
                             ));
-                          }).catchError(
-                            (error) {
+                          }).onError(
+                            (error, stackTrace) {
+                              context.push('/dashboard/profile');
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content: Text(error.toString()),
@@ -325,7 +384,7 @@ class EventsPage extends ConsumerWidget {
               'Events',
               style: GoogleFonts.sarala(
                 fontWeight: FontWeight.w600,
-                fontSize: 26.sp,
+                fontSize: 20.sp,
                 color: kotgGreen,
               ),
             ),
@@ -391,55 +450,54 @@ class EventsPage extends ConsumerWidget {
                                     delay: Duration(milliseconds: 500),
                                     child: GestureDetector(
                                       onTap: () {
-                                        _showEventDestailsBottomSheet(
-                                          price: events
-                                              .value.kotgEvents.eventData
-                                              .elementAt(index)
-                                              .eventAttributes
-                                              .price
-                                              .toString(),
-                                          prize: events
-                                              .value.kotgEvents.eventData
-                                              .elementAt(index)
-                                              .eventAttributes
-                                              .prize
-                                              .toString(),
-                                          maxParticipants: events
-                                              .value.kotgEvents.eventData
-                                              .elementAt(index)
-                                              .eventAttributes
-                                              .maxParticipants
-                                              .toString(),
-                                          dateTime:
-                                              '${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventDate} ${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventTime}',
-                                          eventDate: events
-                                              .value.kotgEvents.eventData
-                                              .elementAt(index)
-                                              .eventAttributes
-                                              .eventDate,
-                                          eventId: events
-                                              .value.kotgEvents.eventData
-                                              .elementAt(index)
-                                              .id,
-                                          desciption: events
-                                              .value.kotgEvents.eventData
-                                              .elementAt(index)
-                                              .eventAttributes
-                                              .description,
-                                          eventName: events
-                                              .value.kotgEvents.eventData
-                                              .elementAt(index)
-                                              .eventAttributes
-                                              .name,
-                                          imageUrl: events
-                                              .value.kotgEvents.eventData
-                                              .elementAt(index)
-                                              .eventAttributes
-                                              .kotgEventImage
-                                              .eventImageData
-                                              .kotgEventImageAttributes
-                                              .url,
-                                        );
+                                        _showEventDetailsBottomSheet(
+                                            price: events
+                                                .value.kotgEvents.eventData
+                                                .elementAt(index)
+                                                .eventAttributes
+                                                .price
+                                                .toString(),
+                                            prize: events
+                                                .value.kotgEvents.eventData
+                                                .elementAt(index)
+                                                .eventAttributes
+                                                .prize
+                                                .toString(),
+                                            maxParticipants: events
+                                                .value.kotgEvents.eventData
+                                                .elementAt(index)
+                                                .eventAttributes
+                                                .maxParticipants
+                                                .toString(),
+                                            dateTime:
+                                                '${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventDate} ${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.eventTime}',
+                                            eventDate: events
+                                                .value.kotgEvents.eventData
+                                                .elementAt(index)
+                                                .eventAttributes
+                                                .eventDate,
+                                            eventId: events
+                                                .value.kotgEvents.eventData
+                                                .elementAt(index)
+                                                .id,
+                                            desciption: events
+                                                .value.kotgEvents.eventData
+                                                .elementAt(index)
+                                                .eventAttributes
+                                                .description,
+                                            eventName: events
+                                                .value.kotgEvents.eventData
+                                                .elementAt(index)
+                                                .eventAttributes
+                                                .name,
+                                            imageUrl: events
+                                                .value.kotgEvents.eventData
+                                                .elementAt(index)
+                                                .eventAttributes
+                                                .kotgEventImage
+                                                .eventImageData
+                                                .kotgEventImageAttributes
+                                                .url);
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
@@ -562,6 +620,11 @@ class EventsPage extends ConsumerWidget {
                                                                   : OutlinedButton(
                                                                       onPressed:
                                                                           () {
+                                                                        context.push(
+                                                                            '/dashboard/events/ticket/${events.value.kotgEvents.eventData.elementAt(index).id}');
+                                                                        // _showTicketBottomSheet(
+                                                                        //     eventId:
+                                                                        //         events.value.kotgEvents.eventData.elementAt(index).id);
                                                                         // context
                                                                         //     .loaderOverlay
                                                                         //     .show();
@@ -598,7 +661,7 @@ class EventsPage extends ConsumerWidget {
                                                                         // });
                                                                       },
                                                                       child: Text(
-                                                                          'Registered',
+                                                                          'View Ticket',
                                                                           style:
                                                                               GoogleFonts.poppins(
                                                                             fontWeight:
@@ -738,59 +801,64 @@ class EventsPage extends ConsumerWidget {
                       );
                     },
                     error: (error) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(error.toString()),
-                          backgroundColor: Colors.red));
-
-                      return ListView.builder(
-                          itemCount: 5,
-                          controller: scrollController,
-                          physics: BouncingScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics(),
-                          ),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Container(
-                                height: 200,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      height: 70,
-                                      child: Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
-                                        ),
-                                        child: ListTile(
-                                          title: Skeleton(
-                                              height: 12,
-                                              width: 24,
-                                              style: SkeletonStyle.text),
-                                          subtitle: Skeleton(
-                                              height: 12,
-                                              width: 15,
-                                              style: SkeletonStyle.text),
-                                          trailing: Skeleton(
-                                            height: 30,
-                                            width: 65,
-                                            style: SkeletonStyle.text,
+                      return Column(
+                        children: [
+                          Text('Network Error'),
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: 5,
+                                controller: scrollController,
+                                physics: BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics(),
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Container(
+                                      height: 200,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            height: 70,
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                              ),
+                                              child: ListTile(
+                                                title: Skeleton(
+                                                    height: 12,
+                                                    width: 24,
+                                                    style: SkeletonStyle.text),
+                                                subtitle: Skeleton(
+                                                    height: 12,
+                                                    width: 15,
+                                                    style: SkeletonStyle.text),
+                                                trailing: Skeleton(
+                                                  height: 30,
+                                                  width: 65,
+                                                  style: SkeletonStyle.text,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[800],
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15)),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[800],
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                ),
-                              ),
-                            );
-                          });
+                                  );
+                                }),
+                          ),
+                        ],
+                      );
                     },
                     loading: (loading) => EventsPageSkeletonWidget(
                         scrollController: scrollController));
