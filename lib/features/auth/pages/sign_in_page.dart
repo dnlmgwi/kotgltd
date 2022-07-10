@@ -2,8 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
-import 'package:kotgltd/features/auth/pages/sign_up_page.dart';
-import 'package:kotgltd/features/auth/pages/widgets/forgot_password_widget.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/auth/providers/email_password_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
@@ -12,6 +10,7 @@ import 'package:lottie/lottie.dart';
 
 class SignInPage extends ConsumerWidget {
   SignInPage({Key? key}) : super(key: key);
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -30,26 +29,6 @@ class SignInPage extends ConsumerWidget {
 
     void updatePassword(BuildContext context, String pass) {
       ref.read(passwordProvider.state).state = pass;
-    }
-
-    void _showBottomSheetForgotPassword() async {
-      await Get.bottomSheet(
-        Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          color: kotgBlack,
-          child: ForgotPasswordWidget(),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
-        ),
-        isDismissible: false,
-      );
-
-      // The code below will run after the bottom sheet goes away
-      print('The Bottom Sheet has gone away!');
     }
 
     return LoaderOverlay(
@@ -217,12 +196,9 @@ class SignInPage extends ConsumerWidget {
                             .signIn(password: _password, email: _email)
                             .catchError((error) {
                           context.loaderOverlay.hide();
-                          Get.snackbar(
-                            "Login Error",
-                            error!.toString(),
-                            backgroundColor: Colors.red,
-                            snackPosition: SnackPosition.BOTTOM,
-                          );
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(error!.toString()),
+                              backgroundColor: Colors.red));
                         });
                       }
                     },
@@ -231,7 +207,9 @@ class SignInPage extends ConsumerWidget {
                     style: ButtonStyle(
                         enableFeedback: true,
                         splashFactory: NoSplash.splashFactory),
-                    onPressed: () => Get.to(() => SignUpPage()),
+                    onPressed: () {
+                      context.push('/auth/register');
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -250,16 +228,16 @@ class SignInPage extends ConsumerWidget {
                     ),
                   ),
                   Divider(),
-                  TextButton(
-                    style: ButtonStyle(
-                        enableFeedback: true,
-                        splashFactory: NoSplash.splashFactory),
-                    onPressed: () => _showBottomSheetForgotPassword(),
-                    child: Text(
-                      "Forgot your password?",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  )
+                  // TextButton(
+                  //   style: ButtonStyle(
+                  //       enableFeedback: true,
+                  //       splashFactory: NoSplash.splashFactory),
+                  //   onPressed: () => context.push('/auth/forgot-password'),
+                  //   child: Text(
+                  //     "Forgot your password?",
+                  //     style: TextStyle(color: Colors.grey),
+                  //   ),
+                  // ) //TODO Unhide Forgot Password
                 ],
               ),
             ),

@@ -42,6 +42,96 @@ class ProfileQueries {
       }''';
   }
 
+  static String updatePhoneNumber() {
+    return r'''mutation(
+      $phone_number: String!
+      $iso_code: String!
+      $user: ID!
+      ) {
+        updateUsersPermissionsUser(
+          data: {
+            phone_number: $phone_number
+            iso_code: $iso_code
+          }
+          id: $user
+        ) {
+          data {
+            id
+            attributes {
+              iso_code
+              phone_number
+            }
+          }
+        }
+      }''';
+  }
+
+  static String updateBirthday() {
+    return r'''mutation(
+      $date_of_birth: Date!
+      $user: ID!
+      ) {
+        updateUsersPermissionsUser(
+          data: {
+            date_of_birth: $date_of_birth
+          }
+          id: $user
+        ) {
+          data {
+            id
+            attributes {
+              date_of_birth
+            }
+          }
+        }
+      }''';
+  }
+
+  static String updateGender() {
+    return r'''mutation(
+      $gender: ENUM_USERSPERMISSIONSUSER_GENDER!
+      $user: ID!
+      ) {
+        updateUsersPermissionsUser(
+          data: {
+            gender: $gender
+          }
+          id: $user
+        ) {
+          data {
+            id
+            attributes {
+              gender
+            }
+          }
+        }
+      }''';
+  }
+
+  static String updateName() {
+    return r'''mutation(
+      $first_name: String!
+      $last_name: String!
+      $user: ID!
+      ) {
+        updateUsersPermissionsUser(
+          data: {
+            first_name: $first_name
+            last_name: $last_name
+          }
+          id: $user
+        ) {
+          data {
+            id
+            attributes {
+              first_name
+              last_name
+            }
+          }
+        }
+      }''';
+  }
+
   static String getProfile() {
     return r'''query ($user_id: ID!) {
       usersPermissionsUser(id:$user_id){

@@ -1,4 +1,5 @@
 import 'package:kotgltd/features/profile/model/profile.dart';
+import 'package:phone_form_field/phone_form_field.dart';
 
 abstract class IProfileRepository {
   ///Get User Profile
@@ -10,5 +11,22 @@ abstract class IProfileRepository {
     required String lastName,
     required String gender,
     required String dateOfBirth,
+  });
+
+  Future<void> updateName({
+    required String firstName,
+    required String lastName,
+  });
+
+  Future<void> updateGender({
+    required String gender,
+  });
+
+  Future<void> updateDateOfBirth({
+    required String dateOfBirth,
+  });
+
+  Future<void> updatePhoneNumber({
+    required PhoneNumber phoneNumber,
   });
 }

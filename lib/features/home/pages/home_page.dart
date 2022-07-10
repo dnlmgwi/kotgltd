@@ -1,13 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/Tickets/pages/tickets_page.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
-import 'package:kotgltd/features/profile/widgets/edit_profile_widget.dart';
 // import 'package:kotgltd/features/reminder/providers/reminder_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icons.dart';
@@ -28,7 +26,10 @@ class HomePage extends ConsumerWidget {
     }
 
     void _showTicketsPageBottomSheet() async {
-      await Get.bottomSheet(TicketsPage());
+      await showMaterialModalBottomSheet(
+        context: context,
+        builder: (context) => TicketsPage(),
+      );
 
       print('The Bottom Sheet has gone away!');
     }
@@ -82,7 +83,7 @@ class HomePage extends ConsumerWidget {
                             ),
                           ),
                           trailing: Icon(LineIcons.editAlt),
-                          onTap: () => Get.to(UpdateProfileWidget()),
+                          onTap: () => context.push('/dashboard/profile'),
                           title: Text(
                             'Welcome, ${data.value!.username}',
                             style: GoogleFonts.sarala(
@@ -133,7 +134,7 @@ class HomePage extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onTap: () => _showTicketsPageBottomSheet(),
+            onTap: () => context.push('/dashboard/tickets'),
           ),
           Padding(
             padding: EdgeInsets.only(

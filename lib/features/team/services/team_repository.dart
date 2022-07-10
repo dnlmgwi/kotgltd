@@ -1,13 +1,10 @@
 // import 'package:supabase/supabase.dart';
-import 'dart:io';
 
 import 'package:graphql/client.dart';
 import 'package:kotgltd/data/enviroment_creds.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/team/graphql/team_queries.dart';
 import 'package:kotgltd/features/team/interfaces/i_team_repository.dart';
-import 'package:kotgltd/features/team/model/invitesData.dart';
-import 'package:kotgltd/features/team/model/team.dart';
 import 'package:kotgltd/features/team/model/userEntity.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
@@ -155,6 +152,44 @@ class TeamRepository extends ITeamRepository {
   }
 
   @override
+  Future deleteMyInvite({
+    required String inviteId,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${Env.baseUrl}api/invite/delete/${inviteId}'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+          'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+        },
+      );
+
+      final jsonResponse = json.decode(response.body);
+
+      if (response.statusCode == 404) {
+        throw Exception('Not Found');
+      }
+
+      if (response.statusCode == 400) {
+        throw Exception(jsonResponse['error']['message']);
+      }
+
+      if (response.statusCode == 401) {
+        throw Exception('Token Expired');
+      }
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw Exception(response.body);
+      }
+
+      return jsonResponse['data']['message'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future deleteTeam() async {
     try {
       final response = await http.delete(
@@ -190,37 +225,38 @@ class TeamRepository extends ITeamRepository {
     }
   }
 
-  // @override
-  // Future<List?> getMyCreatedTeamMembers() async {
-  //   User? _user = user.getAt(0);
-  //   try {
-  //     final QueryOptions options = QueryOptions(
-  //         document: gql(TeamQueries.getMyCreatedTeam()),
-  //         variables: {"captain_id": _user!.id}); //TODO Variable
-
-  //     final QueryResult? result = await graphQLClient().query(options);
-
-  //     if (result!.hasException) {
-  //       print(result.exception.toString());
-  //       throw Exception(result.exception!.graphqlErrors.first.message);
-  //     }
-
-  //     var response = result.data!['teams'] as List?;
-
-  //     print(response);
-
-  //     return response;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
-
   @override
   Future<List<InviteEntity>> getInvites({required String inviteCode}) async {
     try {
       final QueryOptions options = QueryOptions(
           document: gql(TeamQueries.fetchTeamJoinRequests()),
           variables: {"invite_code": inviteCode});
+
+      final QueryResult? result = await graphQLClient().query(options);
+
+      if (result!.hasException) {
+        print(result.exception.toString());
+        throw Exception(result.exception!.graphqlErrors.first.message);
+      }
+
+      var response = InvitesData.fromJson(result.data!).invites.inviteData;
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<InviteEntity>> getMyInvites() async {
+    User? _user = user.getAt(0);
+
+    try {
+      final QueryOptions options = QueryOptions(
+          document: gql(TeamQueries.getMyInvites()),
+          variables: {
+            "user": _user!.id,
+          });
 
       final QueryResult? result = await graphQLClient().query(options);
 

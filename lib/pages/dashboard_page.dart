@@ -1,5 +1,3 @@
-import 'package:flutter/rendering.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
@@ -18,7 +16,7 @@ class DashboardPage extends ConsumerWidget {
     EventsPage(),
     // VirtualCardPage(),
     // WalletPage(),
-    TeamsPage(),
+    // TeamsPage(),
     SettingsPage()
   ];
 
@@ -136,10 +134,10 @@ class DashboardPage extends ConsumerWidget {
               label: 'Events',
               icon: Icon(Ionicons.ticket_outline),
             ),
-            BottomNavigationBarItem(
-              label: 'Teams',
-              icon: Icon(Ionicons.people_outline),
-            ),
+            // BottomNavigationBarItem(
+            //   label: 'Teams',
+            //   icon: Icon(Ionicons.people_outline),
+            // ),
             BottomNavigationBarItem(
               label: 'Settings',
               icon: Icon(
@@ -152,32 +150,3 @@ class DashboardPage extends ConsumerWidget {
     );
   }
 }
-
-
-// _profile.map(
-//                           loading: (loading) => CircularProgressIndicator(),
-//                           data: (data) {
-//                             context.loaderOverlay.hide();
-//                             return Column(
-//                               mainAxisAlignment: MainAxisAlignment.center,
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 ClipOval(
-//                                   child: Image.network(
-//                                     data.value['profile']['avatar']['image'][
-//                                         'url'], //TODO Handle Image Error with Cached Netowrk Image
-//                                     width: 40,
-//                                     height: 40,
-//                                     fit: BoxFit.cover,
-//                                   ),
-//                                 )
-//                               ],
-//                             );
-//                           },
-//                           error: (error) {
-//                             context.loaderOverlay.show();
-
-//                             return Container();
-//                           },
-//                         ),
-                      

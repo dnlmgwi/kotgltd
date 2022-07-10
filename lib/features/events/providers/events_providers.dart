@@ -12,9 +12,20 @@ final eventsProvider = FutureProvider<KOTGEvent>((ref) async {
   return eventsClient.fetchEvents();
 });
 
-final usereventsProvider = FutureProvider((ref) async {
+final userEventsProvider = FutureProvider((ref) async {
   final eventsClient = ref.watch(eventsRepoProvider);
   return eventsClient.userEvents();
+});
+
+final ticketProvider =
+    FutureProvider.family.autoDispose((ref, int eventId) async {
+  final eventsClient = ref.watch(eventsRepoProvider);
+  return eventsClient.ticketDetails(eventId: eventId);
+});
+
+final userPayProvider = FutureProvider.family((ref, String reference) async {
+  final eventsClient = ref.watch(eventsRepoProvider);
+  return eventsClient.ticketPay(reference: reference);
 });
 
 final registeredEventsProvider =

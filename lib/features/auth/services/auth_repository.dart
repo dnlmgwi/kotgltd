@@ -42,11 +42,8 @@ class AuthRepository extends IAuthRepository {
           );
 
       if (result!.hasException) {
-        if (result.exception!.linkException!.originalException
-            .toString()
-            .isNotEmpty) {
-          throw NoConnectionException(); //TODO User Error Codes For More Granular Error Handling
-        }
+        throw NoConnectionException(
+            result.exception!.graphqlErrors.first.message);
       }
 
       return LoginResponse.fromJson(result.data!);
@@ -76,11 +73,8 @@ class AuthRepository extends IAuthRepository {
           );
 
       if (result!.hasException) {
-        if (result.exception!.linkException!.originalException
-            .toString()
-            .isNotEmpty) {
-          throw NoConnectionException();
-        }
+        throw NoConnectionException(
+            result.exception!.graphqlErrors.first.message);
       }
     } on TimeoutException {
       ///30 Seconds Timeout
@@ -119,7 +113,6 @@ class AuthRepository extends IAuthRepository {
         'email': email,
         'password': password,
         'username': username,
-        
       });
 
       final QueryResult? result = await client.mutate(options).timeout(

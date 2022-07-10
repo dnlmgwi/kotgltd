@@ -6,7 +6,8 @@ import 'package:kotgltd/packages/dependencies.dart';
 
 final teamNameProvider = StateProvider<String>((ref) => '');
 
-final inviteCodeGenerator = Provider((ref) => InviteCodeGenerator());
+final inviteCodeProvider = StateProvider<String>((ref) => '');
+
 
 enum TeamState { member, captain, none }
 

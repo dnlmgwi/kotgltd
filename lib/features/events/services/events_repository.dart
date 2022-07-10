@@ -50,11 +50,8 @@ class EventsRepository {
           );
 
       if (result!.hasException) {
-        if (result.exception!.linkException!.originalException
-            .toString()
-            .isNotEmpty) {
-          throw NoConnectionException(); //TODO User Error Codes For More Granular Error Handling
-        }
+        throw NoConnectionException(
+            result.exception!.graphqlErrors.first.message);
       }
 
       var response = result.data!;
@@ -78,11 +75,33 @@ class EventsRepository {
             Duration(seconds: 30),
           );
       if (result!.hasException) {
-        if (result.exception!.linkException!.originalException
-            .toString()
-            .isNotEmpty) {
-          throw NoConnectionException(); //TODO User Error Codes For More Granular Error Handling
-        }
+        throw NoConnectionException(
+            result.exception!.graphqlErrors.first.message);
+      }
+
+      var response = result.data!['eventRegistrations']['data'];
+
+      return response;
+    } on TimeoutException {
+      ///30 Seconds Timeout
+      throw NoConnectionException();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List?> ticketDetails({required int eventId}) async {
+    User? _user = user.getAt(0);
+    try {
+      final QueryOptions options = QueryOptions(
+          document: gql(EventsQueries.eventTicket()),
+          variables: {"user_id": _user!.id, "event_id": eventId});
+      final QueryResult? result = await graphQLClient().query(options).timeout(
+            Duration(seconds: 30),
+          );
+      if (result!.hasException) {
+        throw NoConnectionException(
+            result.exception!.graphqlErrors.first.message);
       }
 
       var response = result.data!['eventRegistrations']['data'];
@@ -118,7 +137,49 @@ class EventsRepository {
       }
 
       if (response.statusCode == 400) {
-        throw Exception('Bad Request');
+        throw Exception(jsonDecode(response.body)['error']['message']);
+      }
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw Exception(response.body);
+      }
+
+      // Decode the json response
+      final jsonResponse = json.decode(response.body);
+
+      return jsonResponse['data'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future ticketPay({required String reference}) async {
+    try {
+      final response =
+          await http.post(Uri.parse('${Env.baseUrl}/api/v1/mpamba/pay'),
+              headers: <String, String>{
+                HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+                'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+              },
+              body: jsonEncode({
+                "msisdn": "265880649774", //TODO Get Number From User
+                "tran_id": reference,
+              }));
+      if (response.statusCode == 404) {
+        throw Exception('Not Found');
+      }
+
+      if (response.statusCode == 403) {
+        throw Exception('Forbidden');
+      }
+
+      if (response.statusCode == 401) {
+        throw Exception('Token Expired');
+      }
+
+      if (response.statusCode == 400) {
+        throw Exception(jsonDecode(response.body)['error']['message']);
       }
 
       if (response.statusCode != 200) {
@@ -154,6 +215,10 @@ class EventsRepository {
         throw Exception('Token Expired');
       }
 
+      if (response.statusCode == 400) {
+        throw Exception(jsonDecode(response.body)['error']['message']);
+      }
+
       if (response.statusCode != 200) {
         print(response.body);
         throw Exception(response.body);
@@ -163,7 +228,7 @@ class EventsRepository {
     }
   }
 
-  Future<void> registerEvent({
+  Future registerEvent({
     required String eventID,
   }) async {
     try {
@@ -174,8 +239,13 @@ class EventsRepository {
           'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
         },
       );
+
       if (response.statusCode == 404) {
         throw Exception('Not Found');
+      }
+
+      if (response.statusCode == 400) {
+        throw Exception(jsonDecode(response.body)['error']['message']);
       }
 
       if (response.statusCode == 401) {
@@ -186,6 +256,11 @@ class EventsRepository {
         print(response.body);
         throw Exception('Network Error');
       }
+
+      // Decode the json response
+      final jsonResponse = json.decode(response.body);
+
+      return jsonResponse['data'];
     } catch (e) {
       rethrow;
     }

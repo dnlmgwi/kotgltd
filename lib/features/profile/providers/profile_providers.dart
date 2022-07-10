@@ -18,10 +18,10 @@ var firstNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
 var lastNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
-enum Gender { male, female, rather_not_say, none }
+enum Gender { Man, Woman, None }
 
 var genderProvider =
-    StateProvider.autoDispose<String>((ref) => Gender.none.name);
+    StateProvider.autoDispose<String>((ref) => Gender.None.name);
 
 var phoneNumberProvider = StateProvider<PhoneNumber>((ref) => PhoneNumber(
       isoCode: IsoCode.MW,
@@ -40,7 +40,7 @@ var dateOfBirthFinalProvider =
   return formatted;
 });
 
-var profileProvider = FutureProvider.autoDispose<Profile>((ref) async {
+var profileProvider = FutureProvider<Profile>((ref) async {
   final profileClient = ref.read(profileRepoProvider);
   return profileClient.getProfile();
 });

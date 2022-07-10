@@ -2,7 +2,7 @@ class EventsQueries {
   static String getAllEvents() {
     return r'''query {
   events(
-    sort: "event_date:desc", publicationState:LIVE,
+    sort: "event_date:asc", publicationState:LIVE,
   ){
     data {
       id
@@ -59,6 +59,48 @@ class EventsQueries {
       }
     }
       }
+}''';
+  }
+
+  static String eventTicket() {
+    return r'''query($user_id: ID!, $event_id: ID!) {
+  eventRegistrations(filters: { user: { id: { eq: $user_id } } event: { id: { eq: $event_id } }}) {
+    data {
+      id
+      attributes {
+        event {
+          data {
+            id
+            attributes {
+              name
+              event_date
+              event_time
+              game {
+                data {
+                  attributes {
+                    name
+                  }
+                }
+              }
+            }
+          }
+        }
+        user {
+          data {
+            attributes {
+              first_name
+              last_name
+            }
+          }
+        }
+        reference
+        status
+        registered_at
+        transaction_id
+        createdAt
+      }
+    }
+  }
 }''';
   }
 

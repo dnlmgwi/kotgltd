@@ -93,7 +93,7 @@
 //                                   )
 //                                   .then(
 //                                       (value) => ref.refresh(teamRepoProvider))
-//                                   .then((value) => Get.back());
+//                                   .then((value) => context.pop(););
 //                             }
 
 //                             void decline(BuildContext context) {
@@ -103,7 +103,7 @@
 //                                   )
 //                                   .then(
 //                                       (value) => ref.refresh(teamRepoProvider))
-//                                   .then((value) => Get.back());
+//                                   .then((value) => context.pop(););
 //                             }
 
 //                             return Slidable(
@@ -230,7 +230,7 @@
 //               onTap: () {
 //                 _userRepo.deleteTeam().then((value) {
 //                   ref.refresh(teamRepoProvider);
-//                   Get.back();
+//                   context.pop();
 //                 });
 //               },
 //             ),

@@ -112,6 +112,21 @@ class TeamQueries {
 }''';
   }
 
+  static String getMyInvites() {
+    return r'''query($user_id: ID!) {
+      invites(filters: { user: { id: { eq: $user_id } } }) {
+        data {
+          id
+          attributes {
+            claimed
+            invite_code
+            createdAt
+          }
+        }
+      }
+    }''';
+  }
+
   // static String deleteTeamJoinRequests() {
   //   return r'''mutation($request_id: ID!){
   //     deleteTeamJoinRequest(input: {

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/auth/pages/sign_in_page.dart';
@@ -103,9 +102,7 @@ class OnboardingPage extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-                        onPressed: () {
-                          Get.to(() => SignInPage());
-                        },
+                        onPressed: () => context.go('/auth'),
                         child: Text(
                           "Skip",
                           style: TextStyle(color: Colors.white),
@@ -113,7 +110,7 @@ class OnboardingPage extends ConsumerWidget {
                     TextButton(
                       onPressed: () {
                         if (_currentPage == pages.length - 1) {
-                          Get.to(() => SignInPage());
+                          context.go('/auth');
                         } else {
                           _pageController.animateToPage(_currentPage + 1,
                               curve: Curves.easeInOutCubic,
