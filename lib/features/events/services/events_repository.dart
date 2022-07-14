@@ -4,6 +4,8 @@ import 'package:kotgltd/data/enviroment_creds.dart';
 import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
 import 'package:kotgltd/features/events/graphql/events_queries.dart';
+import 'package:kotgltd/features/events/model/eventRegistrationEntity.dart';
+import 'package:kotgltd/features/events/model/eventRegistrations.dart';
 import 'package:kotgltd/features/events/model/kotgEvent.dart';
 // ignore: unused_import
 import 'package:kotgltd/features/events/model/kotgEvents.dart';
@@ -90,7 +92,8 @@ class EventsRepository {
     }
   }
 
-  Future<List?> ticketDetails({required int eventId}) async {
+  Future<List<EventRegistrationEntityData>> ticketDetails(
+      {required int eventId}) async {
     User? _user = user.getAt(0);
     try {
       final QueryOptions options = QueryOptions(
@@ -104,13 +107,14 @@ class EventsRepository {
             result.exception!.graphqlErrors.first.message);
       }
 
-      var response = result.data!['eventRegistrations']['data'];
+      var response = EventRegistrations.fromJson(result.data!);
 
-      return response;
+      return response.eventRegistations.eventRegistrationEntityData;
     } on TimeoutException {
       ///30 Seconds Timeout
       throw NoConnectionException();
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

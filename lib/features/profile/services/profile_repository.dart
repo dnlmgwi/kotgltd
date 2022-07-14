@@ -5,6 +5,7 @@ import 'package:kotgltd/features/auth/exception/input_exception.dart';
 import 'package:kotgltd/features/auth/interfaces/i_profile_repository.dart';
 // import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
+import 'package:kotgltd/features/events/model/eventRegistrations.dart';
 import 'package:kotgltd/features/profile/graphql/profile_queries.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
@@ -70,7 +71,6 @@ class ProfileRepository extends IProfileRepository {
         print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-
     } catch (e) {
       rethrow;
     }
@@ -99,7 +99,6 @@ class ProfileRepository extends IProfileRepository {
         print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-
     } catch (e) {
       rethrow;
     }
@@ -133,7 +132,6 @@ class ProfileRepository extends IProfileRepository {
         print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-
     } catch (e) {
       rethrow;
     }
@@ -166,7 +164,6 @@ class ProfileRepository extends IProfileRepository {
         print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-
     } catch (e) {
       rethrow;
     }

@@ -122,28 +122,56 @@ class TicketPage extends ConsumerWidget {
                                     isCornerRounded: true,
                                     padding: EdgeInsets.all(20),
                                     child: TicketData(
-                                        firstName:
-                                            ticket.value!.first['attributes']
-                                                    ['user']['data']
-                                                ['attributes']['first_name'],
-                                        lastName: ticket.value!.first['attributes']
-                                                ['user']['data']['attributes']
-                                            ['last_name'],
-                                        game: ticket.value!.first['attributes']
-                                                ['event']['data']['attributes']
-                                            ['game']['data']['attributes']['name'],
-                                        reference: ticket.value!.first['attributes']['reference'],
-                                        ticketId: ticket.value!.first['id'],
-                                        eventName: ticket.value!.first['attributes']['event']['data']['attributes']['name'],
-                                        status: ticket.value!.first['attributes']['status'],
-                                        eventDate: '${ticket.value!.first['attributes']['event']['data']['attributes']['event_date']} ${ticket.value!.first['attributes']['event']['data']['attributes']['event_time']}',
-                                        eventTime: '${ticket.value!.first['attributes']['event']['data']['attributes']['event_date']} ${ticket.value!.first['attributes']['event']['data']['attributes']['event_time']}'),
+                                        firstName: ticket
+                                            .value
+                                            .first
+                                            .eventAttributes
+                                            .user!
+                                            .eventUserData
+                                            .eventUserAttributes
+                                            .firstName!,
+                                        lastName: ticket
+                                            .value
+                                            .first
+                                            .eventAttributes
+                                            .user!
+                                            .eventUserData
+                                            .eventUserAttributes
+                                            .lastName!,
+                                        game: ticket
+                                            .value
+                                            .first
+                                            .eventAttributes
+                                            .event
+                                            .eventData
+                                            .eventRegAttributes
+                                            .game!
+                                            .gameData
+                                            .gameAttributes
+                                            .name,
+                                        reference: ticket.value.first
+                                            .eventAttributes.reference,
+                                        ticketId: ticket.value.first.id,
+                                        eventName: ticket
+                                            .value
+                                            .first
+                                            .eventAttributes
+                                            .event
+                                            .eventData
+                                            .eventRegAttributes
+                                            .name,
+                                        status: ticket
+                                            .value.first.eventAttributes.status,
+                                        eventDate:
+                                            '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}',
+                                        eventTime:
+                                            '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}'),
                                   ),
                                   SizedBox(
                                     height: 35,
                                   ),
-                                  if (ticket.value!.first['attributes']
-                                          ['status'] !=
+                                  if (ticket
+                                          .value.first.eventAttributes.status !=
                                       "approved")
                                     FadeIn(
                                       delay: Duration(milliseconds: 500),
@@ -162,9 +190,11 @@ class TicketPage extends ConsumerWidget {
 
                                           _repo
                                               .ticketPay(
-                                                  reference: ticket.value!
-                                                          .first['attributes']
-                                                      ['reference'])
+                                                  reference: ticket
+                                                      .value
+                                                      .first
+                                                      .eventAttributes
+                                                      .reference)
                                               .then((value) {
                                             context.loaderOverlay.hide();
                                             print(value);
