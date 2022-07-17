@@ -1,4 +1,3 @@
-import 'package:kotgltd/features/events/model/kotgEventImage.dart';
 import 'package:kotgltd/features/events/model/kotgGame.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 part 'kotgEventRegAttributes.g.dart';
@@ -15,11 +14,14 @@ class KOTGEventRegAttributes {
 
   KOTGGame? game;
 
+  int price;
+
   KOTGEventRegAttributes({
     required this.eventDate,
     required this.eventTime,
     required this.name,
     required this.game,
+    required this.price,
   });
 
   factory KOTGEventRegAttributes.fromJson(Map<String, dynamic> json) =>

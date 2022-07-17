@@ -18,7 +18,7 @@ class PhoneNumberPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _repo = ref.watch(profileRepoProvider);
-    final _phoneNumber = ref.watch(phoneNumberProvider.state);
+    final _phoneNumber = ref.watch(phoneNumberProvider.state).state;
 
     void updatePhoneNumber(BuildContext context, PhoneNumber phoneNumber) {
       ref.read(phoneNumberProvider.state).state = phoneNumber;
@@ -79,7 +79,6 @@ class PhoneNumberPage extends ConsumerWidget {
                             updatePhoneNumber(context, phone!),
                         defaultCountry: IsoCode.MW,
                         showFlagInInput: true,
-                        initialValue: _phoneNumber.state,
                         validator: PhoneValidator.validMobile(),
                         enableInteractiveSelection: true,
                         // initialValue: phoneNumber,
@@ -103,7 +102,7 @@ class PhoneNumberPage extends ConsumerWidget {
                             context.loaderOverlay.show();
                             _repo
                                 .updatePhoneNumber(
-                              phoneNumber: _phoneNumber.state,
+                              phoneNumber: _phoneNumber,
                             )
                                 .then((value) {
                               context.loaderOverlay.hide();

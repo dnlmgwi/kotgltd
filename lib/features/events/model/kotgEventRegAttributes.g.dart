@@ -15,6 +15,7 @@ KOTGEventRegAttributes _$KOTGEventRegAttributesFromJson(
       game: json['game'] == null
           ? null
           : KOTGGame.fromJson(json['game'] as Map<String, dynamic>),
+      price: json['price'] as int,
     );
 
 Map<String, dynamic> _$KOTGEventRegAttributesToJson(
@@ -24,4 +25,5 @@ Map<String, dynamic> _$KOTGEventRegAttributesToJson(
       'event_date': instance.eventDate,
       'event_time': instance.eventTime,
       'game': instance.game?.toJson(),
+      'price': instance.price,
     };

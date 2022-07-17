@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:kotgltd/common/bottomSheetHandle.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/profile/providers/profile_providers.dart';
@@ -14,13 +15,10 @@ class TicketPage extends ConsumerWidget {
     required this.eventId,
   }) : super(key: key);
 
-  final _formKey = GlobalKey<FormState>();
   final String eventId;
 
   @override
   Widget build(BuildContext context, ref) {
-    final _repo = ref.watch(eventsRepoProvider);
-
     Future<void> _refreshTicket() async {
       return ref.refresh(ticketProvider(int.parse(
         eventId,
@@ -67,7 +65,7 @@ class TicketPage extends ConsumerWidget {
                         // print(_events);
                         return _events.map(
                             data: (ticket) {
-                              if (ticket.value!.isEmpty) {
+                              if (ticket.value.isEmpty) {
                                 //print('project snapshot data is: ${projectSnap.data}');
                                 return Center(
                                   child: Column(
@@ -126,7 +124,7 @@ class TicketPage extends ConsumerWidget {
                                             .value
                                             .first
                                             .eventAttributes
-                                            .user!
+                                            .user
                                             .eventUserData
                                             .eventUserAttributes
                                             .firstName!,
@@ -134,7 +132,7 @@ class TicketPage extends ConsumerWidget {
                                             .value
                                             .first
                                             .eventAttributes
-                                            .user!
+                                            .user
                                             .eventUserData
                                             .eventUserAttributes
                                             .lastName!,
@@ -185,34 +183,13 @@ class TicketPage extends ConsumerWidget {
                                           primary: kotgBlack,
                                           backgroundColor: kotgGreen,
                                         ),
-                                        onPressed: () {
-                                          context.loaderOverlay.show();
-
-                                          _repo
-                                              .ticketPay(
-                                                  reference: ticket
-                                                      .value
-                                                      .first
-                                                      .eventAttributes
-                                                      .reference)
-                                              .then((value) {
-                                            context.loaderOverlay.hide();
-                                            print(value);
-                                            context.push('/payment-approval');
-                                          }).catchError((error, stackTrace) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        error.toString())));
-
-                                            context.loaderOverlay.hide();
-                                          });
-                                        },
+                                        onPressed: () => context.push(
+                                            '/dashboard/events/payment/?ref=${ticket.value.first.eventAttributes.reference}&name=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.name}&price=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.price.toString()}'),
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(15.0),
                                             child: Text(
-                                              "Pay Now",
+                                              "Continue to Payment",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -255,10 +232,12 @@ class TicketPage extends ConsumerWidget {
                               );
                             },
                             error: (error) {
-                              return Column(
-                                children: [
-                                  Text('Network Error'),
-                                ],
+                              return Center(
+                                child: Column(
+                                  children: [
+                                    Text('Network Error'),
+                                  ],
+                                ),
                               );
                             },
                             loading: (loading) =>

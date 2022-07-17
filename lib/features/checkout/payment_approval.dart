@@ -65,6 +65,7 @@ class PaymentApprovalPage extends ConsumerWidget {
                     ),
                     onPressed: () {
                       context.pop();
+                      context.go('/dashboard');
                     },
                     child: Center(
                       child: Padding(

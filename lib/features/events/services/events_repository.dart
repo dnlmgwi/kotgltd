@@ -13,6 +13,7 @@ import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
 import 'package:http/http.dart' as http;
+import 'package:phone_form_field/phone_form_field.dart';
 
 class EventsRepository {
   final user = Hive.box<User>('user');
@@ -158,18 +159,28 @@ class EventsRepository {
     }
   }
 
-  Future ticketPay({required String reference}) async {
+  Future ticketPay({
+    required String reference,
+    required PhoneNumber phoneNumber,
+  }) async {
+    print(phoneNumber);
     try {
-      final response =
-          await http.post(Uri.parse('${Env.baseUrl}/api/v1/mpamba/pay'),
-              headers: <String, String>{
-                HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
-                'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
-              },
-              body: jsonEncode({
-                "msisdn": "265880649774", //TODO Get Number From User
-                "tran_id": reference,
-              }));
+      final response = await http.post(
+        Uri.parse('${Env.baseUrl}/api/v1/mpamba/pay'),
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+          'Authorization': 'Bearer ${tokens.get(0)!.jwt}'
+        },
+        // "265880649774"
+        body: jsonEncode(
+          {
+            "msisdn": phoneNumber.countryCode +
+                phoneNumber.nsn, //TODO Get Number From User
+            "tran_id": reference
+          },
+        ),
+      );
+
       if (response.statusCode == 404) {
         throw Exception('Not Found');
       }
@@ -183,16 +194,22 @@ class EventsRepository {
       }
 
       if (response.statusCode == 400) {
-        throw Exception(jsonDecode(response.body)['error']['message']);
+        throw Exception(
+          jsonDecode(response.body)['error']['message'],
+        );
       }
 
       if (response.statusCode != 200) {
         print(response.body);
-        throw Exception(response.body);
+        throw Exception(
+          response.body,
+        );
       }
 
       // Decode the json response
-      final jsonResponse = json.decode(response.body);
+      final jsonResponse = json.decode(
+        response.body,
+      );
 
       return jsonResponse['data'];
     } catch (e) {

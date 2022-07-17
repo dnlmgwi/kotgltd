@@ -9,6 +9,7 @@ import 'package:kotgltd/features/profile/pages/phoneNumber_page.dart';
 import 'package:kotgltd/features/team/pages/team_page.dart';
 import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
 import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
+import 'package:kotgltd/features/tickets/pages/payment_page.dart';
 import 'package:kotgltd/features/tickets/pages/ticket_page.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/features.dart';
@@ -160,6 +161,20 @@ final routerProvider = Provider<GoRouter>((ref) {
 
                       return TicketPage(
                         eventId: eventId!,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'payment',
+                    builder: (context, state) {
+                      final ticketRef = state.queryParams['ref'];
+                      final name = state.queryParams['name'];
+                      final price = state.queryParams['price'];
+
+                      return PaymentPage(
+                        ticketRef: ticketRef!,
+                        eventName: name!,
+                        price: price!,
                       );
                     },
                   ),

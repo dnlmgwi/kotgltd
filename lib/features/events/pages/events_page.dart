@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/bottomSheetHandle.dart';
@@ -64,8 +65,9 @@ class EventsPage extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
-                        Text(
+                        AutoSizeText(
                           eventName,
+                          maxLines: 2,
                           style: GoogleFonts.sarala(
                             fontWeight: FontWeight.w600,
                             fontSize: 20.sp,
