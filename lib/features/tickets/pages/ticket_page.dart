@@ -33,9 +33,9 @@ class TicketPage extends ConsumerWidget {
             elevation: 0,
             centerTitle: true,
             backgroundColor: kotgBlack,
-            leading: GestureDetector(
-              child: Icon(Ionicons.chevron_back, color: kotgGreen),
-              onTap: () {
+            leading: IconButton(
+              icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+              onPressed: () {
                 context.pop();
               },
             ),
@@ -110,86 +110,118 @@ class TicketPage extends ConsumerWidget {
                                 );
                               }
 
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  TicketWidget(
-                                    width: 350,
-                                    height: 500,
-                                    isCornerRounded: true,
-                                    padding: EdgeInsets.all(20),
-                                    child: TicketData(
-                                        firstName: ticket
-                                            .value
-                                            .first
-                                            .eventAttributes
-                                            .user
-                                            .eventUserData
-                                            .eventUserAttributes
-                                            .firstName!,
-                                        lastName: ticket
-                                            .value
-                                            .first
-                                            .eventAttributes
-                                            .user
-                                            .eventUserData
-                                            .eventUserAttributes
-                                            .lastName!,
-                                        game: ticket
-                                            .value
-                                            .first
-                                            .eventAttributes
-                                            .event
-                                            .eventData
-                                            .eventRegAttributes
-                                            .game!
-                                            .gameData
-                                            .gameAttributes
-                                            .name,
-                                        reference: ticket.value.first
-                                            .eventAttributes.reference,
-                                        ticketId: ticket.value.first.id,
-                                        eventName: ticket
-                                            .value
-                                            .first
-                                            .eventAttributes
-                                            .event
-                                            .eventData
-                                            .eventRegAttributes
-                                            .name,
-                                        status: ticket
-                                            .value.first.eventAttributes.status,
-                                        eventDate:
-                                            '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}',
-                                        eventTime:
-                                            '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}'),
-                                  ),
-                                  SizedBox(
-                                    height: 35,
-                                  ),
-                                  if (ticket
-                                          .value.first.eventAttributes.status !=
-                                      "approved")
+                              return SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    TicketWidget(
+                                      width: 350,
+                                      height: 500,
+                                      isCornerRounded: true,
+                                      padding: EdgeInsets.all(20),
+                                      child: TicketData(
+                                          firstName: ticket
+                                              .value
+                                              .first
+                                              .eventAttributes
+                                              .user
+                                              .eventUserData
+                                              .eventUserAttributes
+                                              .firstName!,
+                                          lastName: ticket
+                                              .value
+                                              .first
+                                              .eventAttributes
+                                              .user
+                                              .eventUserData
+                                              .eventUserAttributes
+                                              .lastName!,
+                                          game: ticket
+                                              .value
+                                              .first
+                                              .eventAttributes
+                                              .event
+                                              .eventData
+                                              .eventRegAttributes
+                                              .game!
+                                              .gameData
+                                              .gameAttributes
+                                              .name,
+                                          reference: ticket.value.first
+                                              .eventAttributes.reference,
+                                          ticketId: ticket.value.first.id,
+                                          eventName: ticket
+                                              .value
+                                              .first
+                                              .eventAttributes
+                                              .event
+                                              .eventData
+                                              .eventRegAttributes
+                                              .name,
+                                          status: ticket.value.first
+                                              .eventAttributes.status,
+                                          eventDate:
+                                              '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}',
+                                          eventTime:
+                                              '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}'),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    if (ticket.value.first.eventAttributes
+                                            .status !=
+                                        "approved")
+                                      FadeIn(
+                                        delay: Duration(milliseconds: 500),
+                                        child: ElevatedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            enableFeedback: true,
+                                            primary: kotgBlack,
+                                            backgroundColor: kotgGreen,
+                                          ),
+                                          onPressed: () => context.push(
+                                              '/dashboard/events/payment/?ref=${ticket.value.first.eventAttributes.reference}&name=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.name}&price=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.price.toString()}'),
+                                          child: Center(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: Text(
+                                                "Continue to Payment",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
                                     FadeIn(
-                                      delay: Duration(milliseconds: 500),
-                                      child: ElevatedButton(
+                                      delay: Duration(milliseconds: 600),
+                                      child: OutlinedButton(
                                         style: OutlinedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(5.0),
                                           ),
                                           enableFeedback: true,
-                                          primary: kotgBlack,
-                                          backgroundColor: kotgGreen,
+                                          primary: kotgGreen,
                                         ),
-                                        onPressed: () => context.push(
-                                            '/dashboard/events/payment/?ref=${ticket.value.first.eventAttributes.reference}&name=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.name}&price=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.price.toString()}'),
+                                        onPressed: () {
+                                          context.pop();
+                                        },
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(15.0),
                                             child: Text(
-                                              "Continue to Payment",
+                                              "Dismiss",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -198,37 +230,8 @@ class TicketPage extends ConsumerWidget {
                                         ),
                                       ),
                                     ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  FadeIn(
-                                    delay: Duration(milliseconds: 600),
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                        ),
-                                        enableFeedback: true,
-                                        primary: kotgGreen,
-                                      ),
-                                      onPressed: () {
-                                        context.pop();
-                                      },
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Text(
-                                            "Dismiss",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               );
                             },
                             error: (error) {

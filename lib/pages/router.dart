@@ -14,6 +14,7 @@ import 'package:kotgltd/features/tickets/pages/ticket_page.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/features.dart';
 import 'package:kotgltd/packages/pages.dart';
+import 'package:kotgltd/pages/errorScreen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = GoRouterRefreshStream(
@@ -26,8 +27,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     initialLocation: "/auth",
+    errorPageBuilder: (context, state) => MaterialPage<void>(
+      key: state.pageKey,
+      child: ErrorScreen(state.error!),
+    ),
     debugLogDiagnostics: true,
-
     redirect: (state) {
       // We want to READ the state, here.
       // GoRouter is already aware of state changes through `refreshListenable`
@@ -135,7 +139,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 ]),
             GoRoute(
                 path: 'team',
-                builder: (context, state) => TeamsPage(),
+                builder: (context, state) => SelectGamePage(),
                 routes: [
                   GoRoute(
                     path: 'create',

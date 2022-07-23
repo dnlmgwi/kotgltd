@@ -14,6 +14,8 @@ abstract class ITeamRepository {
     required String inviteId,
   });
 
+  Future<List> getTeams();
+
   Future<List<InviteEntity>> getMyInvites();
 
   Future<Team> getTeam();

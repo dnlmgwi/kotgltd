@@ -9,33 +9,64 @@ import 'package:kotgltd/packages/dependencies.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 
-class TeamsPage extends ConsumerWidget {
-  TeamsPage({Key? key}) : super(key: key);
+class SelectGamePage extends StatelessWidget {
+  SelectGamePage({Key? key}) : super(key: key);
   final scrollController = ScrollController();
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
           body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15, top: 18, bottom: 15),
-            child: Text(
-              'Team',
-              style: GoogleFonts.sarala(
-                fontWeight: FontWeight.w600,
-                fontSize: 26.sp,
-                color: kotgGreen,
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15, top: 18, bottom: 15),
+                child: Text(
+                  'Find Team',
+                  style: GoogleFonts.sarala(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20.sp,
+                    color: kotgGreen,
+                  ),
+                ),
               ),
-            ),
+              Spacer(),
+            ],
           ),
+          Divider(),
+          Card(
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text('My Invites'),
+                  ))),
+          Card(
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text('Create Team'),
+                  ))),
+          Card(
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+              child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text('Join Team'),
+                  ))),
           Divider(),
           Expanded(
             child: Consumer(builder: (context, ref, _) {
-              final teamState = ref.watch(teamStateFutureProvider);
+              Future<void> _refreshEvents() async {
+                return ref.refresh(teamFutureProvider);
+              }
+
+              final teamState = ref.watch(teamFutureProvider);
               final _userRepo = ref.watch(teamRepoProvider);
               final _inviteRepo = ref.watch(inviteRepoProvider);
 
@@ -291,227 +322,53 @@ class TeamsPage extends ConsumerWidget {
 
               return teamState.map(data: (data) {
                 return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 35, top: 30, bottom: 25),
-                          child: ListTile(
-                            title: Text(
-                              data.value.teamName,
-                              style: TextStyle(fontSize: 25.sp),
-                            ),
-                            trailing: IconButton(
-                                onPressed: () {
-                                  _showOptionsBottomSheet(teamId: 0);
-                                },
-                                icon: Icon(
-                                  Ionicons.ellipsis_vertical_outline,
-                                )),
-
-                            // Get.toNamed('/joinRequests',
-                            //     arguments: {
-                            //       'inviteCode': team[0]['invite_code'],
-                            //       'teamId': team[0]['id']
-                            //     })
-                          ),
-                        ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 15.sp,
+                        top: 18,
                       ),
-                      Column(
-                        children: [
-                          ListTile(
-                            leading: Icon(Ionicons.share_outline),
-                            title: Text('Send Invite Code'),
-                            onTap: () => Share.share(data.value.inviteCode),
-                          ),
-                          ListTile(
-                            leading: Icon(Ionicons.person_add_outline),
-                            title: Text('Invites'),
-                            trailing: FutureBuilder(
-                                future: _userRepo.getInviteCount(
-                                    inviteCode: data.value.inviteCode),
-                                builder: (context, snapshot) {
-                                  // Check for errors
-                                  if (snapshot.hasError) {
-                                    return Center(
-                                      child: Icon(
-                                        Ionicons.pulse_outline,
-                                        color: Colors.white,
-                                      ), //TODO Error Icon
-                                    );
-                                  }
-                                  // Once complete, show your application
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    var count = snapshot.data as num;
-
-                                    if (count == 0) {
-                                      return Text('');
-                                    }
-
-                                    return Badge(
-                                      position:
-                                          BadgePosition.topEnd(top: 0, end: 3),
-                                      animationDuration:
-                                          Duration(milliseconds: 300),
-                                      animationType: BadgeAnimationType.slide,
-                                      badgeContent: Text(
-                                        count.toString(),
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    );
-                                  }
-                                  // Otherwise, show something whilst waiting for initialization to complete
-                                  return Badge(
-                                    position:
-                                        BadgePosition.topEnd(top: 0, end: 3),
-                                    animationDuration:
-                                        Duration(milliseconds: 300),
-                                    animationType: BadgeAnimationType.slide,
-                                    badgeContent: Text(
-                                      '',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  );
-                                }),
-                            onTap: () => _showManageTeamBottomSheet(
-                              inviteCode: data.value.inviteCode,
-                              teamId: data.value.id,
-                            ),
-                          ),
-                          // ListTile(
-                          //   leading: Icon(Ionicons.notifications_outline),
-                          //   trailing: Text('Coming Soon'),
-                          //   enabled: false,
-                          //   title: Text('Notifications'),
-                          //   // trailing: Badge(
-                          //   //   position: BadgePosition.topEnd(top: 0, end: 3),
-                          //   //   animationDuration: Duration(milliseconds: 300),
-                          //   //   animationType: BadgeAnimationType.slide,
-                          //   //   badgeContent: Text(
-                          //   //     '2',
-                          //   //     style: TextStyle(color: Colors.white),
-                          //   //   ),
-                          //   // ),
-                          //   onTap: () {},
-                          // ),
-                          ListTile(
-                            leading: Icon(Ionicons.stats_chart_outline),
-                            title: Text('Team Stats'),
-                            trailing: Text('Coming Soon'),
-                            enabled: false,
-                            onTap: () {},
-                          ),
-                        ],
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15, top: 18, bottom: 15),
-                        child: Text(
-                          'Team Members',
-                          style: GoogleFonts.sarala(
+                      child: Text(
+                        "Find Teams",
+                        style: GoogleFonts.sarala(
                             fontWeight: FontWeight.w600,
                             color: Colors.grey,
-                          ),
-                        ),
+                            fontSize: 15.sp),
                       ),
-                      Expanded(
-                        child: data.value.teamMembers!.isEmpty
-                            ? Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15, top: 18, bottom: 15),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Looking abit too empty here...player?',
-                                        style: GoogleFonts.sarala(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 10.sp,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 35,
-                                      ),
-                                      Container(
-                                        width: 50.w,
-                                        child: ElevatedButton.icon(
-                                          style: OutlinedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                            ),
-                                            enableFeedback: true,
-                                            primary: kotgBlack,
-                                            backgroundColor: kotgGreen,
-                                          ),
-                                          icon: Icon(Ionicons.share_outline),
-                                          label: Text(
-                                            'Send Invite Code',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            Share.share(data.value.inviteCode);
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ))
-                            : ListView.builder(
-                                itemCount: data.value.teamMembers!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ListTile(
-                                    // leading: ClipOval(
-                                    //   child: Container(),
-                                    //   // child: Image.network(
-                                    //   //   team["",""][index]['member']
-                                    //   //           ['profile']['avatar']['image']
-                                    //   //       ['url'],
-                                    //   //   width: 40,
-                                    //   //   height: 40,
-                                    //   //   fit: BoxFit.cover,
-                                    //   // ),
-                                    // ),
-                                    leading: TextAvatar(
-                                      shape: Shape.Circular,
-                                      size: 50,
-                                      textColor: Colors.white,
-                                      fontSize: 35,
-                                      upperCase: true,
-                                      numberLetters: 2,
-                                      text: data.value.teamMembers![index]
-                                          ['user']['username'],
-                                    ),
-                                    title: Text(
-                                      data.value.teamMembers![index]['user']
-                                          ['username'],
-                                      style: GoogleFonts.sarala(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20.sp,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      data.value.teamMembers![index]['user']
-                                          ['email'],
-                                      style: GoogleFonts.sarala(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 10.sp,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                      )
-                    ]);
+                    ),
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () => _refreshEvents(),
+                        child: ListView.builder(
+                            // the number of items in the list
+                            itemCount: data.value.length,
+
+                            // display each item of the product list
+                            itemBuilder: (context, index) {
+                              return Card(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 15),
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: ListTile(
+                                        title: Text(data.value[index]
+                                            ['attributes']['team_name']),
+                                        trailing: OutlinedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                onPrimary: Colors.white,
+                                                primary: kotgPurple),
+                                            onPressed: () {},
+                                            child: Text('Join',
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w600,
+                                                ))),
+                                      )));
+                            }),
+                      ),
+                    ),
+                  ],
+                );
               }, loading: (loading) {
                 return Center(
                   child: Column(
@@ -531,133 +388,12 @@ class TeamsPage extends ConsumerWidget {
                   ),
                 );
               }, error: (error) {
-                return TeamsPageOptions(error: error.value);
+                return CircularProgressIndicator();
               });
             }),
           ),
         ],
       )),
-    );
-  }
-}
-
-class TeamsPageOptions extends StatelessWidget {
-  const TeamsPageOptions({
-    Key? key,
-    String? error,
-  }) : super(key: key);
-
-  final String error = "";
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Container(
-            height: 150,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [kotgPurpleLight, kotgPurpleDark]),
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            child: Stack(
-              alignment: Alignment.centerRight,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Opacity(
-                    opacity: 0.2,
-                    child: Lottie.asset('assets/images/teams_icon.json',
-                        fit: BoxFit.cover, height: 80),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => context.push('/dashboard/team/create'),
-                  child: ListTile(
-                      // trailing: Container(
-                      //     child: Icon(
-                      //         Ionicons.people_outline)),
-                      subtitle: Text(
-                          'Games are better together. Form a team with other players by inviting them '),
-                      title: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 15,
-                          bottom: 5,
-                        ),
-                        child: Text(
-                          'Create Team',
-                          style: TextStyle(
-                            fontSize: 25.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Container(
-            height: 150,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [kotgGreenLight, kotgGreenDark]),
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            child: Stack(
-              alignment: Alignment.centerRight,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Opacity(
-                    opacity: 0.2,
-                    child: Lottie.asset('assets/images/join_team_icon.json',
-                        fit: BoxFit.cover, height: 80),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => context.push('/dashboard/team/join'),
-                  child: ListTile(
-                      // trailing: Container(
-                      //     child: Icon(
-                      //   Ionicons.person_add_outline,
-                      //   color: kotgBlack,
-                      // )),
-                      subtitle: Text(
-                          "Join your friend's team by entering an invite code",
-                          style: TextStyle(
-                            color: kotgBlack,
-                          )),
-                      title: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 15,
-                          bottom: 5,
-                        ),
-                        child: Text(
-                          'Join Team',
-                          style: TextStyle(
-                            color: kotgBlack,
-                            fontSize: 25.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -47,10 +47,12 @@ class NamePage extends ConsumerWidget {
         elevation: 0,
         centerTitle: true,
         backgroundColor: kotgBlack,
-        leading: GestureDetector(
-          child: Icon(Ionicons.chevron_back, color: kotgGreen),
-          onTap: () {
-            context.pop();
+        leading: IconButton(
+          icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              context.pop();
+            }
           },
         ),
         title: Text(

@@ -1,4 +1,3 @@
-import 'package:kotgltd/features/events/model/kotgEvents.dart';
 import 'package:kotgltd/features/events/model/kotgGameDataAttributes.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 part 'kotgGame.g.dart';

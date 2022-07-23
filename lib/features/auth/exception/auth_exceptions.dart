@@ -12,6 +12,20 @@ class NoProfileException implements Exception {
   }
 }
 
+class SelectGenderException implements Exception {
+  ///This Exception is thrown when there is an invalid Input Entered in the DB
+  late String _message;
+
+  SelectGenderException([String message = 'Please Select Gender']) {
+    _message = message;
+  }
+
+  @override
+  String toString() {
+    return _message;
+  }
+}
+
 class NoConnectionException implements Exception {
   ///This Exception is thrown when there is an invalid Input Entered in the DB
   late String _message;

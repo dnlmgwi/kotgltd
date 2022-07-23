@@ -10,7 +10,7 @@ import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 
 // import 'package:supabase/supabase.dart';
-enum AuthState { isLoggedIn, isNotLoggedIn, isReturning }
+enum AuthState { isLoggedIn, isNotLoggedIn }
 
 class AuthStateNotifier extends ChangeNotifier {
   final AuthRepository _authRepository;

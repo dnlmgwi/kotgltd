@@ -1,11 +1,11 @@
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
-import 'package:get_phone_number/get_phone_number.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ProfilePage extends StatelessWidget {
@@ -19,9 +19,9 @@ class ProfilePage extends StatelessWidget {
           elevation: 0,
           centerTitle: true,
           backgroundColor: kotgBlack,
-          leading: GestureDetector(
-            child: Icon(Ionicons.chevron_back, color: kotgGreen),
-            onTap: () {
+          leading: IconButton(
+            icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+            onPressed: () {
               context.pop();
             },
           ),
@@ -47,22 +47,133 @@ class ProfilePage extends StatelessWidget {
                       final _profile = ref.watch(profileProvider);
 
                       return _profile.map(
-                          loading: (loading) => Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    CircularProgressIndicator(),
-                                    Text(
-                                      'Please wait...',
+                          loading: (loading) => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, top: 18, bottom: 15),
+                                    child: ListTile(
+                                      leading: Skeleton(
+                                        height: 30,
+                                        width: 30,
+                                        style: SkeletonStyle.circle,
+                                      ),
+                                      title: Skeleton(
+                                        height: 15,
+                                        width: 15,
+                                        style: SkeletonStyle.text,
+                                      ),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    // leading: Icon(
+                                    //   Ionicons.medal_outline,
+                                    //   size: 40,
+                                    // ),
+                                    title: Text('Joined'),
+                                    subtitle: Skeleton(
+                                      height: 15,
+                                      width: 35,
+                                      style: SkeletonStyle.text,
+                                    ),
+                                  ),
+                                  Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, top: 18, bottom: 15),
+                                    child: Text(
+                                      'Personal Details',
                                       style: GoogleFonts.sarala(
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 20.sp,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                      'Name',
+                                      style: GoogleFonts.sarala(
+                                        fontWeight: FontWeight.normal,
                                         color: Colors.grey,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                    trailing: Skeleton(
+                                      height: 15,
+                                      width: 65,
+                                      style: SkeletonStyle.text,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                      'Birthday',
+                                      style: GoogleFonts.sarala(
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    trailing: Skeleton(
+                                      height: 15,
+                                      width: 65,
+                                      style: SkeletonStyle.text,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                      'Gender',
+                                      style: GoogleFonts.sarala(
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    trailing: Skeleton(
+                                      height: 15,
+                                      width: 65,
+                                      style: SkeletonStyle.text,
+                                    ),
+                                  ),
+                                  Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, top: 18, bottom: 15),
+                                    child: Text(
+                                      'Contact Details',
+                                      style: GoogleFonts.sarala(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    enabled: false,
+                                    title: Text(
+                                      'Email',
+                                      style: GoogleFonts.sarala(
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    trailing: Skeleton(
+                                      height: 15,
+                                      width: 65,
+                                      style: SkeletonStyle.text,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title: Text(
+                                      'Phone Number',
+                                      style: GoogleFonts.sarala(
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    trailing: Skeleton(
+                                      height: 15,
+                                      width: 65,
+                                      style: SkeletonStyle.text,
+                                    ),
+                                  ),
+                                ],
                               ),
                           data: (data) {
                             bool enableNameField({
@@ -96,23 +207,22 @@ class ProfilePage extends StatelessWidget {
                                   .isNotEmpty;
                             }
 
-                            final _phoneNumber =
-                                ref.watch(phoneNumberProvider.state);
+                            // final _phoneNumber =
+                            //     ref.watch(phoneNumberProvider.state);
 
-                            void updatePhoneNumber(
-                                BuildContext context, PhoneNumber phoneNumber) {
-                              ref.read(phoneNumberProvider.state).state =
-                                  phoneNumber;
-                            }
+                            // void updatePhoneNumber( PhoneNumber phoneNumber) {
+                            //   ref.read(phoneNumberProvider.state).state =
+                            //       phoneNumber;
+                            // }
 
-                            autofill() async {
-                              String phoneNumber = await GetPhoneNumber().get();
-                              updatePhoneNumber(
-                                  context,
-                                  PhoneNumber(
-                                      isoCode: IsoCode.MW,
-                                      nsn: phoneNumber.split('+265')[1]));
-                            }
+                            // autofill() async {
+                            //   String phoneNumber = await GetPhoneNumber().get();
+                            //   updatePhoneNumber(
+                            //       context,
+                            //       PhoneNumber(
+                            //           isoCode: IsoCode.MW,
+                            //           nsn: phoneNumber.split('+265')[1]));
+                            // }
 
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,7 +353,7 @@ class ProfilePage extends StatelessWidget {
                                     ),
                                   ),
                                   onTap: () async {
-                                    await autofill();
+                                    // await autofill();
                                     context.push(
                                         '/dashboard/profile/phoneNumber?phoneNumber=${data.value.profileAttributes.phoneNumber}');
                                   },

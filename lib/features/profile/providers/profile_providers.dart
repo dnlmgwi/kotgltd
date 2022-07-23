@@ -59,7 +59,7 @@ var dateOfBirthFinalProvider = StateProvider.family<String, DateTime?>(
   },
 );
 
-var profileProvider = FutureProvider<Profile>((ref) async {
+var profileProvider = FutureProvider.autoDispose<Profile>((ref) async {
   final profileClient = ref.read(profileRepoProvider);
   return profileClient.getProfile();
 });

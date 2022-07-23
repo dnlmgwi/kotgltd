@@ -46,9 +46,9 @@ class PaymentPage extends ConsumerWidget {
         elevation: 0,
         centerTitle: true,
         backgroundColor: kotgBlack,
-        leading: GestureDetector(
-          child: Icon(Ionicons.chevron_back, color: kotgGreen),
-          onTap: () {
+        leading: IconButton(
+          icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+          onPressed: () {
             context.pop();
           },
         ),
@@ -333,49 +333,39 @@ class PaymentPage extends ConsumerWidget {
                       height: 100,
                     ),
                     ElevatedButton(
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        enableFeedback: true,
-                        primary: kotgBlack,
-                        backgroundColor: kotgGreen,
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          context.loaderOverlay.show();
-                          _repo
-                              .ticketPay(
-                            reference: ticketRef,
-                            phoneNumber: _phoneNumber,
-                          )
-                              .then((value) {
-                            context.push('/payment-approval');
-                            context.loaderOverlay.hide();
-                          }).catchError((error, stackTrace) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  error.toString(),
-                                ),
-                              ),
-                            );
-                            context.loaderOverlay.hide();
-                          });
-                        }
-                      },
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            "Pay",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                        style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
+                            enableFeedback: true,
+                            primary: kotgBlack,
+                            backgroundColor: kotgGreen),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            context.loaderOverlay.show();
+                            _repo
+                                .ticketPay(
+                                    reference: ticketRef,
+                                    phoneNumber: _phoneNumber)
+                                .then((value) {
+                              context.push('/payment-approval');
+                              context.loaderOverlay.hide();
+                            }).catchError((error, stackTrace) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(error.toString()),
+                              ));
+                              context.loaderOverlay.hide();
+                            });
+                          }
+                        },
+                        child: Center(
+                          child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text("Pay",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                        ))
                   ],
                 );
               }),

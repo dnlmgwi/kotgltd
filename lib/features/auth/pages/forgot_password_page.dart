@@ -34,9 +34,9 @@ class ForgotPasswordPage extends ConsumerWidget {
           elevation: 0,
           centerTitle: true,
           backgroundColor: kotgBlack,
-          leading: GestureDetector(
-            child: Icon(Ionicons.chevron_back, color: kotgGreen),
-            onTap: () {
+          leading: IconButton(
+            icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+            onPressed: () {
               context.pop();
             },
           ),

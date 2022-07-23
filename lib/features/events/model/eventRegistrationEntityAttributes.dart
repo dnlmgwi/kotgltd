@@ -1,4 +1,3 @@
-import 'package:kotgltd/features/auth/model/user.dart';
 import 'package:kotgltd/features/events/model/eventUser.dart';
 import 'package:kotgltd/features/events/model/kotgEventRegData.dart';
 import 'package:kotgltd/packages/dependencies.dart';

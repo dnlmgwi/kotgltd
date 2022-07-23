@@ -42,10 +42,12 @@ class BirthdayPage extends ConsumerWidget {
         elevation: 0,
         centerTitle: true,
         backgroundColor: kotgBlack,
-        leading: GestureDetector(
-          child: Icon(Ionicons.chevron_back, color: kotgGreen),
-          onTap: () {
-            context.pop();
+        leading: IconButton(
+          icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              context.pop();
+            }
           },
         ),
         title: Text(
@@ -74,13 +76,7 @@ class BirthdayPage extends ConsumerWidget {
                         child: SizedBox(
                           height: 150.sp,
                           child: ScrollDatePicker(
-                            style: DatePickerStyle(
-                              textStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
                             selectedDate: _dateofBirth.state,
-                            locale: DatePickerLocale.enUS,
                             onDateTimeChanged: (DateTime value) {
                               updateDateofBirth(context, value);
                             },

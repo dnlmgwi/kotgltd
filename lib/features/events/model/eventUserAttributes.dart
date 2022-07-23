@@ -1,4 +1,3 @@
-import 'package:kotgltd/features/events/model/eventRegistrationEntity.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 part 'eventUserAttributes.g.dart';
 
