@@ -20,27 +20,46 @@ var lastNameProvider = StateProvider.autoDispose<String>((ref) => '');
 
 enum Gender { Man, Woman, None }
 
+enum PaymentOption { Mpamba, AirtelMoney }
+
 var genderProvider =
     StateProvider.autoDispose<String>((ref) => Gender.None.name);
 
-var phoneNumberProvider = StateProvider<PhoneNumber>((ref) => PhoneNumber(
-      isoCode: IsoCode.MW,
-      nsn: '',
-    ));
+var phoneNumberProvider = StateProvider<PhoneNumber>(
+  (ref) => PhoneNumber(
+    isoCode: IsoCode.MW,
+    nsn: '',
+  ),
+);
+
+var paymentPhoneNumberProvider = StateProvider<PhoneNumber>(
+  (ref) => PhoneNumber(
+    isoCode: IsoCode.MW,
+    nsn: '',
+  ),
+);
+
+var paymentOptionProvider = StateProvider<PaymentOption>(
+  (ref) => PaymentOption.Mpamba,
+);
+
+var selectedPaymentOptionProvider = StateProvider<int>((ref) => 0);
 
 var otpProvider = StateProvider<String>((ref) => '');
 
-var dateOfBirthProvider =
-    StateProvider.autoDispose<DateTime>((ref) => DateTime.now());
+var dateOfBirthProvider = StateProvider.autoDispose<DateTime>(
+  (ref) => DateTime.now(),
+);
 
-var dateOfBirthFinalProvider =
-    StateProvider.family<String, DateTime?>((ref, date) {
-  final DateFormat formatter = DateFormat('yyyy-MM-dd');
-  final String formatted = formatter.format(date ?? DateTime.now());
-  return formatted;
-});
+var dateOfBirthFinalProvider = StateProvider.family<String, DateTime?>(
+  (ref, date) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(date ?? DateTime.now());
+    return formatted;
+  },
+);
 
-var profileProvider = FutureProvider<Profile>((ref) async {
+var profileProvider = FutureProvider.autoDispose<Profile>((ref) async {
   final profileClient = ref.read(profileRepoProvider);
   return profileClient.getProfile();
 });

@@ -1,11 +1,14 @@
 // import 'package:supabase/supabase.dart';
 import 'package:graphql/client.dart';
 import 'package:kotgltd/data/enviroment_creds.dart';
+import 'package:kotgltd/features/auth/exception/auth_exceptions.dart';
 import 'package:kotgltd/features/auth/exception/input_exception.dart';
 import 'package:kotgltd/features/auth/interfaces/i_profile_repository.dart';
 // import 'package:kotgltd/features/auth/model/profile.dart';
 import 'package:kotgltd/features/auth/model/token.dart';
+import 'package:kotgltd/features/events/model/eventRegistrations.dart';
 import 'package:kotgltd/features/profile/graphql/profile_queries.dart';
+import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
@@ -70,7 +73,6 @@ class ProfileRepository extends IProfileRepository {
         print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-
     } catch (e) {
       rethrow;
     }
@@ -82,9 +84,9 @@ class ProfileRepository extends IProfileRepository {
   }) async {
     User? _user = user.values.first;
 
-    // if (Gender.rather_not_say.name == gender) {
-    //   gender = "ratherNotSay";
-    // }
+    if (Gender.None.name == gender) {
+      throw SelectGenderException();
+    }
 
     try {
       final MutationOptions options = MutationOptions(
@@ -99,7 +101,8 @@ class ProfileRepository extends IProfileRepository {
         print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-
+    } on SelectGenderException catch (e) {
+      throw e;
     } catch (e) {
       rethrow;
     }
@@ -133,7 +136,6 @@ class ProfileRepository extends IProfileRepository {
         print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-
     } catch (e) {
       rethrow;
     }
@@ -166,7 +168,6 @@ class ProfileRepository extends IProfileRepository {
         print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
-
     } catch (e) {
       rethrow;
     }

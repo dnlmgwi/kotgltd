@@ -8,7 +8,6 @@ final teamNameProvider = StateProvider<String>((ref) => '');
 
 final inviteCodeProvider = StateProvider<String>((ref) => '');
 
-
 enum TeamState { member, captain, none }
 
 final teamStateProvider = StateProvider.autoDispose((ref) => TeamState.none);
@@ -21,6 +20,12 @@ final teamStateFutureProvider = FutureProvider.autoDispose((ref) async {
   } catch (e) {
     rethrow;
   }
+  return team;
+});
+
+final teamFutureProvider = FutureProvider((ref) async {
+  // var teamStateType = ref.watch(teamStateProvider);
+  final team = await ref.watch(teamRepoProvider).getTeams();
   return team;
 });
 

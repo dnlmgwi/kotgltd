@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -17,19 +19,18 @@ class GenderPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final _repo = ref.watch(profileRepoProvider);
-    final _gender = ref.watch(genderProvider.state);
+    final _gender = ref.watch(genderProvider.state).state;
 
-    void updateGender(BuildContext context, String gender) {
-      ref.read(genderProvider.state).state = gender.trim();
+    void updateGender(String gender) {
+      ref.read(genderProvider.state).state = gender;
     }
 
     void updateDetails(
-      BuildContext context,
       String gender,
     ) {
-      if (gender.isEmpty) gender = _gender.state;
+      if (gender.isEmpty) gender = _gender;
 
-      if (gender.isNotEmpty) updateGender(context, gender);
+      if (gender.isNotEmpty) updateGender(gender);
     }
 
     return Scaffold(
@@ -37,10 +38,12 @@ class GenderPage extends ConsumerWidget {
         elevation: 0,
         centerTitle: true,
         backgroundColor: kotgBlack,
-        leading: GestureDetector(
-          child: Icon(Ionicons.chevron_back, color: kotgGreen),
-          onTap: () {
-            context.pop();
+        leading: IconButton(
+          icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              context.pop();
+            }
           },
         ),
         title: Text(
@@ -90,7 +93,7 @@ class GenderPage extends ConsumerWidget {
 
                                 // isExpanded: true,
                                 enableFeedback: true,
-                                value: _gender.state,
+                                value: _gender,
                                 items: Gender.values
                                     .map<DropdownMenuItem<String>>((value) {
                                   return DropdownMenuItem<String>(
@@ -101,7 +104,7 @@ class GenderPage extends ConsumerWidget {
                                   );
                                 }).toList(),
                                 onChanged: (value) {
-                                  updateGender(context, value.toString());
+                                  updateGender(value.toString());
                                 }),
                           ],
                         ),
@@ -119,20 +122,27 @@ class GenderPage extends ConsumerWidget {
                           backgroundColor: kotgGreen,
                         ),
                         onPressed: () {
-                          updateDetails(context, gender);
+                          updateDetails(gender);
                           if (_formKey.currentState!.validate()) {
                             context.loaderOverlay.show();
                             _repo
                                 .updateGender(
-                              gender: _gender.state,
+                              gender: _gender,
                             )
                                 .then((value) {
                               context.loaderOverlay.hide();
                               ref.refresh(profileProvider);
                               context.pop();
                             }).catchError((error, stackTrace) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(error.toString())));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        error.toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      )));
 
                               context.loaderOverlay.hide();
                             });

@@ -35,9 +35,9 @@ class TicketsPage extends ConsumerWidget {
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: kotgBlack,
-                leading: GestureDetector(
-                  child: Icon(Ionicons.chevron_back, color: kotgGreen),
-                  onTap: () {
+                leading: IconButton(
+                  icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+                  onPressed: () {
                     context.pop();
                   },
                 ),

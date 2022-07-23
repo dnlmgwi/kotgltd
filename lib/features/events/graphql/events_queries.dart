@@ -75,6 +75,7 @@ class EventsQueries {
               name
               event_date
               event_time
+              price
               game {
                 data {
                   attributes {

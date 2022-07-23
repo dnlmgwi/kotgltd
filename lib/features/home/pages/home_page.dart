@@ -41,8 +41,7 @@ class HomePage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(
-                left: 15.sp, top: 18.sp, bottom: 25.sp, right: 15.sp),
+            padding: EdgeInsets.only(left: 15.sp, top: 18.sp, right: 15.sp),
             child: Consumer(builder: (context, ref, _) {
               return FadeIn(
                 delay: Duration(milliseconds: 500),
@@ -125,16 +124,22 @@ class HomePage extends ConsumerWidget {
               );
             }),
           ),
-          ListTile(
-            trailing: Icon(Icons.chevron_right),
-            // leading: Icon(Ionicons.ticket_outline),
-            title: Text(
-              'My Tickets',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+          Divider(),
+          InkWell(
+            onTap: () => context.push('/dashboard/tickets'),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: ListTile(
+                trailing: Icon(Icons.chevron_right),
+                // leading: Icon(Ionicons.ticket_outline),
+                title: Text(
+                  'My Tickets',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
-            onTap: () => context.push('/dashboard/tickets'),
           ),
           Padding(
             padding: EdgeInsets.only(

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
@@ -34,7 +36,18 @@ class SignInPage extends ConsumerWidget {
     return LoaderOverlay(
       overlayOpacity: 0.8,
       child: Scaffold(
-        body: Center(
+        body:
+            // Container(
+            // decoration: BoxDecoration(
+            //   image: DecorationImage(
+            //     image: AssetImage("assets/images/controller.jpg"),
+            //     fit: BoxFit.fitHeight,
+            //   ),
+            // ),
+            // child: BackdropFilter(
+            // filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+            // child:
+            Center(
           child: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.only(left: 20.sp, right: 20.sp, top: 80.sp),
@@ -244,6 +257,8 @@ class SignInPage extends ConsumerWidget {
           ),
         ),
       ),
+      // ),
+      // ),
     );
   }
 }

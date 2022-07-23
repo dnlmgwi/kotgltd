@@ -9,9 +9,14 @@ import 'package:kotgltd/pages/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  // await FlutterWindowManager.addFlags(
+  //   FlutterWindowManager.FLAG_SECURE,
+  // );
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: kotgBlack,

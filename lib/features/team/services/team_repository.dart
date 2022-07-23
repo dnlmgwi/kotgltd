@@ -252,11 +252,10 @@ class TeamRepository extends ITeamRepository {
     User? _user = user.getAt(0);
 
     try {
-      final QueryOptions options = QueryOptions(
-          document: gql(TeamQueries.getMyInvites()),
-          variables: {
-            "user": _user!.id,
-          });
+      final QueryOptions options =
+          QueryOptions(document: gql(TeamQueries.getMyInvites()), variables: {
+        "user": _user!.id,
+      });
 
       final QueryResult? result = await graphQLClient().query(options);
 
@@ -346,4 +345,28 @@ class TeamRepository extends ITeamRepository {
   //     rethrow;
   //   }
   // }
+
+  @override
+  Future<List> getTeams() async {
+    try {
+      final QueryOptions options = QueryOptions(
+        document: gql(
+          TeamQueries.getTeams(),
+        ),
+      );
+      final QueryResult? result = await graphQLClient().query(options);
+
+      if (result!.hasException) {
+        throw Exception(result.exception!.graphqlErrors.first.message);
+      }
+
+      var response = result.data!['teams']['data'];
+
+      print(response);
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

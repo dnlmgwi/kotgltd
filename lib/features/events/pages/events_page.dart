@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/bottomSheetHandle.dart';
@@ -20,7 +21,7 @@ class EventsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    Future<void> _refreshEvents(BuildContext context) async {
+    Future<void> _refreshEvents() async {
       return ref.refresh(eventsRepoProvider);
     }
 
@@ -64,8 +65,9 @@ class EventsPage extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
-                        Text(
+                        AutoSizeText(
                           eventName,
+                          maxLines: 2,
                           style: GoogleFonts.sarala(
                             fontWeight: FontWeight.w600,
                             fontSize: 20.sp,
@@ -324,7 +326,6 @@ class EventsPage extends ConsumerWidget {
                             eventID: eventId,
                           )
                               .then((ticket) {
-                            Gaimon.success();
                             Navigator.pop(context);
                             context.loaderOverlay.hide();
 
@@ -345,13 +346,11 @@ class EventsPage extends ConsumerWidget {
                                   SnackBar(
                                       content: Text(error.toString()),
                                       backgroundColor: Colors.red));
-                              Gaimon.error();
+
                               context.loaderOverlay.hide();
                             },
                           );
                         } else {
-                          Gaimon.error();
-
                           context.loaderOverlay.hide();
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content:
@@ -392,10 +391,11 @@ class EventsPage extends ConsumerWidget {
           Divider(),
           Expanded(
             child: RefreshIndicator(
-              onRefresh: () => _refreshEvents(context),
+              onRefresh: () => _refreshEvents(),
               child: Consumer(builder: (context, ref, _) {
                 final _events = ref.watch(eventsProvider);
                 // final _payment = ref.read(walletProvider);
+                
 
                 // print(_events);
                 return _events.map(
@@ -669,24 +669,75 @@ class EventsPage extends ConsumerWidget {
                                                                           )));
                                                             },
                                                             loading: (loading) =>
-                                                                LoadingIndicator(
-                                                                  indicatorType:
-                                                                      Indicator
-                                                                          .ballPulseSync,
-                                                                  colors: [
-                                                                    kotgPurple
-                                                                  ],
-                                                                  strokeWidth:
-                                                                      0.5,
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .black,
-                                                                  pathBackgroundColor:
-                                                                      Colors
-                                                                          .black,
-                                                                ),
-                                                            error: (error) => Text(
-                                                                'Error')); //TODO Add Refresh
+                                                                OutlinedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      // _showTicketBottomSheet(
+                                                                      //     eventId:
+                                                                      //         events.value.kotgEvents.eventData.elementAt(index).id);
+                                                                      // context
+                                                                      //     .loaderOverlay
+                                                                      //     .show();
+                                                                      // ref
+                                                                      //     .watch(
+                                                                      //       deRegisterEventsProvider(
+                                                                      //         int.parse(
+                                                                      //           events.value.kotgEvents.eventData.elementAt(index).id,
+                                                                      //         ),
+                                                                      //       ),
+                                                                      //     )
+                                                                      //     .catchError((error) => Get.snackbar(
+                                                                      //           "Deregistration Error",
+                                                                      //           error.toString(),
+                                                                      //           backgroundColor: Colors.red,
+                                                                      //           snackPosition: SnackPosition.TOP,
+                                                                      //         ))
+                                                                      //     .whenComplete(() {
+                                                                      //   Get.snackbar(
+                                                                      //     "Successfully Deregistered",
+                                                                      //     'Sad To See you leave!',
+                                                                      //     snackPosition: SnackPosition.TOP,
+                                                                      //   );
+                                                                      //   ref.refresh(
+                                                                      //     registeredEventsProvider(
+                                                                      //       int.parse(events.value.kotgEvents.eventData.elementAt(index).id),
+                                                                      //     ),
+                                                                      //   );
+                                                                      // }).whenComplete(() {
+                                                                      //   context.loaderOverlay.hide();
+
+                                                                      //   // ref.refresh(
+                                                                      //   //     eventsProvider);
+                                                                      // });
+                                                                    },
+                                                                    child:
+                                                                        LoadingIndicator(
+                                                                      indicatorType:
+                                                                          Indicator
+                                                                              .ballPulseSync,
+                                                                      colors: [
+                                                                        kotgPurple
+                                                                      ],
+                                                                      strokeWidth:
+                                                                          0.5,
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .black,
+                                                                      pathBackgroundColor:
+                                                                          Colors
+                                                                              .black,
+                                                                    )),
+                                                            error: (error) => OutlinedButton(
+                                                                onPressed: () =>
+                                                                    ref.refresh(registeredEventsProvider(int.parse(events
+                                                                        .value
+                                                                        .kotgEvents
+                                                                        .eventData
+                                                                        .elementAt(
+                                                                            index)
+                                                                        .id))),
+                                                                child: Icon(Ionicons
+                                                                    .refresh))); //TODO Add Refresh
                                                       })),
                                                       subtitle: Wrap(
                                                         children: [

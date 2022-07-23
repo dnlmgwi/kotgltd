@@ -9,10 +9,12 @@ import 'package:kotgltd/features/profile/pages/phoneNumber_page.dart';
 import 'package:kotgltd/features/team/pages/team_page.dart';
 import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
 import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
+import 'package:kotgltd/features/tickets/pages/payment_page.dart';
 import 'package:kotgltd/features/tickets/pages/ticket_page.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/features.dart';
 import 'package:kotgltd/packages/pages.dart';
+import 'package:kotgltd/pages/errorScreen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = GoRouterRefreshStream(
@@ -25,8 +27,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     initialLocation: "/auth",
+    errorPageBuilder: (context, state) => MaterialPage<void>(
+      key: state.pageKey,
+      child: ErrorScreen(state.error!),
+    ),
     debugLogDiagnostics: true,
-
     redirect: (state) {
       // We want to READ the state, here.
       // GoRouter is already aware of state changes through `refreshListenable`
@@ -134,7 +139,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 ]),
             GoRoute(
                 path: 'team',
-                builder: (context, state) => TeamsPage(),
+                builder: (context, state) => SelectGamePage(),
                 routes: [
                   GoRoute(
                     path: 'create',
@@ -160,6 +165,20 @@ final routerProvider = Provider<GoRouter>((ref) {
 
                       return TicketPage(
                         eventId: eventId!,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'payment',
+                    builder: (context, state) {
+                      final ticketRef = state.queryParams['ref'];
+                      final name = state.queryParams['name'];
+                      final price = state.queryParams['price'];
+
+                      return PaymentPage(
+                        ticketRef: ticketRef!,
+                        eventName: name!,
+                        price: price!,
                       );
                     },
                   ),

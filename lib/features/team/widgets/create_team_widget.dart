@@ -27,9 +27,9 @@ class CreateTeamWidget extends ConsumerWidget {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: kotgBlack,
-          leading: GestureDetector(
-            child: Icon(Ionicons.chevron_back, color: kotgPurple),
-            onTap: () {
+          leading: IconButton(
+            icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+            onPressed: () {
               context.pop();
             },
           ),

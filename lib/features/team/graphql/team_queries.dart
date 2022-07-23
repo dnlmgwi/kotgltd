@@ -127,6 +127,26 @@ class TeamQueries {
     }''';
   }
 
+  ///Team Have Joined
+  static String getTeams() {
+    return r'''query {
+      teams{
+        data {
+          id
+          attributes {
+            team_name 
+            invite_code
+          }
+        }
+        meta {
+          pagination {
+            total
+          }
+        }
+      }
+    }''';
+  }
+
   // static String deleteTeamJoinRequests() {
   //   return r'''mutation($request_id: ID!){
   //     deleteTeamJoinRequest(input: {

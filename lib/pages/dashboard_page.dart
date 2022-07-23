@@ -16,7 +16,7 @@ class DashboardPage extends ConsumerWidget {
     EventsPage(),
     // VirtualCardPage(),
     // WalletPage(),
-    // TeamsPage(),
+    // SelectGamePage(),
     SettingsPage()
   ];
 

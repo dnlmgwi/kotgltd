@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kotgltd/features/events/model/kotgEvent.dart';
 import 'package:kotgltd/features/events/services/events_repository.dart';
+import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 
 final eventsRepoProvider = Provider(
@@ -24,8 +25,11 @@ final ticketProvider =
 });
 
 final userPayProvider = FutureProvider.family((ref, String reference) async {
+  var phoneNumber = ref.read(paymentPhoneNumberProvider.state).state;
+
   final eventsClient = ref.watch(eventsRepoProvider);
-  return eventsClient.ticketPay(reference: reference);
+
+  return eventsClient.ticketPay(reference: reference, phoneNumber: phoneNumber);
 });
 
 final registeredEventsProvider =

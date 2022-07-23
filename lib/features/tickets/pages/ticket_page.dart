@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:kotgltd/common/bottomSheetHandle.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/profile/providers/profile_providers.dart';
@@ -14,13 +15,10 @@ class TicketPage extends ConsumerWidget {
     required this.eventId,
   }) : super(key: key);
 
-  final _formKey = GlobalKey<FormState>();
   final String eventId;
 
   @override
   Widget build(BuildContext context, ref) {
-    final _repo = ref.watch(eventsRepoProvider);
-
     Future<void> _refreshTicket() async {
       return ref.refresh(ticketProvider(int.parse(
         eventId,
@@ -35,9 +33,9 @@ class TicketPage extends ConsumerWidget {
             elevation: 0,
             centerTitle: true,
             backgroundColor: kotgBlack,
-            leading: GestureDetector(
-              child: Icon(Ionicons.chevron_back, color: kotgGreen),
-              onTap: () {
+            leading: IconButton(
+              icon: Icon(Ionicons.chevron_back, color: kotgGreen),
+              onPressed: () {
                 context.pop();
               },
             ),
@@ -67,7 +65,7 @@ class TicketPage extends ConsumerWidget {
                         // print(_events);
                         return _events.map(
                             data: (ticket) {
-                              if (ticket.value!.isEmpty) {
+                              if (ticket.value.isEmpty) {
                                 //print('project snapshot data is: ${projectSnap.data}');
                                 return Center(
                                   child: Column(
@@ -112,77 +110,118 @@ class TicketPage extends ConsumerWidget {
                                 );
                               }
 
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  TicketWidget(
-                                    width: 350,
-                                    height: 500,
-                                    isCornerRounded: true,
-                                    padding: EdgeInsets.all(20),
-                                    child: TicketData(
-                                        firstName:
-                                            ticket.value!.first['attributes']
-                                                    ['user']['data']
-                                                ['attributes']['first_name'],
-                                        lastName: ticket.value!.first['attributes']
-                                                ['user']['data']['attributes']
-                                            ['last_name'],
-                                        game: ticket.value!.first['attributes']
-                                                ['event']['data']['attributes']
-                                            ['game']['data']['attributes']['name'],
-                                        reference: ticket.value!.first['attributes']['reference'],
-                                        ticketId: ticket.value!.first['id'],
-                                        eventName: ticket.value!.first['attributes']['event']['data']['attributes']['name'],
-                                        status: ticket.value!.first['attributes']['status'],
-                                        eventDate: '${ticket.value!.first['attributes']['event']['data']['attributes']['event_date']} ${ticket.value!.first['attributes']['event']['data']['attributes']['event_time']}',
-                                        eventTime: '${ticket.value!.first['attributes']['event']['data']['attributes']['event_date']} ${ticket.value!.first['attributes']['event']['data']['attributes']['event_time']}'),
-                                  ),
-                                  SizedBox(
-                                    height: 35,
-                                  ),
-                                  if (ticket.value!.first['attributes']
-                                          ['status'] !=
-                                      "approved")
+                              return SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    TicketWidget(
+                                      width: 350,
+                                      height: 500,
+                                      isCornerRounded: true,
+                                      padding: EdgeInsets.all(20),
+                                      child: TicketData(
+                                          firstName: ticket
+                                              .value
+                                              .first
+                                              .eventAttributes
+                                              .user
+                                              .eventUserData
+                                              .eventUserAttributes
+                                              .firstName!,
+                                          lastName: ticket
+                                              .value
+                                              .first
+                                              .eventAttributes
+                                              .user
+                                              .eventUserData
+                                              .eventUserAttributes
+                                              .lastName!,
+                                          game: ticket
+                                              .value
+                                              .first
+                                              .eventAttributes
+                                              .event
+                                              .eventData
+                                              .eventRegAttributes
+                                              .game!
+                                              .gameData
+                                              .gameAttributes
+                                              .name,
+                                          reference: ticket.value.first
+                                              .eventAttributes.reference,
+                                          ticketId: ticket.value.first.id,
+                                          eventName: ticket
+                                              .value
+                                              .first
+                                              .eventAttributes
+                                              .event
+                                              .eventData
+                                              .eventRegAttributes
+                                              .name,
+                                          status: ticket.value.first
+                                              .eventAttributes.status,
+                                          eventDate:
+                                              '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}',
+                                          eventTime:
+                                              '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}'),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    if (ticket.value.first.eventAttributes
+                                            .status !=
+                                        "approved")
+                                      FadeIn(
+                                        delay: Duration(milliseconds: 500),
+                                        child: ElevatedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            enableFeedback: true,
+                                            primary: kotgBlack,
+                                            backgroundColor: kotgGreen,
+                                          ),
+                                          onPressed: () => context.push(
+                                              '/dashboard/events/payment/?ref=${ticket.value.first.eventAttributes.reference}&name=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.name}&price=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.price.toString()}'),
+                                          child: Center(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: Text(
+                                                "Continue to Payment",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
                                     FadeIn(
-                                      delay: Duration(milliseconds: 500),
-                                      child: ElevatedButton(
+                                      delay: Duration(milliseconds: 600),
+                                      child: OutlinedButton(
                                         style: OutlinedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(5.0),
                                           ),
                                           enableFeedback: true,
-                                          primary: kotgBlack,
-                                          backgroundColor: kotgGreen,
+                                          primary: kotgGreen,
                                         ),
                                         onPressed: () {
-                                          context.loaderOverlay.show();
-
-                                          _repo
-                                              .ticketPay(
-                                                  reference: ticket.value!
-                                                          .first['attributes']
-                                                      ['reference'])
-                                              .then((value) {
-                                            context.loaderOverlay.hide();
-                                            print(value);
-                                            context.push('/payment-approval');
-                                          }).catchError((error, stackTrace) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        error.toString())));
-
-                                            context.loaderOverlay.hide();
-                                          });
+                                          context.pop();
                                         },
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(15.0),
                                             child: Text(
-                                              "Pay Now",
+                                              "Dismiss",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -191,44 +230,17 @@ class TicketPage extends ConsumerWidget {
                                         ),
                                       ),
                                     ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  FadeIn(
-                                    delay: Duration(milliseconds: 600),
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                        ),
-                                        enableFeedback: true,
-                                        primary: kotgGreen,
-                                      ),
-                                      onPressed: () {
-                                        context.pop();
-                                      },
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Text(
-                                            "Dismiss",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               );
                             },
                             error: (error) {
-                              return Column(
-                                children: [
-                                  Text('Network Error'),
-                                ],
+                              return Center(
+                                child: Column(
+                                  children: [
+                                    Text('Network Error'),
+                                  ],
+                                ),
                               );
                             },
                             loading: (loading) =>
