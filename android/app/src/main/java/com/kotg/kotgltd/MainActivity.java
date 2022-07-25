@@ -1,4 +1,4 @@
-package com.kotg.kotgltd;
+package club.kotg.kotgltd;
 
 import io.flutter.embedding.android.FlutterActivity;
 
