@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/components.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
-import 'package:kotgltd/features/tickets/widgets/ticket_page_skeleton.dart';
 import 'package:kotgltd/features/transactions/providers/transactions_providers.dart';
+import 'package:kotgltd/features/transactions/widgets/transactions_page_skeleton.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -331,8 +331,9 @@ class TransactionsPage extends ConsumerWidget {
                                     });
                               }
                               // Otherwise, show something whilst waiting for initialization to complete
-                              return TicketPageSkeletonWidget(
-                                  scrollController: scrollController);
+                              return TransactionPageSkeletonWidget(
+                                scrollController: scrollController,
+                              );
                             });
                       }),
                     ),
