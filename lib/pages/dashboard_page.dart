@@ -2,7 +2,6 @@ import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
 import 'package:kotgltd/features/settings/settings_page.dart';
-import 'package:kotgltd/features/team/pages/team_page.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/features/events/pages/events_page.dart';
 import 'package:kotgltd/features/home/pages/home_page.dart';
