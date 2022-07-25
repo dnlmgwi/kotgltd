@@ -4,7 +4,6 @@ import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
-import 'package:phone_form_field/phone_form_field.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -71,11 +70,21 @@ class ProfilePage extends StatelessWidget {
                                     //   Ionicons.medal_outline,
                                     //   size: 40,
                                     // ),
-                                    title: Text('Joined'),
-                                    subtitle: Skeleton(
-                                      height: 15,
-                                      width: 35,
-                                      style: SkeletonStyle.text,
+                                    title: Text(
+                                      'Member Since',
+                                      style: GoogleFonts.sarala(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, top: 5),
+                                      child: Skeleton(
+                                        height: 15,
+                                        width: 15,
+                                        style: SkeletonStyle.text,
+                                      ),
                                     ),
                                   ),
                                   Divider(),
@@ -250,7 +259,7 @@ class ProfilePage extends StatelessWidget {
                                   //   Ionicons.medal_outline,
                                   //   size: 40,
                                   // ),
-                                  title: Text('Joined'),
+                                  title: Text('Member Since'),
                                   subtitle: Text(timeago.format(
                                       data.value.profileAttributes.createdAt)),
                                 ),

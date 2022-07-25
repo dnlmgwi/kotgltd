@@ -84,7 +84,7 @@ class TicketsPage extends ConsumerWidget {
                                             padding: const EdgeInsets.only(
                                                 right: 35, left: 35, bottom: 5),
                                             child: Text(
-                                                'find our events, on the events tab.',
+                                                'Find our events, on the events tab.',
                                                 style: GoogleFonts.sarala(
                                                     fontWeight:
                                                         FontWeight.normal,
@@ -182,7 +182,7 @@ class TicketsPage extends ConsumerWidget {
                                                           child: Text(
                                                               'There is a problem with this ticket, Contact support for help using the ticket reference.',
                                                               style: GoogleFonts.sarala(
-                                                                  fontWeight: 
+                                                                  fontWeight:
                                                                       FontWeight
                                                                           .normal,
                                                                   fontSize:

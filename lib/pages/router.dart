@@ -11,6 +11,7 @@ import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
 import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
 import 'package:kotgltd/features/tickets/pages/payment_page.dart';
 import 'package:kotgltd/features/tickets/pages/ticket_page.dart';
+import 'package:kotgltd/features/transactions/pages/transactions_page.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/features.dart';
 import 'package:kotgltd/packages/pages.dart';
@@ -95,6 +96,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           path: '/dashboard',
           builder: (context, state) => DashboardPage(),
           routes: [
+            GoRoute(
+              path: 'transactions',
+              builder: (context, state) => TransactionsPage(),
+            ),
             GoRoute(
                 path: 'profile',
                 builder: (context, state) => ProfilePage(),

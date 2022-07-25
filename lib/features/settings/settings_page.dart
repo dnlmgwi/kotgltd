@@ -202,10 +202,9 @@ class SettingsPage extends ConsumerWidget {
                     ListTile(
                       leading: Icon(Ionicons.receipt_outline),
                       title: Text('Transactions'),
-                      subtitle: Text('Coming Soon'),
+                      subtitle: Text('View your transaction history'),
                       enableFeedback: true,
-                      enabled: false,
-                      onTap: () {},
+                      onTap: () => context.push('/dashboard/transactions'),
                     ),
                     Divider(),
                     Padding(
