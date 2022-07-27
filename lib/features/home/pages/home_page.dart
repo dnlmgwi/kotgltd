@@ -156,20 +156,18 @@ class HomePage extends ConsumerWidget {
             }),
           ),
           Divider(),
-          InkWell(
-            onTap: () => context.push('/dashboard/tickets'),
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Card(
-                child: ListTile(
-                  leading: Icon(Ionicons.ticket_outline, color: Colors.white70),
-                  trailing: Icon(Icons.chevron_right),
-                  // leading: Icon(Ionicons.ticket_outline),
-                  title: Text(
-                    'My Tickets',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: Card(
+              child: ListTile(
+                onTap: () => context.push('/dashboard/tickets'),
+                leading: Icon(Ionicons.ticket_outline, color: Colors.white70),
+                trailing: Icon(Icons.chevron_right),
+                // leading: Icon(Ionicons.ticket_outline),
+                title: Text(
+                  'My Tickets',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -193,13 +191,13 @@ class HomePage extends ConsumerWidget {
                         color: Colors.grey,
                         fontSize: 12.sp),
                   ),
-                  Text(
-                    "See More",
-                    style: GoogleFonts.sarala(
-                        fontWeight: FontWeight.w600,
-                        color: kotgGreen,
-                        fontSize: 8.sp),
-                  ),
+                  // Text(
+                  //   "See More",
+                  //   style: GoogleFonts.sarala(
+                  //       fontWeight: FontWeight.w600,
+                  //       color: kotgGreen,
+                  //       fontSize: 8.sp),
+                  // ),
                 ],
               ),
             ),
@@ -219,10 +217,10 @@ class HomePage extends ConsumerWidget {
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: GameCard(
-                            url: data[index]['url']!,
-                            name: data[index]['name']!,
-                          ),
+                          child: Skeleton(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              style: SkeletonStyle.box),
                         );
                       })),
             ),
@@ -233,19 +231,19 @@ class HomePage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Stories",
+                    "Watch",
                     style: GoogleFonts.sarala(
                         fontWeight: FontWeight.w600,
                         color: Colors.grey,
                         fontSize: 12.sp),
                   ),
-                  Text(
-                    "See More",
-                    style: GoogleFonts.sarala(
-                        fontWeight: FontWeight.w600,
-                        color: kotgGreen,
-                        fontSize: 8.sp),
-                  ),
+                  // Text(
+                  //   "See More",
+                  //   style: GoogleFonts.sarala(
+                  //       fontWeight: FontWeight.w600,
+                  //       color: kotgGreen,
+                  //       fontSize: 8.sp),
+                  // ),
                 ],
               ),
             ),
@@ -273,6 +271,55 @@ class HomePage extends ConsumerWidget {
                       );
                     }),
               ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: 15.sp,
+                right: 15.sp,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Listen",
+                    style: GoogleFonts.sarala(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey,
+                        fontSize: 12.sp),
+                  ),
+                  // Text(
+                  //   "See More",
+                  //   style: GoogleFonts.sarala(
+                  //       fontWeight: FontWeight.w600,
+                  //       color: kotgGreen,
+                  //       fontSize: 8.sp),
+                  // ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Center(
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      physics: BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
+                      ),
+                      padding: EdgeInsets.only(
+                        left: 15.sp,
+                        top: 18,
+                      ),
+                      itemCount: data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Skeleton(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              style: SkeletonStyle.box),
+                        );
+                      })),
             ),
           ]))
         ],
