@@ -9,6 +9,14 @@ class TransactionQueries {
                   createdAt
                   result_desc
                   conversation_id
+                  event {
+                    data {
+                      id
+                      attributes {
+                        price
+                      }
+                    }
+                  }
                 }
               }
             }

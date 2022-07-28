@@ -170,8 +170,11 @@ class TicketPage extends ConsumerWidget {
                                       height: 15,
                                     ),
                                     if (ticket.value.first.eventAttributes
-                                            .status !=
-                                        "approved")
+                                                .status !=
+                                            "approved" &&
+                                        ticket.value.first.eventAttributes
+                                                .status !=
+                                            "received")
                                       FadeIn(
                                         delay: Duration(milliseconds: 500),
                                         child: ElevatedButton(

@@ -350,7 +350,7 @@ class PaymentPage extends ConsumerWidget {
                                 .then((value) {
                               context.push('/payment-approval');
                               context.loaderOverlay.hide();
-                            }).catchError((error, stackTrace) {
+                            }).onError((error, stackTrace) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 content: Text(error.toString()),

@@ -264,7 +264,14 @@ class TransactionsPage extends ConsumerWidget {
                                                                         .bold),
                                                       ),
                                                       Text(
-                                                        '100',
+                                                        payment[index]['attributes']
+                                                                            [
+                                                                            'event']
+                                                                        ['data']
+                                                                    [
+                                                                    'attributes']
+                                                                ['price']
+                                                            .toString(),
                                                         style:
                                                             GoogleFonts.oxygen(
                                                                 fontSize: 17.sp,

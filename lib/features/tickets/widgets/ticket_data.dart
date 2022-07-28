@@ -9,18 +9,18 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TicketData extends StatelessWidget {
-  const TicketData({
-    Key? key,
-    required this.ticketId,
-    required this.eventName,
-    required this.status,
-    required this.eventDate,
-    required this.eventTime,
-    required this.game,
-    required this.reference,
-    required this.firstName,
-    required this. lastName
-  }) : super(key: key);
+  const TicketData(
+      {Key? key,
+      required this.ticketId,
+      required this.eventName,
+      required this.status,
+      required this.eventDate,
+      required this.eventTime,
+      required this.game,
+      required this.reference,
+      required this.firstName,
+      required this.lastName})
+      : super(key: key);
 
   final String ticketId,
       eventName,
@@ -28,7 +28,9 @@ class TicketData extends StatelessWidget {
       eventTime,
       eventDate,
       game,
-      reference, firstName, lastName;
+      reference,
+      firstName,
+      lastName;
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +125,21 @@ class TicketData extends StatelessWidget {
               ),
             ),
           );
+        case "received":
+          return Container(
+            width: 120.0,
+            height: 25.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30.0),
+              border: Border.all(width: 1.0, color: Colors.orange),
+            ),
+            child: Center(
+              child: Text(
+                status,
+                style: TextStyle(color: Colors.orange),
+              ),
+            ),
+          );
         case "processing":
           return Container(
             width: 120.0,
@@ -192,7 +209,7 @@ class TicketData extends StatelessWidget {
               ticketDetailsWidget(
                 'Name',
                 '${firstName} ${lastName}',
-            ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0, right: 52.0),
                 child: ticketDetailsWidget('Ticket Ref', reference,

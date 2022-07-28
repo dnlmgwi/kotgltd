@@ -231,7 +231,7 @@ class HomePage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Watch",
+                    "Stories",
                     style: GoogleFonts.sarala(
                         fontWeight: FontWeight.w600,
                         color: Colors.grey,
@@ -271,55 +271,6 @@ class HomePage extends ConsumerWidget {
                       );
                     }),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 15.sp,
-                right: 15.sp,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Listen",
-                    style: GoogleFonts.sarala(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey,
-                        fontSize: 12.sp),
-                  ),
-                  // Text(
-                  //   "See More",
-                  //   style: GoogleFonts.sarala(
-                  //       fontWeight: FontWeight.w600,
-                  //       color: kotgGreen,
-                  //       fontSize: 8.sp),
-                  // ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      physics: BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics(),
-                      ),
-                      padding: EdgeInsets.only(
-                        left: 15.sp,
-                        top: 18,
-                      ),
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Skeleton(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              style: SkeletonStyle.box),
-                        );
-                      })),
             ),
           ]))
         ],

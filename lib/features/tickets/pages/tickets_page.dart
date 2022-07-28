@@ -298,6 +298,31 @@ class TicketsPage extends ConsumerWidget {
                                                               ),
                                                             if (tickets[index][
                                                                     'status'] ==
+                                                                "recieved")
+                                                              Container(
+                                                                decoration: BoxDecoration(
+                                                                    color:
+                                                                        Colors.orange,
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(10))),
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          10.0),
+                                                                  // child: Text(
+                                                                  //   '${tickets[index]['status']}',
+                                                                  //   style: TextStyle(
+                                                                  //       fontSize: 10.sp,
+                                                                  //       color: Colors
+                                                                  //           .black),
+                                                                  // ),
+                                                                ),
+                                                              ),
+                                                            
+                                                            if (tickets[index][
+                                                                    'status'] ==
                                                                 "processing")
                                                               Container(
                                                                 decoration: BoxDecoration(
@@ -469,6 +494,15 @@ class TicketsPage extends ConsumerWidget {
                                           case "approved":
                                             return Container(
                                               color: kotgGreen,
+                                              child: Lottie.asset(
+                                                'assets/images/check-green.json',
+                                                height: 110.sp,
+                                                repeat: false,
+                                              ),
+                                            );
+                                            case "received":
+                                            return Container(
+                                              color: Colors.orange,
                                               child: Lottie.asset(
                                                 'assets/images/check-green.json',
                                                 height: 110.sp,
