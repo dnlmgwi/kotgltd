@@ -578,7 +578,7 @@ class TeamsPageOptions extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => context.push('/dashboard/team/create'),
+                  onTap: () => context.push('/team/create'),
                   child: ListTile(
                       // trailing: Container(
                       //     child: Icon(
@@ -626,7 +626,7 @@ class TeamsPageOptions extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => context.push('/dashboard/team/join'),
+                  onTap: () => context.push('/team/join'),
                   child: ListTile(
                       // trailing: Container(
                       //     child: Icon(

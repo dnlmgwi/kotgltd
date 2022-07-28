@@ -41,7 +41,6 @@ class NetworkDetectorNotifier extends ChangeNotifier {
           break;
         case ConnectivityResult.none:
           _networkState = NetworkStatus.isOff;
-
           notifyListeners();
           break;
         default:

@@ -117,6 +117,7 @@ class TicketPage extends ConsumerWidget {
                                     TicketWidget(
                                       width: 350,
                                       height: 500,
+                                      color: Colors.white,
                                       isCornerRounded: true,
                                       padding: EdgeInsets.all(20),
                                       child: TicketData(
@@ -187,7 +188,7 @@ class TicketPage extends ConsumerWidget {
                                             backgroundColor: kotgGreen,
                                           ),
                                           onPressed: () => context.push(
-                                              '/dashboard/events/payment/?ref=${ticket.value.first.eventAttributes.reference}&name=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.name}&price=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.price.toString()}'),
+                                              '/events/payment/?ref=${ticket.value.first.eventAttributes.reference}&name=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.name}&price=${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.price.toString()}'),
                                           child: Center(
                                             child: Padding(
                                               padding:

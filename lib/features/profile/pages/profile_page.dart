@@ -290,7 +290,7 @@ class ProfilePage extends StatelessWidget {
                                         data.value.profileAttributes.lastName,
                                   ),
                                   onTap: () => context.push(
-                                      '/dashboard/profile/name?firstName=${data.value.profileAttributes.firstName}&lastName=${data.value.profileAttributes.lastName}'),
+                                      '/profile/name?firstName=${data.value.profileAttributes.firstName}&lastName=${data.value.profileAttributes.lastName}'),
                                   trailing: Text(
                                       '${data.value.profileAttributes.firstName} ${data.value.profileAttributes.lastName}'),
                                 ),
@@ -306,7 +306,7 @@ class ProfilePage extends StatelessWidget {
                                     ),
                                   ),
                                   onTap: () => context.push(
-                                      '/dashboard/profile/birthday?dob=${data.value.profileAttributes.dateOfBirth}'),
+                                      '/profile/birthday?dob=${data.value.profileAttributes.dateOfBirth}'),
                                   trailing: Text(
                                       data.value.profileAttributes.dateOfBirth),
                                 ),
@@ -322,7 +322,7 @@ class ProfilePage extends StatelessWidget {
                                     ),
                                   ),
                                   onTap: () => context.push(
-                                      '/dashboard/profile/gender?gender=${data.value.profileAttributes.gender}'),
+                                      '/profile/gender?gender=${data.value.profileAttributes.gender}'),
                                   trailing:
                                       Text(data.value.profileAttributes.gender),
                                 ),
@@ -364,7 +364,7 @@ class ProfilePage extends StatelessWidget {
                                   onTap: () async {
                                     // await autofill();
                                     context.push(
-                                        '/dashboard/profile/phoneNumber?phoneNumber=${data.value.profileAttributes.phoneNumber}');
+                                        '/profile/phoneNumber?phoneNumber=${data.value.profileAttributes.phoneNumber}');
                                   },
                                   trailing: Text(
                                       data.value.profileAttributes.phoneNumber),

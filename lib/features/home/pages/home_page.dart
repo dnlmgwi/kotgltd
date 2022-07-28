@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
@@ -7,12 +7,13 @@ import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/Tickets/pages/tickets_page.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/home/page_provider.dart';
-import 'package:kotgltd/features/home/widgets/game_card.dart';
+import 'package:kotgltd/features/stories/providers/stories_providers.dart';
 // import 'package:kotgltd/features/reminder/providers/reminder_providers.dart';
 import 'package:kotgltd/packages/dependencies.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 // import 'package:share_plus/share_plus.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:html2md/html2md.dart' as html2md;
 
 class HomePage extends ConsumerWidget {
   HomePage({Key? key}) : super(key: key);
@@ -24,8 +25,12 @@ class HomePage extends ConsumerWidget {
     // final _page = ref.watch(pageProvider.state);
     // final _reminder = ref.watch(addRemiderProvider);
 
-    Future<void> _refreshFeed(BuildContext context) async {
+    Future<void> _refreshFeed() async {
       return ref.refresh(eventsRepoProvider);
+    }
+
+    Future<void> _refreshPosts() async {
+      return ref.refresh(storiesRepoProvider);
     }
 
     void _showTicketsPageBottomSheet() async {
@@ -113,7 +118,7 @@ class HomePage extends ConsumerWidget {
                             ),
                           ),
                           trailing: Icon(Ionicons.create_outline),
-                          onTap: () => context.push('/dashboard/profile'),
+                          onTap: () => context.push('/profile'),
                           title: Text(
                             'Welcome, ${data.value!.username}',
                             style: GoogleFonts.sarala(
@@ -160,7 +165,7 @@ class HomePage extends ConsumerWidget {
             padding: const EdgeInsets.all(5),
             child: Card(
               child: ListTile(
-                onTap: () => context.push('/dashboard/tickets'),
+                onTap: () => context.push('/tickets'),
                 leading: Icon(Ionicons.ticket_outline, color: Colors.white70),
                 trailing: Icon(Icons.chevron_right),
                 // leading: Icon(Ionicons.ticket_outline),
@@ -174,105 +179,272 @@ class HomePage extends ConsumerWidget {
             ),
           ),
           Expanded(
-              child: Column(children: [
-            Padding(
-              padding: EdgeInsets.only(
-                left: 15.sp,
-                right: 15.sp,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Discover",
-                    style: GoogleFonts.sarala(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey,
-                        fontSize: 12.sp),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 15.sp,
+                    right: 15.sp,
                   ),
-                  // Text(
-                  //   "See More",
-                  //   style: GoogleFonts.sarala(
-                  //       fontWeight: FontWeight.w600,
-                  //       color: kotgGreen,
-                  //       fontSize: 8.sp),
-                  // ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      physics: BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Discover",
+                        style: GoogleFonts.sarala(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey,
+                            fontSize: 12.sp),
                       ),
-                      padding: EdgeInsets.only(
-                        left: 15.sp,
-                        top: 18,
-                      ),
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Skeleton(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              style: SkeletonStyle.box),
-                        );
-                      })),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 15.sp, right: 15.sp, top: 10.sp),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Stories",
-                    style: GoogleFonts.sarala(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey,
-                        fontSize: 12.sp),
+                      // Text(
+                      //   "See More",
+                      //   style: GoogleFonts.sarala(
+                      //       fontWeight: FontWeight.w600,
+                      //       color: kotgGreen,
+                      //       fontSize: 8.sp),
+                      // ),
+                    ],
                   ),
-                  // Text(
-                  //   "See More",
-                  //   style: GoogleFonts.sarala(
-                  //       fontWeight: FontWeight.w600,
-                  //       color: kotgGreen,
-                  //       fontSize: 8.sp),
-                  // ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 5,
-              child: Container(
-                height: 200,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics(),
-                    ),
-                    padding: EdgeInsets.only(
-                      left: 15.sp,
-                      top: 18,
-                    ),
-                    itemCount: 5,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Skeleton(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          style: SkeletonStyle.box,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Center(
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics(),
+                          ),
+                          padding: EdgeInsets.only(
+                            left: 15.sp,
+                            top: 18,
+                          ),
+                          itemCount: data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Skeleton(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  style: SkeletonStyle.box),
+                            );
+                          })),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(left: 15.sp, right: 15.sp, top: 10.sp),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Stories",
+                        style: GoogleFonts.sarala(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey,
+                            fontSize: 12.sp),
+                      ),
+                      TextButton(
+                        child: Text(
+                          "See More",
+                          style: GoogleFonts.sarala(
+                              fontWeight: FontWeight.w600,
+                              color: kotgGreen,
+                              fontSize: 8.sp),
                         ),
-                      );
-                    }),
-              ),
+                        onPressed: () => context.push('/stories'),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    height: 200,
+                    child: RefreshIndicator(
+                      onRefresh: () => _refreshPosts(),
+                      child: Consumer(builder: (context, ref, _) {
+                        final _eventsRepo = ref.watch(postsProvider);
+
+                        return _eventsRepo.map(
+                            error: (error) {
+                              return Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 15.sp,
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: 35.sp,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 35, left: 35, bottom: 5),
+                                          child: Text(error.toString(),
+                                              style: GoogleFonts.sarala(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 10.sp,
+                                                  color: Colors.grey)),
+                                        ),
+                                      ],
+                                    ),
+                                  ));
+                            },
+                            data: (posts) {
+                              if (posts.value.isEmpty) {
+                                //print('project snapshot data is: ${projectSnap.data}');
+                                return Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 35.sp, left: 15.sp, bottom: 35.sp),
+                                    child: Center(
+                                      child: Container(
+                                        width: 50.w,
+                                        child: ElevatedButton.icon(
+                                          style: OutlinedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            enableFeedback: true,
+                                            primary: kotgBlack,
+                                            backgroundColor: kotgGreen,
+                                          ),
+                                          icon: Icon(Ionicons.ticket_outline),
+                                          label: Text(
+                                            'Try Again',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            _refreshPosts();
+                                          },
+                                        ),
+                                      ),
+                                    ));
+                              }
+
+                              return ListView.builder(
+                                  itemCount: posts.value.length,
+                                  controller: scrollController,
+                                  scrollDirection: Axis.vertical,
+                                  physics: BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics(),
+                                  ),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return FadeIn(
+                                        delay: Duration(milliseconds: 500),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.sp, right: 15.sp),
+                                          child: Card(
+                                            elevation: 1,
+                                            child: InkWell(
+                                              onTap: () => context.push(
+                                                  '/stories/post?id=${posts.value[index]['id']}&slug=${posts.value[index]['title']['rendered']}'),
+                                              highlightColor: kotgBlack,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                                child: ListTile(
+                                                    subtitle: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        AutoSizeText(
+                                                            MarkdownBody(
+                                                              shrinkWrap: true,
+                                                              data: Markdown(
+                                                                      data: html2md.convert(posts.value[index]
+                                                                              [
+                                                                              'excerpt']
+                                                                          [
+                                                                          'rendered']))
+                                                                  .data,
+                                                            ).data,
+                                                            maxLines: 3,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            style: GoogleFonts.sarala(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                fontSize: 10.sp,
+                                                                color: Colors
+                                                                    .grey)),
+                                                        Text(
+                                                            timeago.format(
+                                                                DateTime.parse(
+                                                                    posts.value[
+                                                                            index]
+                                                                        [
+                                                                        'date'])),
+                                                            style: GoogleFonts.sarala(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                fontSize: 10.sp,
+                                                                color: Colors
+                                                                    .grey))
+                                                      ],
+                                                    ),
+                                                    title: AutoSizeText(
+                                                        posts.value[index]
+                                                                ['title']
+                                                            ['rendered'],
+                                                        wrapWords: true,
+                                                        overflow:
+                                                            TextOverflow.fade,
+                                                        style:
+                                                            GoogleFonts.sarala(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 10.sp,
+                                                          color: Colors.white,
+                                                        ))),
+                                              ),
+                                            ),
+                                          ),
+                                        ));
+                                  });
+                            },
+                            loading: ((loading) =>
+                                // Otherwise, show something whilst waiting for initialization to complete
+                                Container(
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      physics: BouncingScrollPhysics(
+                                        parent: AlwaysScrollableScrollPhysics(),
+                                      ),
+                                      padding: EdgeInsets.only(
+                                          left: 15.sp, top: 18, right: 15.sp),
+                                      itemCount: 5,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Skeleton(
+                                            height: 150.sp,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)),
+                                            style: SkeletonStyle.box,
+                                          ),
+                                        );
+                                      }),
+                                )));
+                      }),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ]))
+          )
         ],
       ),
     ));

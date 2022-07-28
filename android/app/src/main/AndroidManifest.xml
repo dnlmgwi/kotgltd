@@ -40,8 +40,8 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="http" />
             <data android:scheme="https" />
-            <data android:host="www.kotg.club" />
-            <data android:host="www.kotg.club"/>
+            <data android:host="*.kotg.club" />
+            <data android:host="*.kotg.club"/>
             </intent-filter>
             </activity>
         <!-- Don't delete the meta-data below.

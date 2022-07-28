@@ -254,6 +254,7 @@ class EventsPage extends ConsumerWidget {
                     width: 350,
                     height: 500,
                     isCornerRounded: true,
+                    color: Colors.white,
                     padding: EdgeInsets.all(20),
                     child: Text(eventId),
                   ),
@@ -330,7 +331,7 @@ class EventsPage extends ConsumerWidget {
                             Navigator.pop(context);
                             context.loaderOverlay.hide();
 
-                            context.push('/dashboard/events/ticket/${eventId}');
+                            context.push('/events/ticket/${eventId}');
 
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text("Sucessfully Reserved")));
@@ -342,7 +343,7 @@ class EventsPage extends ConsumerWidget {
                             ));
                           }).onError(
                             (error, stackTrace) {
-                              context.push('/dashboard/profile');
+                              context.push('/profile');
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content: Text(error.toString()),
@@ -621,7 +622,7 @@ class EventsPage extends ConsumerWidget {
                                                                       onPressed:
                                                                           () {
                                                                         context.push(
-                                                                            '/dashboard/events/ticket/${events.value.kotgEvents.eventData.elementAt(index).id}');
+                                                                            '/events/ticket/${events.value.kotgEvents.eventData.elementAt(index).id}');
                                                                         // _showTicketBottomSheet(
                                                                         //     eventId:
                                                                         //         events.value.kotgEvents.eventData.elementAt(index).id);
@@ -669,64 +670,65 @@ class EventsPage extends ConsumerWidget {
                                                                           )));
                                                             },
                                                             loading: (loading) =>
-                                                                OutlinedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      // _showTicketBottomSheet(
-                                                                      //     eventId:
-                                                                      //         events.value.kotgEvents.eventData.elementAt(index).id);
-                                                                      // context
-                                                                      //     .loaderOverlay
-                                                                      //     .show();
-                                                                      // ref
-                                                                      //     .watch(
-                                                                      //       deRegisterEventsProvider(
-                                                                      //         int.parse(
-                                                                      //           events.value.kotgEvents.eventData.elementAt(index).id,
-                                                                      //         ),
-                                                                      //       ),
-                                                                      //     )
-                                                                      //     .catchError((error) => Get.snackbar(
-                                                                      //           "Deregistration Error",
-                                                                      //           error.toString(),
-                                                                      //           backgroundColor: Colors.red,
-                                                                      //           snackPosition: SnackPosition.TOP,
-                                                                      //         ))
-                                                                      //     .whenComplete(() {
-                                                                      //   Get.snackbar(
-                                                                      //     "Successfully Deregistered",
-                                                                      //     'Sad To See you leave!',
-                                                                      //     snackPosition: SnackPosition.TOP,
-                                                                      //   );
-                                                                      //   ref.refresh(
-                                                                      //     registeredEventsProvider(
-                                                                      //       int.parse(events.value.kotgEvents.eventData.elementAt(index).id),
-                                                                      //     ),
-                                                                      //   );
-                                                                      // }).whenComplete(() {
-                                                                      //   context.loaderOverlay.hide();
+                                                                LoadingIndicator(
+                                                                  indicatorType:
+                                                                      Indicator
+                                                                          .ballPulseSync,
+                                                                  colors: [
+                                                                    kotgPurple
+                                                                  ],
+                                                                  strokeWidth:
+                                                                      0.5,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .black,
+                                                                  pathBackgroundColor:
+                                                                      Colors
+                                                                          .black,
+                                                                ),
+                                                            // OutlinedButton(
+                                                            //     onPressed:
+                                                            //         () {
+                                                            // _showTicketBottomSheet(
+                                                            //     eventId:
+                                                            //         events.value.kotgEvents.eventData.elementAt(index).id);
+                                                            // context
+                                                            //     .loaderOverlay
+                                                            //     .show();
+                                                            // ref
+                                                            //     .watch(
+                                                            //       deRegisterEventsProvider(
+                                                            //         int.parse(
+                                                            //           events.value.kotgEvents.eventData.elementAt(index).id,
+                                                            //         ),
+                                                            //       ),
+                                                            //     )
+                                                            //     .catchError((error) => Get.snackbar(
+                                                            //           "Deregistration Error",
+                                                            //           error.toString(),
+                                                            //           backgroundColor: Colors.red,
+                                                            //           snackPosition: SnackPosition.TOP,
+                                                            //         ))
+                                                            //     .whenComplete(() {
+                                                            //   Get.snackbar(
+                                                            //     "Successfully Deregistered",
+                                                            //     'Sad To See you leave!',
+                                                            //     snackPosition: SnackPosition.TOP,
+                                                            //   );
+                                                            //   ref.refresh(
+                                                            //     registeredEventsProvider(
+                                                            //       int.parse(events.value.kotgEvents.eventData.elementAt(index).id),
+                                                            //     ),
+                                                            //   );
+                                                            // }).whenComplete(() {
+                                                            //   context.loaderOverlay.hide();
 
-                                                                      //   // ref.refresh(
-                                                                      //   //     eventsProvider);
-                                                                      // });
-                                                                    },
-                                                                    child:
-                                                                        LoadingIndicator(
-                                                                      indicatorType:
-                                                                          Indicator
-                                                                              .ballPulseSync,
-                                                                      colors: [
-                                                                        kotgPurple
-                                                                      ],
-                                                                      strokeWidth:
-                                                                          0.5,
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .black,
-                                                                      pathBackgroundColor:
-                                                                          Colors
-                                                                              .black,
-                                                                    )),
+                                                            //   // ref.refresh(
+                                                            //   //     eventsProvider);
+                                                            // });
+                                                            // },
+                                                            // child:
+                                                            // ),
                                                             error: (error) => OutlinedButton(
                                                                 onPressed: () =>
                                                                     ref.refresh(registeredEventsProvider(int.parse(events

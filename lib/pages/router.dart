@@ -6,6 +6,8 @@ import 'package:kotgltd/features/profile/pages/birthday_page.dart';
 import 'package:kotgltd/features/profile/pages/gender_page.dart';
 import 'package:kotgltd/features/profile/pages/name_page.dart';
 import 'package:kotgltd/features/profile/pages/phoneNumber_page.dart';
+import 'package:kotgltd/features/stories/pages/stories_page.dart';
+import 'package:kotgltd/features/stories/pages/story_page.dart';
 import 'package:kotgltd/features/team/pages/team_page.dart';
 import 'package:kotgltd/features/team/widgets/create_team_widget.dart';
 import 'package:kotgltd/features/team/widgets/join_team_widget.dart';
@@ -60,11 +62,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       // At this point, IF we're in the login page, go to the home page
       if (user == AuthState.isLoggedIn) {
         switch (state.location) {
-          case '/dashboard':
-            state.location == '/dashboard';
+          case '/':
+            state.location == '/';
             break;
           case '/auth':
-            return '/dashboard';
+            return '/';
 
           // case '/':
           //   state.location == '/auth';
@@ -92,103 +94,117 @@ final routerProvider = Provider<GoRouter>((ref) {
               builder: (context, state) => ForgotPasswordPage(),
             ),
           ]),
-      GoRoute(
-          path: '/dashboard',
-          builder: (context, state) => DashboardPage(),
-          routes: [
-            GoRoute(
-              path: 'transactions',
-              builder: (context, state) => TransactionsPage(),
-            ),
-            GoRoute(
-                path: 'profile',
-                builder: (context, state) => ProfilePage(),
-                routes: [
-                  GoRoute(
-                    path: 'name',
-                    builder: (context, state) {
-                      final firstName = state.queryParams['firstName'];
-                      final lastName = state.queryParams['lastName'];
+      GoRoute(path: '/', builder: (context, state) => DashboardPage(), routes: [
+        GoRoute(
+          path: 'transactions',
+          builder: (context, state) => TransactionsPage(),
+        ),
+        GoRoute(
+            path: 'stories',
+            builder: (context, state) => StoriesPage(),
+            routes: [
+              GoRoute(
+                path: 'post',
+                builder: (context, state) {
+                  final postId = state.queryParams['id'];
+                  final slug = state.queryParams['slug'];
 
-                      return NamePage(
-                        firstName: firstName!,
-                        lastName: lastName!,
-                      );
-                    },
-                  ),
-                  GoRoute(
-                      path: 'gender',
-                      builder: (context, state) {
-                        final gender = state.queryParams['gender'];
+                  return StoryPage(
+                    id: postId!,
+                    slug: slug!,
+                  );
+                },
+              ),
+            ]),
+        GoRoute(
+            path: 'profile',
+            builder: (context, state) => ProfilePage(),
+            routes: [
+              GoRoute(
+                path: 'name',
+                builder: (context, state) {
+                  final firstName = state.queryParams['firstName'];
+                  final lastName = state.queryParams['lastName'];
 
-                        return GenderPage(gender: gender!);
-                      }),
-                  GoRoute(
-                      path: 'birthday',
-                      builder: (context, state) {
-                        final birthday = state.queryParams['dob'];
+                  return NamePage(
+                    firstName: firstName!,
+                    lastName: lastName!,
+                  );
+                },
+              ),
+              GoRoute(
+                  path: 'gender',
+                  builder: (context, state) {
+                    final gender = state.queryParams['gender'];
 
-                        return BirthdayPage(
-                          birthday: birthday!,
-                        );
-                      }),
-                  GoRoute(
-                      path: 'phoneNumber',
-                      builder: (context, state) {
-                        final phoneNumber = state.queryParams['phoneNumber'];
+                    return GenderPage(gender: gender!);
+                  }),
+              GoRoute(
+                  path: 'birthday',
+                  builder: (context, state) {
+                    final birthday = state.queryParams['dob'];
 
-                        return PhoneNumberPage(
-                          phoneNumber: phoneNumber!,
-                        );
-                      }),
-                ]),
-            GoRoute(
-                path: 'team',
-                builder: (context, state) => SelectGamePage(),
-                routes: [
-                  GoRoute(
-                    path: 'create',
-                    builder: (context, state) => CreateTeamWidget(),
-                  ),
-                  GoRoute(
-                    path: 'join',
-                    builder: (context, state) => JoinTeamWidget(),
-                  ),
-                ]),
-            GoRoute(
-                path: 'tickets',
-                builder: (context, state) => TicketsPage(),
-                routes: []),
-            GoRoute(
-                path: 'events',
-                builder: (context, state) => EventsPage(),
-                routes: [
-                  GoRoute(
-                    path: 'ticket/:id',
-                    builder: (context, state) {
-                      final eventId = state.params['id'];
+                    return BirthdayPage(
+                      birthday: birthday!,
+                    );
+                  }),
+              GoRoute(
+                  path: 'phoneNumber',
+                  builder: (context, state) {
+                    final phoneNumber = state.queryParams['phoneNumber'];
 
-                      return TicketPage(
-                        eventId: eventId!,
-                      );
-                    },
-                  ),
-                  GoRoute(
-                    path: 'payment',
-                    builder: (context, state) {
-                      final ticketRef = state.queryParams['ref'];
-                      final name = state.queryParams['name'];
-                      final price = state.queryParams['price'];
+                    return PhoneNumberPage(
+                      phoneNumber: phoneNumber!,
+                    );
+                  }),
+            ]),
+        GoRoute(
+            path: 'team',
+            builder: (context, state) => SelectGamePage(),
+            routes: [
+              GoRoute(
+                path: 'create',
+                builder: (context, state) => CreateTeamWidget(),
+              ),
+              GoRoute(
+                path: 'join',
+                builder: (context, state) => JoinTeamWidget(),
+              ),
+            ]),
+        GoRoute(
+            path: 'tickets',
+            builder: (context, state) => TicketsPage(),
+            routes: []),
+        GoRoute(
+            path: 'events',
+            builder: (context, state) => EventsPage(),
+            routes: [
+              GoRoute(
+                path: 'ticket/:id',
+                builder: (context, state) {
+                  final eventId = state.params['id'];
 
-                      return PaymentPage(
-                        ticketRef: ticketRef!,
-                        eventName: name!,
-                        price: price!,
-                      );
-                    },
-                  ),
-                ]),
-          ]),
+                  return TicketPage(
+                    eventId: eventId!,
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'payment',
+                builder: (context, state) {
+                  final ticketRef = state.queryParams['ref'];
+                  final name = state.queryParams['name'];
+                  final price = state.queryParams['price'];
+
+                  return PaymentPage(
+                    ticketRef: ticketRef!,
+                    eventName: name!,
+                    price: price!,
+                  );
+                },
+              ),
+            ]),
+      ]),
       GoRoute(
         path: '/payment-approval',
         builder: (context, state) => PaymentApprovalPage(),

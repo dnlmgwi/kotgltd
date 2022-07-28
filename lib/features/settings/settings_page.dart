@@ -180,7 +180,7 @@ class SettingsPage extends ConsumerWidget {
             ListTile(
               leading: LineIcon.user(),
               title: Text('Profile'),
-              onTap: () => context.push('/dashboard/profile'),
+              onTap: () => context.push('/profile'),
             ),
             Divider(),
             Expanded(
@@ -204,7 +204,7 @@ class SettingsPage extends ConsumerWidget {
                       title: Text('Transactions'),
                       subtitle: Text('View your transaction history'),
                       enableFeedback: true,
-                      onTap: () => context.push('/dashboard/transactions'),
+                      onTap: () => context.push('/transactions'),
                     ),
                     Divider(),
                     Padding(
