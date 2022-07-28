@@ -1,11 +1,10 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:kotgltd/common/bottomSheetHandle.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
-import 'package:kotgltd/features/profile/providers/profile_providers.dart';
 import 'package:kotgltd/features/tickets/widgets/ticket_data.dart';
+import 'package:kotgltd/features/tickets/widgets/ticket_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 

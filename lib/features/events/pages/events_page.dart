@@ -6,6 +6,7 @@ import 'package:kotgltd/common/bottomSheetHandle.dart';
 import 'package:kotgltd/common/color.dart';
 import 'package:kotgltd/features/events/providers/events_providers.dart';
 import 'package:kotgltd/features/events/widgets/events_page_skeleton.dart';
+import 'package:kotgltd/features/tickets/widgets/ticket_widget.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -395,7 +396,6 @@ class EventsPage extends ConsumerWidget {
               child: Consumer(builder: (context, ref, _) {
                 final _events = ref.watch(eventsProvider);
                 // final _payment = ref.read(walletProvider);
-                
 
                 // print(_events);
                 return _events.map(
