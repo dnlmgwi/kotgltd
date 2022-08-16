@@ -70,7 +70,7 @@ class ProfileRepository extends IProfileRepository {
       final QueryResult? result = await graphQLClient().mutate(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
+        
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
     } catch (e) {
@@ -98,7 +98,6 @@ class ProfileRepository extends IProfileRepository {
       final QueryResult? result = await graphQLClient().mutate(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
     } on SelectGenderException catch (e) {
@@ -133,7 +132,7 @@ class ProfileRepository extends IProfileRepository {
       final QueryResult? result = await graphQLClient().mutate(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
+        
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
     } catch (e) {
@@ -155,7 +154,7 @@ class ProfileRepository extends IProfileRepository {
       final QueryResult? result = await graphQLClient().mutate(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
+      
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
     } catch (e) {
@@ -187,7 +186,7 @@ class ProfileRepository extends IProfileRepository {
       final QueryResult? result = await graphQLClient().mutate(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
+        
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
     } catch (e) {
@@ -207,7 +206,7 @@ class ProfileRepository extends IProfileRepository {
       final QueryResult? result = await graphQLClient().query(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
+        
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 

@@ -39,7 +39,7 @@ class InviteRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception('Network Error');
       }
 
@@ -77,7 +77,7 @@ class InviteRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception('Network Error');
       }
 
@@ -114,7 +114,7 @@ class InviteRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception('Network Error');
       }
 

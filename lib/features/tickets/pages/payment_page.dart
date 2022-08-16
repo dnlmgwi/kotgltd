@@ -33,7 +33,6 @@ class PaymentPage extends ConsumerWidget {
     final _paymentOption = ref.watch(paymentOptionProvider.state).state;
 
     void updatePhoneNumber(PhoneNumber phoneNumber) {
-      print(phoneNumber);
       ref.watch(paymentPhoneNumberProvider.state).state = phoneNumber;
     }
 

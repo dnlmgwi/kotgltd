@@ -51,7 +51,6 @@ class TransactionRepository extends ITransactionsRepository {
       final QueryResult? result = await graphQLClient().query(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 

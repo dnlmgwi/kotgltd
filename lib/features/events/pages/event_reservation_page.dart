@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:kotgltd/common/color.dart';
@@ -137,7 +135,7 @@ class EventReservationPage extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 5, bottom: 15),
                         child: Text(
-                            'By accepting the Terms & Conditions and continuing, your spot will be reserved, until you pay the registration fee is paid.',
+                            'By accepting the Terms & Conditions and continuing, your spot will be reserved until the registration fee is paid.',
                             style: GoogleFonts.sarala(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 10.sp,

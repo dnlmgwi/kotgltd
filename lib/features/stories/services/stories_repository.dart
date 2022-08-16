@@ -29,7 +29,7 @@ class StoriesRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+      
         throw Exception(response.body);
       }
 
@@ -68,7 +68,7 @@ class StoriesRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception(response.body);
       }
 

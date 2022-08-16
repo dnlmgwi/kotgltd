@@ -116,7 +116,7 @@ class EventsRepository {
       ///30 Seconds Timeout
       throw NoConnectionException();
     } catch (e) {
-      print(e);
+      
       rethrow;
     }
   }
@@ -147,7 +147,7 @@ class EventsRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception(response.body);
       }
 
@@ -164,7 +164,7 @@ class EventsRepository {
     required String reference,
     required PhoneNumber phoneNumber,
   }) async {
-    print(phoneNumber);
+    
     try {
       final response = await http.post(
         Uri.parse('${Env.baseUrl}/api/v1/mpamba/pay'),
@@ -201,7 +201,7 @@ class EventsRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception(
           response.body,
         );
@@ -242,7 +242,7 @@ class EventsRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception(response.body);
       }
     } catch (e) {
@@ -276,7 +276,7 @@ class EventsRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception('Network Error');
       }
 
@@ -308,7 +308,7 @@ class EventsRepository {
       final QueryResult? result = await graphQLClient().mutate(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
+    
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
     } catch (e) {

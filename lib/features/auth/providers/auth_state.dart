@@ -74,7 +74,7 @@ class AuthStateNotifier extends ChangeNotifier {
       //Change Auth State
       isAuth();
     } catch (e) {
-      print(e);
+      
       isNotAuth();
       _tokens.clear(); //Todo Network Exceptions
       _user.clear();
@@ -109,7 +109,6 @@ class AuthStateNotifier extends ChangeNotifier {
       }
       return response;
     } catch (e) {
-      print(e);
       isNotAuth();
       // userTeam.clear();
       _tokens.clear(); //Todo Network Exceptions
@@ -146,7 +145,7 @@ class AuthStateNotifier extends ChangeNotifier {
       }
       return response;
     } catch (e) {
-      print(e);
+      
       isNotAuth();
       // userTeam.clear();
       _tokens.clear(); //Todo Network Exceptions

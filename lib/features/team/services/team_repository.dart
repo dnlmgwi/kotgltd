@@ -67,7 +67,7 @@ class TeamRepository extends ITeamRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception(response.body);
       }
 
@@ -103,7 +103,7 @@ class TeamRepository extends ITeamRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception(response.body);
       }
 
@@ -141,7 +141,7 @@ class TeamRepository extends ITeamRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception(response.body);
       }
 
@@ -179,7 +179,7 @@ class TeamRepository extends ITeamRepository {
       }
 
       if (response.statusCode != 200) {
-        print(response.body);
+        
         throw Exception(response.body);
       }
 
@@ -235,7 +235,6 @@ class TeamRepository extends ITeamRepository {
       final QueryResult? result = await graphQLClient().query(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
@@ -260,7 +259,6 @@ class TeamRepository extends ITeamRepository {
       final QueryResult? result = await graphQLClient().query(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
@@ -282,7 +280,6 @@ class TeamRepository extends ITeamRepository {
       final QueryResult? result = await graphQLClient().query(options);
 
       if (result!.hasException) {
-        print(result.exception.toString());
         throw Exception(result.exception!.graphqlErrors.first.message);
       }
 
