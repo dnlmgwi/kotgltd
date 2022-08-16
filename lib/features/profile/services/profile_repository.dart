@@ -142,6 +142,28 @@ class ProfileRepository extends IProfileRepository {
   }
 
   @override
+  Future<void> updateIGN({
+    required String ign,
+    required int ticketId,
+  }) async {
+    // User? _user = user.values.first;
+
+    try {
+      final MutationOptions options = MutationOptions(
+          document: gql(ProfileQueries.updateIGN()),
+          variables: {"ticketId": id, "ign": ign});
+      final QueryResult? result = await graphQLClient().mutate(options);
+
+      if (result!.hasException) {
+        print(result.exception.toString());
+        throw Exception(result.exception!.graphqlErrors.first.message);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<void> updateDateOfBirth({
     required String dateOfBirth,
   }) async {

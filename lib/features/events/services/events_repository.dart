@@ -9,6 +9,7 @@ import 'package:kotgltd/features/events/model/eventRegistrations.dart';
 import 'package:kotgltd/features/events/model/kotgEvent.dart';
 // ignore: unused_import
 import 'package:kotgltd/features/events/model/kotgEvents.dart';
+import 'package:kotgltd/features/profile/graphql/profile_queries.dart';
 import 'package:kotgltd/packages/core.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 import 'package:kotgltd/packages/models.dart';
@@ -251,6 +252,7 @@ class EventsRepository {
 
   Future registerEvent({
     required String eventID,
+    required String ign,
   }) async {
     try {
       final response = await http.post(
@@ -281,7 +283,34 @@ class EventsRepository {
       // Decode the json response
       final jsonResponse = json.decode(response.body);
 
+      try {
+        await updateIGN(ign: ign, ticketId: jsonResponse['data']['id']);
+      } catch (e) {
+        rethrow;
+      }
+
       return jsonResponse['data'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateIGN({
+    required String ign,
+    required int ticketId,
+  }) async {
+    // User? _user = user.values.first;
+
+    try {
+      final MutationOptions options = MutationOptions(
+          document: gql(ProfileQueries.updateIGN()),
+          variables: {"ticketId": ticketId, "ign": ign});
+      final QueryResult? result = await graphQLClient().mutate(options);
+
+      if (result!.hasException) {
+        print(result.exception.toString());
+        throw Exception(result.exception!.graphqlErrors.first.message);
+      }
     } catch (e) {
       rethrow;
     }

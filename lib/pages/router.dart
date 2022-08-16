@@ -2,6 +2,7 @@ import 'package:kotgltd/features/auth/pages/forgot_password_page.dart';
 import 'package:kotgltd/features/auth/providers/auth_providers.dart';
 import 'package:kotgltd/features/auth/providers/auth_state.dart';
 import 'package:kotgltd/features/checkout/payment_approval.dart';
+import 'package:kotgltd/features/events/pages/event_reservation_page.dart';
 import 'package:kotgltd/features/profile/pages/birthday_page.dart';
 import 'package:kotgltd/features/profile/pages/gender_page.dart';
 import 'package:kotgltd/features/profile/pages/name_page.dart';
@@ -179,6 +180,18 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'events',
             builder: (context, state) => EventsPage(),
             routes: [
+              GoRoute(
+                path: 'reserve',
+                builder: (context, state) {
+                  final eventId = state.queryParams['id'];
+                  final game = state.queryParams['game'];
+
+                  return EventReservationPage(
+                    eventId: eventId!,
+                    game: game!,
+                  );
+                },
+              ),
               GoRoute(
                 path: 'ticket/:id',
                 builder: (context, state) {

@@ -132,6 +132,19 @@ class ProfileQueries {
       }''';
   }
 
+  static String updateIGN() {
+    return r'''mutation($ign: String!, $ticketId: ID!) {
+      updateEventRegistration(data: { ign: $ign }, id: $ticketId) {
+        data {
+          id
+          attributes {
+            ign
+          }
+        }
+      }
+    }''';
+  }
+
   static String getProfile() {
     return r'''query ($user_id: ID!) {
       usersPermissionsUser(id:$user_id){

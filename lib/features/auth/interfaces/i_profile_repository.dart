@@ -26,6 +26,11 @@ abstract class IProfileRepository {
     required String dateOfBirth,
   });
 
+  Future<void> updateIGN({
+    required String ign,
+    required int ticketId,
+  });
+
   Future<void> updatePhoneNumber({
     required PhoneNumber phoneNumber,
   });

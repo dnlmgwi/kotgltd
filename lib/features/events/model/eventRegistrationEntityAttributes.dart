@@ -11,6 +11,8 @@ class EventRegistrationEntityAttributes {
 
   String reference;
 
+  String? ign;
+
   String status;
 
   @JsonKey(name: 'registered_at')
@@ -25,6 +27,7 @@ class EventRegistrationEntityAttributes {
     required this.event,
     required this.createdAt,
     required this.reference,
+    required this.ign,
     required this.registeredAt,
     required this.status,
     required this.transactionId,

@@ -121,6 +121,9 @@ class TicketPage extends ConsumerWidget {
                                       isCornerRounded: true,
                                       padding: EdgeInsets.all(20),
                                       child: TicketData(
+                                          ign:
+                                              ticket.value.first.eventAttributes.ign ??
+                                                  "Error",
                                           firstName: ticket
                                               .value
                                               .first
@@ -161,10 +164,8 @@ class TicketPage extends ConsumerWidget {
                                               .name,
                                           status: ticket.value.first
                                               .eventAttributes.status,
-                                          eventDate:
-                                              '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}',
-                                          eventTime:
-                                              '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}'),
+                                          eventDate: '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}',
+                                          eventTime: '${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventDate} ${ticket.value.first.eventAttributes.event.eventData.eventRegAttributes.eventTime}'),
                                     ),
                                     SizedBox(
                                       height: 15,

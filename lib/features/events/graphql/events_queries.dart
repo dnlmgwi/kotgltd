@@ -21,11 +21,42 @@ class EventsQueries {
         description
         price
         prize
+        game {
+          data {
+          attributes {
+              name
+            }
+          }
+        }
       }
     }
   }
 }''';
   }
+
+  //TODO Update IGN
+  //   static String updateIGN() {
+  //   return r'''mutation(
+  //     $ign: String!
+  //     $user: ID!
+  //     ) {
+  //       updateUsersPermissionsUser(
+  //         data: {
+  //           first_name: $first_name
+  //           last_name: $last_name
+  //         }
+  //         id: $user
+  //       ) {
+  //         data {
+  //           id
+  //           attributes {
+  //             first_name
+  //             last_name
+  //           }
+  //         }
+  //       }
+  //     }''';
+  // }
 
   static String deregisterEvent() {
     return r'''mutation($registration_id: ID!) {
@@ -62,6 +93,19 @@ class EventsQueries {
 }''';
   }
 
+  static String updateIGN() {
+    return r'''mutation($ign: String!, $ticketId: ID!) {
+      updateEventRegistration(data: { ign: $ign }, id: $ticketId) {
+        data {
+          id
+          attributes {
+            ign
+          }
+        }
+      }
+    }''';
+  }
+
   static String eventTicket() {
     return r'''query($user_id: ID!, $event_id: ID!) {
   eventRegistrations(filters: { user: { id: { eq: $user_id } } event: { id: { eq: $event_id } }}) {
@@ -96,6 +140,7 @@ class EventsQueries {
         }
         reference
         status
+        ign
         registered_at
         transaction_id
         createdAt
@@ -116,9 +161,8 @@ class EventsQueries {
       user {
         data {
           id
-          attributes {
-            
-        username
+          attributes {       
+            username
           }
         }
       }

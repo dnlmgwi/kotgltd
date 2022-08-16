@@ -9,18 +9,19 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TicketData extends StatelessWidget {
-  const TicketData(
-      {Key? key,
-      required this.ticketId,
-      required this.eventName,
-      required this.status,
-      required this.eventDate,
-      required this.eventTime,
-      required this.game,
-      required this.reference,
-      required this.firstName,
-      required this.lastName})
-      : super(key: key);
+  const TicketData({
+    Key? key,
+    required this.ticketId,
+    required this.eventName,
+    required this.status,
+    required this.eventDate,
+    required this.eventTime,
+    required this.game,
+    required this.reference,
+    required this.firstName,
+    required this.lastName,
+    required this.ign,
+  }) : super(key: key);
 
   final String ticketId,
       eventName,
@@ -28,6 +29,7 @@ class TicketData extends StatelessWidget {
       eventTime,
       eventDate,
       game,
+      ign,
       reference,
       firstName,
       lastName;
@@ -207,8 +209,8 @@ class TicketData extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ticketDetailsWidget(
-                'Name',
-                '${firstName} ${lastName}',
+                'IGN',
+                ign,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0, right: 52.0),

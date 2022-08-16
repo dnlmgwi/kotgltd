@@ -26,12 +26,6 @@ class EventsPage extends ConsumerWidget {
       return ref.refresh(eventsRepoProvider);
     }
 
-    void updateTermsAndConditions(BuildContext context, bool tc) {
-      ref.read(tcEventsProvider.state).state = tc;
-    }
-
-    final _eventsRepo = ref.watch(eventsRepoProvider);
-
     void _showEventDetailsBottomSheet(
         {required String eventId,
         required String eventName,
@@ -266,113 +260,6 @@ class EventsPage extends ConsumerWidget {
       );
     }
 
-    void _showEventRegDialog({
-      required String eventId,
-      required String eventName,
-      required String eventPrice,
-    }) async {
-      await showDialog(
-        context: context,
-        builder: (context) => Consumer(
-          builder: ((context, ref, child) {
-            final _tc = ref.watch(tcEventsProvider.state).state;
-
-            return LoaderOverlay(
-              overlayOpacity: 0.8,
-              child: AlertDialog(
-                backgroundColor: kotgBlack,
-                title: Text(
-                  'Event Reservation',
-                  style: GoogleFonts.sarala(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20.sp,
-                    color: Colors.grey,
-                  ),
-                ),
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 15),
-                        child: Text(
-                            'By selecting confirm your spot will be reserved, until you pay the registration fee.',
-                            style: GoogleFonts.sarala(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 10.sp,
-                                color: Colors.grey)),
-                      ),
-                      // BottomSheetHandle(),
-                      CheckboxListTile(
-                          activeColor: kotgBlack,
-                          checkColor: kotgGreen,
-                          selected: false,
-                          title: Text('I Accept the terms and conditions'),
-                          tileColor: kotgBlack,
-                          value: _tc,
-                          onChanged: (value) {
-                            updateTermsAndConditions(context, value!);
-                          }),
-                    ],
-                  ),
-                ),
-                actions: [
-                  ElevatedButton(
-                      child: Text('Confirm'),
-                      onPressed: () {
-                        context.loaderOverlay.show();
-                        if (_tc) {
-                          _eventsRepo
-                              .registerEvent(
-                            eventID: eventId,
-                          )
-                              .then((ticket) {
-                            Navigator.pop(context);
-                            context.loaderOverlay.hide();
-
-                            context.push('/events/ticket/${eventId}');
-
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("Sucessfully Reserved")));
-
-                            ref.refresh(registeredEventsProvider(
-                              int.parse(
-                                eventId,
-                              ),
-                            ));
-                          }).onError(
-                            (error, stackTrace) {
-                              context.push('/profile');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(error.toString()),
-                                      backgroundColor: Colors.red));
-
-                              context.loaderOverlay.hide();
-                            },
-                          );
-                        } else {
-                          context.loaderOverlay.hide();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text("Please Accept Terms And Conditions"),
-                              backgroundColor: Colors.red));
-                        }
-                      }),
-                  OutlinedButton(
-                    child: Text('Dismiss'),
-                    style: ButtonStyle(),
-                    onPressed: () => Navigator.pop(context),
-                  )
-                ],
-              ),
-            );
-          }),
-        ),
-      );
-    }
-
     return SafeArea(
       child: Scaffold(
           body: Column(
@@ -587,29 +474,8 @@ class EventsPage extends ConsumerWidget {
                                                                               kotgPurple),
                                                                       onPressed:
                                                                           () {
-                                                                        _showEventRegDialog(
-                                                                          eventId: events
-                                                                              .value
-                                                                              .kotgEvents
-                                                                              .eventData
-                                                                              .elementAt(index)
-                                                                              .id,
-                                                                          eventPrice: events
-                                                                              .value
-                                                                              .kotgEvents
-                                                                              .eventData
-                                                                              .elementAt(index)
-                                                                              .eventAttributes
-                                                                              .price
-                                                                              .toString(),
-                                                                          eventName: events
-                                                                              .value
-                                                                              .kotgEvents
-                                                                              .eventData
-                                                                              .elementAt(index)
-                                                                              .eventAttributes
-                                                                              .name,
-                                                                        );
+                                                                        context.push(
+                                                                            '/events/reserve/?id=${events.value.kotgEvents.eventData.elementAt(index).id}&game=${events.value.kotgEvents.eventData.elementAt(index).eventAttributes.game!.gameData.gameAttributes.name}');
                                                                       },
                                                                       child: Text(
                                                                           'Join',
@@ -623,43 +489,6 @@ class EventsPage extends ConsumerWidget {
                                                                           () {
                                                                         context.push(
                                                                             '/events/ticket/${events.value.kotgEvents.eventData.elementAt(index).id}');
-                                                                        // _showTicketBottomSheet(
-                                                                        //     eventId:
-                                                                        //         events.value.kotgEvents.eventData.elementAt(index).id);
-                                                                        // context
-                                                                        //     .loaderOverlay
-                                                                        //     .show();
-                                                                        // ref
-                                                                        //     .watch(
-                                                                        //       deRegisterEventsProvider(
-                                                                        //         int.parse(
-                                                                        //           events.value.kotgEvents.eventData.elementAt(index).id,
-                                                                        //         ),
-                                                                        //       ),
-                                                                        //     )
-                                                                        //     .catchError((error) => Get.snackbar(
-                                                                        //           "Deregistration Error",
-                                                                        //           error.toString(),
-                                                                        //           backgroundColor: Colors.red,
-                                                                        //           snackPosition: SnackPosition.TOP,
-                                                                        //         ))
-                                                                        //     .whenComplete(() {
-                                                                        //   Get.snackbar(
-                                                                        //     "Successfully Deregistered",
-                                                                        //     'Sad To See you leave!',
-                                                                        //     snackPosition: SnackPosition.TOP,
-                                                                        //   );
-                                                                        //   ref.refresh(
-                                                                        //     registeredEventsProvider(
-                                                                        //       int.parse(events.value.kotgEvents.eventData.elementAt(index).id),
-                                                                        //     ),
-                                                                        //   );
-                                                                        // }).whenComplete(() {
-                                                                        //   context.loaderOverlay.hide();
-
-                                                                        //   // ref.refresh(
-                                                                        //   //     eventsProvider);
-                                                                        // });
                                                                       },
                                                                       child: Text(
                                                                           'View Ticket',

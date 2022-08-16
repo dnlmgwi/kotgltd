@@ -17,6 +17,9 @@ KOTGEventAttributes _$KOTGEventAttributesFromJson(Map<String, dynamic> json) =>
       maxParticipants: json['max_participants'] as int,
       kotgEventImage:
           KOTGEventImage.fromJson(json['image'] as Map<String, dynamic>),
+      game: json['game'] == null
+          ? null
+          : KOTGGame.fromJson(json['game'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$KOTGEventAttributesToJson(
@@ -28,6 +31,7 @@ Map<String, dynamic> _$KOTGEventAttributesToJson(
       'image': instance.kotgEventImage.toJson(),
       'description': instance.description,
       'max_participants': instance.maxParticipants,
+      'game': instance.game?.toJson(),
       'price': instance.price,
       'prize': instance.prize,
     };

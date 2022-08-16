@@ -1,4 +1,5 @@
 import 'package:kotgltd/features/events/model/kotgEventImage.dart';
+import 'package:kotgltd/features/events/model/kotgGame.dart';
 import 'package:kotgltd/packages/dependencies.dart';
 part 'kotgEventAttributes.g.dart';
 
@@ -20,6 +21,8 @@ class KOTGEventAttributes {
   @JsonKey(name: 'max_participants')
   int maxParticipants;
 
+  KOTGGame? game;
+
   int price;
 
   int prize;
@@ -33,6 +36,7 @@ class KOTGEventAttributes {
     required this.prize,
     required this.maxParticipants,
     required this.kotgEventImage,
+    required this.game,
   });
 
   factory KOTGEventAttributes.fromJson(Map<String, dynamic> json) =>

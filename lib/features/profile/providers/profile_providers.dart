@@ -22,6 +22,8 @@ enum Gender { Man, Woman, None }
 
 enum PaymentOption { Mpamba, AirtelMoney }
 
+var ignProvider = StateProvider.autoDispose<String>((ref) => '?');
+
 var genderProvider =
     StateProvider.autoDispose<String>((ref) => Gender.None.name);
 
